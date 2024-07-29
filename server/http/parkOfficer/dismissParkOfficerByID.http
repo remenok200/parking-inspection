@@ -1,0 +1,1 @@
+PUT http://localhost:5001/api/parkOfficers/1/dismiss HTTP/1.1

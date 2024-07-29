@@ -1,0 +1,6 @@
+PUT http://localhost:5001/api/parkOfficers/2 HTTP/1.1
+Content-Type: application/json
+
+{
+  "badgeNumber": "123456-X"
+}

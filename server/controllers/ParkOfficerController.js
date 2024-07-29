@@ -10,7 +10,7 @@ const createHttpError = require('http-errors');
 
 module.exports.getAllParkOfficers = async (req, res, next) => {
   try {
-    const parkOfficers = ParkOfficer.findAll();
+    const parkOfficers = await ParkOfficer.findAll();
 
     return res.status(200).send({ data: parkOfficers });
   } catch (error) {
