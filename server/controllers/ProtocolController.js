@@ -2,7 +2,7 @@ const { Protocol, ParkOfficer, Image } = require('../models');
 const createHttpError = require('http-errors');
 
 // getAllProtocols
-// getAllProtocolsByOfficerID // без пагінації
+// getAllProtocolsByOfficerID
 // createProtocol
 // updateProtocolByID
 // deleteProtocolByID
@@ -40,7 +40,7 @@ module.exports.getAllProtocols = async (req, res, next) => {
 
 module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
   try {
-    const { params: { officerId } } = req;
+    const { params: { officerId }, pagination } = req;
 
     const protocols = await Protocol.findAll({
       where: { officerId },
@@ -56,7 +56,8 @@ module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
           as: 'images'
         }
       ],
-      order: [['updated_at', 'DESC']]
+      order: [['updated_at', 'DESC']],
+      ...pagination
     });
 
     if(!protocols.length) {
