@@ -11,6 +11,7 @@ app.use(express.json()); // body parser
 
 app.use(express.static('./public'));
 
+// localhost:5001/api
 app.use('/api', router);
 
 app.use(errorHandler);
