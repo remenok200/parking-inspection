@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Protocol.init({
     serviceNotes: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       validate: {
         notNull: true,
         notEmpty: true
@@ -24,6 +24,22 @@ module.exports = (sequelize, DataTypes) => {
     fineAmount: {
       allowNull: false,
       type: DataTypes.DOUBLE,
+      validate: {
+        notNull: true,
+        notEmpty: true
+      }
+    },
+    violatorFullName: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        notNull: true,
+        notEmpty: true
+      }
+    },
+    violatorPassportNumber: {
+      allowNull: false,
+      type: DataTypes.STRING,
       validate: {
         notNull: true,
         notEmpty: true

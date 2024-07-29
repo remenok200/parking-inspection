@@ -11,7 +11,7 @@ module.exports = {
       },
       serviceNotes: {
         field: 'service_notes',
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
       },
       officerId: {
@@ -30,6 +30,16 @@ module.exports = {
       fineAmount: {
         field: 'fine_amount',
         type: Sequelize.DOUBLE,
+        allowNull: false
+      },
+      violatorFullName: {
+        field: 'violator_full_name',
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      violatorPassportNumber: {
+        field: 'violator_passport_number',
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {

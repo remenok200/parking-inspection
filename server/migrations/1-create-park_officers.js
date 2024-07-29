@@ -23,6 +23,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      isWorked: {
+        field: 'is_worked',
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
