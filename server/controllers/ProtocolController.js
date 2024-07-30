@@ -72,9 +72,9 @@ module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
 
 module.exports.createProtocol = async (req, res, next) => {
   try {
-    const { body, files } = req;
+    const { params: { officerId }, body, files } = req;
 
-    const createdProtocol = await Protocol.create(body);
+    const createdProtocol = await Protocol.create({ ...body, officerId });
 
     if(!createdProtocol) {
       return next(createHttpError(400, 'Protocol not created'));

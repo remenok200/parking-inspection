@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   class ParkOfficer extends Model {
     static associate({ Protocol }) {
       ParkOfficer.hasMany(Protocol, {
-        foreignKey: 'officerId'
+        foreignKey: 'officerId',
+        as: 'protocols'
       });
     }
   }

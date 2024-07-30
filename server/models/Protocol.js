@@ -4,11 +4,13 @@ module.exports = (sequelize, DataTypes) => {
   class Protocol extends Model {
     static associate({ ParkOfficer, Image }) {
       Protocol.belongsTo(ParkOfficer, {
-        foreignKey: 'officerId'
+        foreignKey: 'officerId',
+        as: 'parkOfficer'
       });
 
       Protocol.hasMany(Image, {
-        foreignKey: 'protocolId'
+        foreignKey: 'protocolId',
+        as: 'images'
       });
     }
   }
