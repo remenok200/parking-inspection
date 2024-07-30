@@ -13,12 +13,11 @@ const ProtocolController = require('../controllers/ProtocolController');
 
 protocolRouter
 .route('/')
-.get(paginate, ProtocolController.getAllProtocols)
+.get(paginate, ProtocolController.getAllProtocolsByOfficerID)
 .post(uploadImages, ProtocolController.createProtocol);
 
 protocolRouter
 .route('/:id')
-.get(paginate, ProtocolController.getAllProtocolsByOfficerID)
 .put(uploadImages, ProtocolController.updateProtocolByID)
 .delete(ProtocolController.deleteProtocolByID);
 

@@ -1,1 +1,1 @@
-GET http://localhost:5001/api/parkOfficers/1/protocols/ HTTP/1.1
+GET http://localhost:5001/api/parkOfficers/4/protocols/ HTTP/1.1
