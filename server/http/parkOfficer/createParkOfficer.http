@@ -2,7 +2,7 @@ POST http://localhost:5001/api/parkOfficers HTTP/1.1
 Content-Type: application/json
 
 {
-  "fullName": "Delete Me",
-  "badgeNumber": "123456-U",
+  "fullName": "John Doe",
+  "badgeNumber": "123456-G",
   "district": "Zaporizhzhia, Voznesenivskiy"
 }

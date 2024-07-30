@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     badgeNumber: {
       allowNull: false,
       type: DataTypes.STRING,
+      unique: true,
       validate: {
         notNull: true,
         notEmpty: true
