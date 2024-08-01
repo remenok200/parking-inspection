@@ -7,10 +7,12 @@ import {
   dismissParkOfficer,
 } from '../../redux/slices/parkOfficerSlice';
 import DeleteConfirmation from '../Modals/DeleteConfirmation';
+import UpdateParkOfficer from '../Modals/UpdateParkOfficer';
 
 const ParkOfficer = ({ parkOfficer }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
+  const [updateParkOfficerOpen, setUpdateParkOfficerOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -43,7 +45,16 @@ const ParkOfficer = ({ parkOfficer }) => {
         />
       )}
 
-      <button onClick={dismissHandler}>Dismiss</button>
+      <button onClick={() => setUpdateParkOfficerOpen(true)}>Edit</button>
+      {updateParkOfficerOpen && (
+        <UpdateParkOfficer
+          open={updateParkOfficerOpen}
+          setIsOpen={setUpdateParkOfficerOpen}
+          officer={parkOfficer}
+        />
+      )}
+
+      {parkOfficer.isWorked && <button onClick={dismissHandler}>Dismiss</button>}
     </article>
   );
 };
