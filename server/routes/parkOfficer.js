@@ -4,6 +4,7 @@ const imageRouter = require('./image');
 const protocolRouter = require('./protocol');
 
 const ParkOfficerController = require('../controllers/ParkOfficerController');
+const ProtocolController = require('../controllers/ProtocolController');
 
 // getAllParkOfficers
 // getParkOfficerByID
@@ -11,6 +12,11 @@ const ParkOfficerController = require('../controllers/ParkOfficerController');
 // updateParkOfficerByID
 // deleteParkOfficerByID
 // dismissParkOfficerByID
+
+// localhost:5001/api/parkOfficers/protocols
+parkOfficerRouter.
+route('/protocols')
+.get(ProtocolController.getAllProtocols);
 
 parkOfficerRouter
 .route('/')
