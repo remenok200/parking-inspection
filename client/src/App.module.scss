@@ -1,0 +1,20 @@
+.nav-list {
+  font-size: 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  li {
+    padding-left: 40px;
+    list-style-type: none;
+  }
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+
+  &:hover {
+    border-bottom: 1px dashed black;
+  }
+}
