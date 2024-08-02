@@ -40,7 +40,7 @@ const ParkOfficer = ({ parkOfficer }) => {
         <DeleteConfirmation
           open={deleteConfirmationModalOpen}
           setIsOpen={setDeleteConfirmationModalOpen}
-          officerFullName={parkOfficer.fullName}
+          itemName={parkOfficer.fullName}
           deleteCallback={deleteHandler}
         />
       )}

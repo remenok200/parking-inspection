@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Protocol.module.scss';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import {
+  deleteProtocolByID,
+  getAllProtocols,
+} from '../../redux/slices/protocolSlice';
+import { useDispatch } from 'react-redux';
+import DeleteConfirmation from '../Modals/DeleteConfirmation';
 
 const Protocol = ({ protocol }) => {
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState();
+  const dispatch = useDispatch();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -12,6 +21,16 @@ const Protocol = ({ protocol }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
+  };
+
+  const deleteHandler = async () => {
+    await dispatch(
+      deleteProtocolByID({
+        parkOfficerID: protocol.officerId,
+        protocolID: protocol.id,
+      })
+    );
+    await dispatch(getAllProtocols());
   };
 
   return (
@@ -27,6 +46,18 @@ const Protocol = ({ protocol }) => {
 
       <p>Officer full name: {protocol.parkOfficer.full_name}</p>
       <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
+
+      <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+        Delete
+      </button>
+      {deleteConfirmationModalOpen && (
+        <DeleteConfirmation
+          open={deleteConfirmationModalOpen}
+          setIsOpen={setDeleteConfirmationModalOpen}
+          itemName={`protocol № ${protocol.id}`}
+          deleteCallback={deleteHandler}
+        />
+      )}
 
       {protocol.images.length > 0 && (
         <Slider {...settings} className={styles.slider}>

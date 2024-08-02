@@ -14,15 +14,15 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-const DeleteConfirmation = ({ open, setIsOpen, officerFullName, deleteCallback }) => {
+const DeleteConfirmation = ({ open, setIsOpen, itemName, deleteCallback }) => {
   return (
     <Modal
       isOpen={open}
       onRequestClose={() => setIsOpen(false)}
       style={customStyles}
     >
-      <h2>Delete park officer</h2>
-      <p>Are u sure want to delete {officerFullName}?</p>
+      <h2>Delete {itemName}</h2>
+      <p>Are u sure want to delete {itemName}?</p>
 
       <button onClick={() => deleteCallback()}>Yes</button>
       <button onClick={() => setIsOpen(false)}>No</button>
