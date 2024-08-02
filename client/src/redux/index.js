@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import parkOfficerReducer from './slices/parkOfficerSlice';
+import protocolSlice from './slices/protocolSlice';
 
 const store = configureStore({
   reducer: {
-    parkOfficers: parkOfficerReducer
+    parkOfficers: parkOfficerReducer,
+    protocols: protocolSlice
   }
 });
 
