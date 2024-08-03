@@ -8,6 +8,7 @@ import {
 } from '../../redux/slices/parkOfficerSlice';
 import { useDispatch } from 'react-redux';
 import { customStyles } from '../../common/modals/customStyles';
+import styles from './Modals.module.scss';
 
 Modal.setAppElement('#root');
 
@@ -37,36 +38,50 @@ const UpdateParkOfficer = ({ open, setIsOpen, officer }) => {
       onRequestClose={() => setIsOpen(false)}
       style={customStyles}
     >
-      <h2>Edit officer</h2>
+      <h2 className={styles['form-title']}>{officer.fullName} | Edit</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={parkOfficerValidationSchema}
         onSubmit={handlerUpdateForm}
       >
         {(formikProps) => (
-          <Form>
+          <Form className={styles['form-container']}>
             <label>
               Fullname:
               <Field name="fullName" autoComplete="off" />
-              <ErrorMessage name="fullName" />
+              <ErrorMessage
+                name="fullName"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
             <label>
               Badge number:
               <Field name="badgeNumber" autoComplete="off" />
-              <ErrorMessage name="badgeNumber" />
+              <ErrorMessage
+                name="badgeNumber"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
             <label>
               District:
               <Field name="district" autoComplete="off" />
-              <ErrorMessage name="district" />
+              <ErrorMessage
+                name="district"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
-            <button type="submit">Update officer</button>
-            <button type="button" onClick={() => setIsOpen(false)}>
-              Cancel
-            </button>
+            <div className={styles['button-container']}>
+              <button type="submit">Update officer</button>
+              <button type="button" onClick={() => setIsOpen(false)}>
+                Cancel
+              </button>
+            </div>
           </Form>
         )}
       </Formik>
