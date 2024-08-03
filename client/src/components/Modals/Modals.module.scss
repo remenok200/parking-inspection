@@ -1,0 +1,5 @@
+@use '../../common/styles/template';
+
+.form-container {
+  @extend %form-container;
+}

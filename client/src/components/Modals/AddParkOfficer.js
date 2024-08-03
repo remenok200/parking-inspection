@@ -8,6 +8,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { parkOfficerValidationSchema } from '../../schemas/parkOfficerValidationSchema';
 import { customStyles } from '../../common/modals/customStyles';
+import styles from './Modals.module.scss';
 
 const initialValues = {
   fullName: '',
@@ -44,29 +45,43 @@ const AddParkOfficer = ({ open, setIsOpen }) => {
         onSubmit={handleAddParkOfficerSubmit}
       >
         {(formikProps) => (
-          <Form>
+          <Form className={styles['form-container']}>
             <label>
               Fullname:
               <Field name="fullName" autoComplete="off" />
-              <ErrorMessage name="fullName" />
+              <ErrorMessage
+                name="fullName"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
             <label>
               Badge number:
               <Field name="badgeNumber" autoComplete="off" />
-              <ErrorMessage name="badgeNumber" />
+              <ErrorMessage
+                name="badgeNumber"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
             <label>
               District:
               <Field name="district" autoComplete="off" />
-              <ErrorMessage name="district" />
+              <ErrorMessage
+                name="district"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
-            <button type="submit">Add officer</button>
-            <button type="button" onClick={() => setIsOpen(false)}>
-              Cancel
-            </button>
+            <div className={styles['button-container']}>
+              <button type="submit">Add officer</button>
+              <button type="button" onClick={() => setIsOpen(false)}>
+                Cancel
+              </button>
+            </div>
           </Form>
         )}
       </Formik>
