@@ -8,6 +8,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import { customStyles } from '../../common/modals/customStyles';
+import styles from './Modals.module.scss';
 
 const initialValues = {
   serviceNotes: '',
@@ -43,42 +44,62 @@ const CreateProtocol = ({
       onRequestClose={() => setIsOpen(false)}
       style={customStyles}
     >
-      <h2>{parkOfficerFullName} | Create protocol</h2>
+      <h2 className={styles['form-title']}>
+        {parkOfficerFullName} | Create protocol
+      </h2>
       <Formik
         initialValues={initialValues}
         validationSchema={protocolValidationSchema}
         onSubmit={handleCreateProtocolSubmit}
       >
         {(formikProps) => (
-          <Form>
+          <Form className={styles['form-container']}>
             <label>
               Service notes:
               <Field name="serviceNotes" as="textarea" autoComplete="off" />
-              <ErrorMessage name="serviceNotes" />
+              <ErrorMessage
+                name="serviceNotes"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
             <label>
               Fine amount:
               <Field name="fineAmount" type="number" autoComplete="off" />
-              <ErrorMessage name="fineAmount" />
+              <ErrorMessage
+                name="fineAmount"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
             <label>
               Violator full name:
               <Field name="violatorFullName" autoComplete="off" />
-              <ErrorMessage name="violatorFullName" />
+              <ErrorMessage
+                name="violatorFullName"
+                className={styles['form-error']}
+                component="div"
+              />
             </label>
 
             <label>
               Violator passport number:
               <Field name="violatorPassportNumber" autoComplete="off" />
-              <ErrorMessage name="violatorPassportNumber" />
+              <ErrorMessage
+                name="violatorPassportNumber"
+                component="div"
+                className={styles['form-error']}
+              />
             </label>
 
-            <button type="submit">Create protocol</button>
-            <button type="button" onClick={() => setIsOpen(false)}>
-              Cancel
-            </button>
+            <div className={styles['button-container']}>
+              <button type="submit">Create protocol</button>
+              <button type="button" onClick={() => setIsOpen(false)}>
+                Cancel
+              </button>
+            </div>
           </Form>
         )}
       </Formik>

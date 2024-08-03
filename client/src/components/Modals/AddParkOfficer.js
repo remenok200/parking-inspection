@@ -38,7 +38,7 @@ const AddParkOfficer = ({ open, setIsOpen }) => {
       onRequestClose={() => setIsOpen(false)}
       style={customStyles}
     >
-      <h2>Add officer</h2>
+      <h2 className={styles['form-title']}>Add officer</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={parkOfficerValidationSchema}
