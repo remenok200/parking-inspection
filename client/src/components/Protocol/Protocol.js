@@ -10,6 +10,7 @@ import {
 import { useDispatch } from 'react-redux';
 import DeleteConfirmation from '../Modals/DeleteConfirmation';
 import UpdateProtocol from '../Modals/UpdateProtocol';
+import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 
 const Protocol = ({ protocol }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
@@ -24,6 +25,9 @@ const Protocol = ({ protocol }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
+    arrows: protocol.images.length > 1,
+    prevArrow: <CustomPrevArrow />,
+    nextArrow: <CustomNextArrow />,
   };
 
   const deleteHandler = async () => {
