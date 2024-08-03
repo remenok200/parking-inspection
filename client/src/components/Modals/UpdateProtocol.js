@@ -1,32 +1,37 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { parkOfficerValidationSchema } from '../../schemas/parkOfficerValidationSchema';
+import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import {
-  updateParkOfficer,
-  getParkOfficers,
-} from '../../redux/slices/parkOfficerSlice';
+  updateProtocol,
+  getAllProtocols,
+} from '../../redux/slices/protocolSlice';
 import { useDispatch } from 'react-redux';
 import { customStyles } from '../../common/modals/customStyles';
 import styles from './Modals.module.scss';
 
 Modal.setAppElement('#root');
 
-const UpdateParkOfficer = ({ open, setIsOpen, officer }) => {
+const UpdateProtocol = ({ open, setIsOpen, protocol }) => {
   const dispatch = useDispatch();
 
   const initialValues = {
-    fullName: officer.fullName,
-    badgeNumber: officer.badgeNumber,
-    district: officer.district,
+    serviceNotes: protocol.serviceNotes,
+    fineAmount: protocol.fineAmount,
+    violatorFullName: protocol.violatorFullName,
+    violatorPassportNumber: protocol.violatorPassportNumber,
   };
 
   const handlerUpdateForm = async (values, { resetForm }) => {
     try {
       await dispatch(
-        updateParkOfficer({ parkOfficerID: officer.id, updatedData: values })
+        updateProtocol({
+          parkOfficerID: protocol.officerId,
+          protocolID: protocol.id,
+          updatedData: values,
+        })
       );
-      await dispatch(getParkOfficers());
+      await dispatch(getAllProtocols());
       resetForm();
       setIsOpen(false);
     } catch (error) {
@@ -40,46 +45,57 @@ const UpdateParkOfficer = ({ open, setIsOpen, officer }) => {
       onRequestClose={() => setIsOpen(false)}
       style={customStyles}
     >
-      <h2 className={styles['form-title']}>{officer.fullName} | Edit</h2>
+      <h2 className={styles['form-title']}>Protocol № {protocol.id} | Edit</h2>
       <Formik
         initialValues={initialValues}
-        validationSchema={parkOfficerValidationSchema}
+        validationSchema={protocolValidationSchema}
         onSubmit={handlerUpdateForm}
       >
         {(formikProps) => (
           <Form className={styles['form-container']}>
             <label>
-              Fullname:
-              <Field name="fullName" autoComplete="off" />
+              Service Notes:
+              <Field name="serviceNotes" autoComplete="off" />
               <ErrorMessage
-                name="fullName"
+                name="serviceNotes"
                 component="div"
                 className={styles['form-error']}
               />
             </label>
 
             <label>
-              Badge number:
-              <Field name="badgeNumber" autoComplete="off" />
+              Fine amount:
+              <Field name="fineAmount" autoComplete="off" />
               <ErrorMessage
-                name="badgeNumber"
+                name="fineAmount"
+                component="div"
+                type="number"
+                className={styles['form-error']}
+              />
+            </label>
+
+            <label>
+              Violator full name:
+              <Field name="violatorFullName" autoComplete="off" />
+              <ErrorMessage
+                name="violatorFullName"
                 component="div"
                 className={styles['form-error']}
               />
             </label>
 
             <label>
-              District:
-              <Field name="district" autoComplete="off" />
+              Violator passport number:
+              <Field name="violatorPassportNumber" autoComplete="off" />
               <ErrorMessage
-                name="district"
+                name="violatorPassportNumber"
                 component="div"
                 className={styles['form-error']}
               />
             </label>
 
             <div className={styles['button-container']}>
-              <button type="submit">Update officer</button>
+              <button type="submit">Update protocol</button>
               <button type="button" onClick={() => setIsOpen(false)}>
                 Cancel
               </button>
@@ -91,4 +107,4 @@ const UpdateParkOfficer = ({ open, setIsOpen, officer }) => {
   );
 };
 
-export default UpdateParkOfficer;
+export default UpdateProtocol;

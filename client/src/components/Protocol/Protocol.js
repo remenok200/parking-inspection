@@ -9,9 +9,12 @@ import {
 } from '../../redux/slices/protocolSlice';
 import { useDispatch } from 'react-redux';
 import DeleteConfirmation from '../Modals/DeleteConfirmation';
+import UpdateProtocol from '../Modals/UpdateProtocol';
 
 const Protocol = ({ protocol }) => {
-  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState();
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+    useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const dispatch = useDispatch();
 
   const settings = {
@@ -47,17 +50,29 @@ const Protocol = ({ protocol }) => {
       <p>Officer full name: {protocol.parkOfficer.full_name}</p>
       <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
 
-      <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-        Delete
-      </button>
-      {deleteConfirmationModalOpen && (
-        <DeleteConfirmation
-          open={deleteConfirmationModalOpen}
-          setIsOpen={setDeleteConfirmationModalOpen}
-          itemName={`protocol № ${protocol.id}`}
-          deleteCallback={deleteHandler}
-        />
-      )}
+      <div className={styles['button-container']}>
+        <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+          Delete
+        </button>
+
+        {deleteConfirmationModalOpen && (
+          <DeleteConfirmation
+            open={deleteConfirmationModalOpen}
+            setIsOpen={setDeleteConfirmationModalOpen}
+            itemName={`protocol № ${protocol.id}`}
+            deleteCallback={deleteHandler}
+          />
+        )}
+
+        <button onClick={() => setEditModalOpen(true)}>Edit</button>
+        {editModalOpen && (
+          <UpdateProtocol
+            open={editModalOpen}
+            setIsOpen={setEditModalOpen}
+            protocol={protocol}
+          />
+        )}
+      </div>
 
       {protocol.images.length > 0 && (
         <Slider {...settings} className={styles.slider}>
