@@ -26,3 +26,9 @@ export const deleteProtocolByID = async (parkOfficerID, protocolID) =>
   await httpClient.delete(
     `/parkOfficers/${parkOfficerID}/protocols/${protocolID}`
   );
+
+export const createProtocol = async (parkOfficerID, protocolData) =>
+  await httpClient.post(
+    `/parkOfficers/${parkOfficerID}/protocols`,
+    protocolData
+  );

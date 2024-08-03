@@ -8,11 +8,13 @@ import {
 } from '../../redux/slices/parkOfficerSlice';
 import DeleteConfirmation from '../Modals/DeleteConfirmation';
 import UpdateParkOfficer from '../Modals/UpdateParkOfficer';
+import CreateProtocol from '../Modals/CreateProtocol';
 
 const ParkOfficer = ({ parkOfficer }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [updateParkOfficerOpen, setUpdateParkOfficerOpen] = useState(false);
+  const [createProtocolModalOpen, setCreateProtocolModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -54,7 +56,25 @@ const ParkOfficer = ({ parkOfficer }) => {
         />
       )}
 
-      {parkOfficer.isWorked && <button onClick={dismissHandler}>Dismiss</button>}
+      {parkOfficer.isWorked && (
+        <>
+          <button onClick={() => setCreateProtocolModalOpen(true)}>
+            Create protocol
+          </button>
+          {createProtocolModalOpen && (
+            <CreateProtocol
+              open={createProtocolModalOpen}
+              setIsOpen={setCreateProtocolModalOpen}
+              parkOfficerID={parkOfficer.id}
+              parkOfficerFullName={parkOfficer.fullName}
+            />
+          )}
+        </>
+      )}
+
+      {parkOfficer.isWorked && (
+        <button onClick={dismissHandler}>Dismiss</button>
+      )}
     </article>
   );
 };

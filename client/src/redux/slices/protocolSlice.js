@@ -7,7 +7,9 @@ const getAllProtocols = createAsyncThunk(
   `${SLICE_NAME}/getAllProtocols`,
   async (param, thunkAPI) => {
     try {
-      const { data: { data: protocols } } = await API.getAllProtocols();
+      const {
+        data: { data: protocols },
+      } = await API.getAllProtocols();
 
       return protocols;
     } catch (error) {
@@ -18,9 +20,20 @@ const getAllProtocols = createAsyncThunk(
 
 const deleteProtocolByID = createAsyncThunk(
   `${SLICE_NAME}/deleteProtocolByID`,
-  async({ parkOfficerID, protocolID }, thunkAPI) => {
+  async ({ parkOfficerID, protocolID }, thunkAPI) => {
     try {
       await API.deleteProtocolByID(parkOfficerID, protocolID);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const createProtocol = createAsyncThunk(
+  `${SLICE_NAME}/createProtocol`,
+  async ({ parkOfficerID, protocolData }, thunkAPI) => {
+    try {
+      await API.createProtocol(parkOfficerID, protocolData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -30,7 +43,7 @@ const deleteProtocolByID = createAsyncThunk(
 const initialState = {
   protocols: [],
   isLoading: false,
-  error: null
+  error: null,
 };
 
 const protocolSlice = createSlice({
@@ -67,11 +80,26 @@ const protocolSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
-  }
+
+    builder.addCase(createProtocol.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(createProtocol.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+
+    builder.addCase(createProtocol.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+  },
 });
 
 const { reducer } = protocolSlice;
 
-export { getAllProtocols, deleteProtocolByID };
+export { getAllProtocols, deleteProtocolByID, createProtocol };
 
 export default reducer;

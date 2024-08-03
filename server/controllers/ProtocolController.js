@@ -74,6 +74,12 @@ module.exports.createProtocol = async (req, res, next) => {
   try {
     const { params: { officerId }, body, files } = req;
 
+    const officer = await ParkOfficer.findByPk(officerId);
+
+    if (!officer || !officer.isWorked) {
+      return next(createHttpError(400, 'Park officer is not active or does not exist'));
+    }
+
     const createdProtocol = await Protocol.create({ ...body, officerId });
 
     if(!createdProtocol) {

@@ -1,4 +1,4 @@
-POST http://localhost:5001/api/parkOfficers/4/protocols/ HTTP/1.1
+POST http://localhost:5001/api/parkOfficers/7/protocols/ HTTP/1.1
 Content-Type: application/json
 
 {

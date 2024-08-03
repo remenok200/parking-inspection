@@ -1,32 +1,25 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { addParkOfficer, getParkOfficers } from '../../redux/slices/parkOfficerSlice';
+import {
+  addParkOfficer,
+  getParkOfficers,
+} from '../../redux/slices/parkOfficerSlice';
 import { useDispatch } from 'react-redux';
 import { parkOfficerValidationSchema } from '../../schemas/parkOfficerValidationSchema';
+import { customStyles } from '../../common/modals/customStyles';
 
 const initialValues = {
   fullName: '',
   badgeNumber: '',
-  district: ''
-}
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
+  district: '',
 };
 
 Modal.setAppElement('#root');
 
 const AddParkOfficer = ({ open, setIsOpen }) => {
   const dispatch = useDispatch();
-  
+
   const handleAddParkOfficerSubmit = async (values, { resetForm }) => {
     try {
       await dispatch(addParkOfficer(values));
@@ -36,7 +29,7 @@ const AddParkOfficer = ({ open, setIsOpen }) => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <Modal
@@ -52,23 +45,28 @@ const AddParkOfficer = ({ open, setIsOpen }) => {
       >
         {(formikProps) => (
           <Form>
-            <label>Fullname:
-              <Field name='fullName' />
-              <ErrorMessage name='fullName' />
+            <label>
+              Fullname:
+              <Field name="fullName" autoComplete="off" />
+              <ErrorMessage name="fullName" />
             </label>
 
-            <label>Badge number:
-              <Field name='badgeNumber' />
-              <ErrorMessage name='badgeNumber' />
+            <label>
+              Badge number:
+              <Field name="badgeNumber" autoComplete="off" />
+              <ErrorMessage name="badgeNumber" />
             </label>
 
-            <label>District:
-              <Field name='district' />
-              <ErrorMessage name='district' />
+            <label>
+              District:
+              <Field name="district" autoComplete="off" />
+              <ErrorMessage name="district" />
             </label>
 
-            <button type='submit'>Add officer</button>
-            <button type='button' onClick={() => setIsOpen(false)}>Cancel</button>
+            <button type="submit">Add officer</button>
+            <button type="button" onClick={() => setIsOpen(false)}>
+              Cancel
+            </button>
           </Form>
         )}
       </Formik>
