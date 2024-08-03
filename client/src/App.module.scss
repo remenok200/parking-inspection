@@ -1,3 +1,5 @@
+@use './common/styles/template';
+
 .nav-list {
   font-size: 2em;
   display: flex;
@@ -17,4 +19,12 @@
   &:hover {
     border-bottom: 1px dashed black;
   }
+}
+
+button {
+  @extend %button;
+}
+
+input {
+  @extend %input;
 }

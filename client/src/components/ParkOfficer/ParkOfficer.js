@@ -9,6 +9,7 @@ import {
 import DeleteConfirmation from '../Modals/DeleteConfirmation';
 import UpdateParkOfficer from '../Modals/UpdateParkOfficer';
 import CreateProtocol from '../Modals/CreateProtocol';
+import cx from 'classnames';
 
 const ParkOfficer = ({ parkOfficer }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
@@ -33,48 +34,57 @@ const ParkOfficer = ({ parkOfficer }) => {
       <h1>{parkOfficer.fullName}</h1>
       <p>Badge number: {parkOfficer.badgeNumber}</p>
       <p>District: {parkOfficer.district}</p>
-      <p>{parkOfficer.isWorked ? 'Worked' : 'Not worked'}</p>
+      <p
+        className={cx({
+          [styles['status-worked']]: parkOfficer.isWorked,
+          [styles['status-not-worked']]: !parkOfficer.isWorked,
+        })}
+      >
+        {parkOfficer.isWorked ? 'Worked' : 'Not worked'}
+      </p>
 
-      <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-        Delete
-      </button>
-      {deleteConfirmationModalOpen && (
-        <DeleteConfirmation
-          open={deleteConfirmationModalOpen}
-          setIsOpen={setDeleteConfirmationModalOpen}
-          itemName={parkOfficer.fullName}
-          deleteCallback={deleteHandler}
-        />
-      )}
+      <div className={styles['button-container']}>
+        <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+          Delete
+        </button>
+        {deleteConfirmationModalOpen && (
+          <DeleteConfirmation
+            open={deleteConfirmationModalOpen}
+            setIsOpen={setDeleteConfirmationModalOpen}
+            itemName={parkOfficer.fullName}
+            deleteCallback={deleteHandler}
+          />
+        )}
 
-      <button onClick={() => setUpdateParkOfficerOpen(true)}>Edit</button>
-      {updateParkOfficerOpen && (
-        <UpdateParkOfficer
-          open={updateParkOfficerOpen}
-          setIsOpen={setUpdateParkOfficerOpen}
-          officer={parkOfficer}
-        />
-      )}
+        <button onClick={() => setUpdateParkOfficerOpen(true)}>Edit</button>
+        {updateParkOfficerOpen && (
+          <UpdateParkOfficer
+            open={updateParkOfficerOpen}
+            setIsOpen={setUpdateParkOfficerOpen}
+            officer={parkOfficer}
+          />
+        )}
 
-      {parkOfficer.isWorked && (
-        <>
-          <button onClick={() => setCreateProtocolModalOpen(true)}>
-            Create protocol
-          </button>
-          {createProtocolModalOpen && (
-            <CreateProtocol
-              open={createProtocolModalOpen}
-              setIsOpen={setCreateProtocolModalOpen}
-              parkOfficerID={parkOfficer.id}
-              parkOfficerFullName={parkOfficer.fullName}
-            />
-          )}
-        </>
-      )}
+        {parkOfficer.isWorked && (
+          <>
+            <button onClick={() => setCreateProtocolModalOpen(true)}>
+              Create protocol
+            </button>
+            {createProtocolModalOpen && (
+              <CreateProtocol
+                open={createProtocolModalOpen}
+                setIsOpen={setCreateProtocolModalOpen}
+                parkOfficerID={parkOfficer.id}
+                parkOfficerFullName={parkOfficer.fullName}
+              />
+            )}
+          </>
+        )}
 
-      {parkOfficer.isWorked && (
-        <button onClick={dismissHandler}>Dismiss</button>
-      )}
+        {parkOfficer.isWorked && (
+          <button onClick={dismissHandler}>Dismiss</button>
+        )}
+      </div>
     </article>
   );
 };

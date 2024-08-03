@@ -3,3 +3,24 @@
 .card-wrapper {
   @extend %card-wrapper;
 }
+
+@mixin status-style($bg-color, $border-color, $text-color) {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: $text-color;
+  background-color: $bg-color;
+  border: 2px solid $border-color;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.status-worked {
+  @include status-style(#d4edda, #c3e6cb, #155724);
+}
+
+.status-not-worked {
+  @include status-style(#e9ecef, #ced4da, #333);
+}
