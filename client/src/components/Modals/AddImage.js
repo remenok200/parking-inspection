@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 Modal.setAppElement('#root');
 
-const AddImage = ({ open, setIsOpen, protocolID }) => {
+const AddImage = ({ open, setIsOpen, protocolID, refreshProtocolsList }) => {
   const dispatch = useDispatch();
 
   const [file, setFile] = useState(null);
@@ -24,6 +24,7 @@ const AddImage = ({ open, setIsOpen, protocolID }) => {
         await dispatch(
           addImagesToProtocol({ protocolID, images: formData })
         );
+        await refreshProtocolsList();
       } catch (error) {
         console.error(error);
       }

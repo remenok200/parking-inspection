@@ -14,7 +14,7 @@ import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import AddImage from '../Modals/AddImage';
 
-const Protocol = ({ protocol }) => {
+const Protocol = ({ protocol, refreshProtocolsList }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -93,7 +93,8 @@ const Protocol = ({ protocol }) => {
           <AddImage
             open={addImagesModalOpen}
             setIsOpen={setAddImagesModalOpen}
-            protocolID={protocol.id }
+            protocolID={protocol.id}
+            refreshProtocolsList={refreshProtocolsList}
           />
         )}
       </div>
