@@ -92,7 +92,11 @@ const ProtocolsPage = () => {
         </div>
       </div>
 
-      {parkOfficerFullName && <h1>{parkOfficerFullName} | Protocols</h1>}
+      {parkOfficerFullName ? (
+        <h1 className={styles.header}>{parkOfficerFullName} | Protocols</h1>
+      ) : (
+        <h1 className={styles.header}>All protocols</h1>
+      )}
 
       {protocolsCards}
     </section>
