@@ -1,6 +1,7 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import ParkOfficersPage from './pages/ParkOfficersPage/ParkOfficersPage';
 import ProtocolsPage from './pages/ProtocolsPage/ProtocolsPage';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import styles from './App.module.scss';
 
 function App() {
@@ -9,14 +10,24 @@ function App() {
       <nav>
         <ul className={styles['nav-list']}>
           <li>
-            <Link className={styles.link} to="/">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
               Officers
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link className={styles.link} to="/protocols">
+            <NavLink
+              to="/protocols"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
               Protocols
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </nav>

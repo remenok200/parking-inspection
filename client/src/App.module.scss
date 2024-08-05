@@ -14,10 +14,30 @@
 
 .link {
   text-decoration: none;
-  color: black;
+  color: #000;
+  font-weight: normal;
+  padding: 10px;
+  transition: color 0.3s, border-bottom 0.3s;
+  position: relative;
 
-  &:hover {
-    border-bottom: 1px dashed black;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background-color: transparent;
+    transition: background-color 0.3s;
+  }
+}
+
+.active {
+  color: #007bff;
+  font-weight: bold;
+
+  &::after {
+    background-color: #007bff;
   }
 }
 
