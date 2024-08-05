@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import DeleteConfirmation from '../Modals/DeleteConfirmation';
 import UpdateProtocol from '../Modals/UpdateProtocol';
 import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
+import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 
 const Protocol = ({ protocol }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
@@ -48,8 +49,14 @@ const Protocol = ({ protocol }) => {
       <p>Fine amount: {protocol.fineAmount}</p>
       <p>Violator full name: {protocol.violatorFullName}</p>
       <p>Violator passport number: {protocol.violatorPassportNumber}</p>
-      <p>Created: {protocol.createdAt}</p>
-      <p>Updated: {protocol.updatedAt}</p>
+      <p>
+        Created: {formatDateTime(protocol.createdAt)} |{' '}
+        {timeAgo(protocol.createdAt)}
+      </p>
+      <p>
+        Updated: {formatDateTime(protocol.updatedAt)} |{' '}
+        {timeAgo(protocol.updatedAt)}
+      </p>
 
       <p>Officer full name: {protocol.parkOfficer.full_name}</p>
       <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
