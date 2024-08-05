@@ -12,11 +12,14 @@ import DeleteConfirmation from '../Modals/DeleteConfirmation';
 import UpdateProtocol from '../Modals/UpdateProtocol';
 import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
+import AddImage from '../Modals/AddImage';
 
 const Protocol = ({ protocol }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [addImagesModalOpen, setAddImagesModalOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   const settings = {
@@ -65,7 +68,6 @@ const Protocol = ({ protocol }) => {
         <button onClick={() => setDeleteConfirmationModalOpen(true)}>
           Delete
         </button>
-
         {deleteConfirmationModalOpen && (
           <DeleteConfirmation
             open={deleteConfirmationModalOpen}
@@ -81,6 +83,17 @@ const Protocol = ({ protocol }) => {
             open={editModalOpen}
             setIsOpen={setEditModalOpen}
             protocol={protocol}
+          />
+        )}
+
+        <button onClick={() => setAddImagesModalOpen(true)}>
+          Add image(s)
+        </button>
+        {addImagesModalOpen && (
+          <AddImage
+            open={addImagesModalOpen}
+            setIsOpen={setAddImagesModalOpen}
+            protocolID={protocol.id }
           />
         )}
       </div>

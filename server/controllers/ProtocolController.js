@@ -16,19 +16,19 @@ module.exports.getAllProtocols = async (req, res, next) => {
         {
           model: ParkOfficer,
           attributes: ['id', 'full_name', 'badge_number'],
-          as: 'parkOfficer'
+          as: 'parkOfficer',
         },
         {
           model: Image,
           attributes: ['id', 'path'],
-          as: 'images'
-        }
+          as: 'images',
+        },
       ],
       order: [['updated_at', 'DESC']],
-      ...pagination
+      ...pagination,
     });
 
-    if(!protocols.length) {
+    if (!protocols.length) {
       return next(createHttpError(404, 'Protocols not found'));
     }
 
@@ -36,11 +36,14 @@ module.exports.getAllProtocols = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
   try {
-    const { params: { officerId }, pagination } = req;
+    const {
+      params: { officerId },
+      pagination,
+    } = req;
 
     const protocols = await Protocol.findAll({
       where: { officerId },
@@ -48,19 +51,19 @@ module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
         {
           model: ParkOfficer,
           attributes: ['id', 'full_name', 'badge_number'],
-          as: 'parkOfficer'
+          as: 'parkOfficer',
         },
         {
           model: Image,
           attributes: ['id', 'path'],
-          as: 'images'
-        }
+          as: 'images',
+        },
       ],
       order: [['updated_at', 'DESC']],
-      ...pagination
+      ...pagination,
     });
 
-    if(!protocols.length) {
+    if (!protocols.length) {
       return next(createHttpError(404, 'Protocols not found'));
     }
 
@@ -68,28 +71,34 @@ module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports.createProtocol = async (req, res, next) => {
   try {
-    const { params: { officerId }, body, files } = req;
+    const {
+      params: { officerId },
+      body,
+      files,
+    } = req;
 
     const officer = await ParkOfficer.findByPk(officerId);
 
     if (!officer || !officer.isWorked) {
-      return next(createHttpError(400, 'Park officer is not active or does not exist'));
+      return next(
+        createHttpError(400, 'Park officer is not active or does not exist')
+      );
     }
 
     const createdProtocol = await Protocol.create({ ...body, officerId });
 
-    if(!createdProtocol) {
+    if (!createdProtocol) {
       return next(createHttpError(400, 'Protocol not created'));
     }
 
-    if(files?.length) {
-      const images = files.map(file => ({
+    if (files?.length) {
+      const images = files.map((file) => ({
         path: file.filename,
-        protocolId: createdProtocol.id
+        protocolId: createdProtocol.id,
       }));
 
       await Image.bulkCreate(images);
@@ -101,42 +110,46 @@ module.exports.createProtocol = async (req, res, next) => {
         {
           model: ParkOfficer,
           attributes: ['id', 'full_name', 'badge_number'],
-          as: 'parkOfficer'
+          as: 'parkOfficer',
         },
         {
           model: Image,
           attributes: ['id', 'path'],
-          as: 'images'
-        }
+          as: 'images',
+        },
       ],
-      order: [['updated_at', 'DESC']]
+      order: [['updated_at', 'DESC']],
     });
 
     return res.status(201).send({ data: protocolWithData });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports.updateProtocolByID = async (req, res, next) => {
   try {
-    const { params: { id }, body, files } = req;
+    const {
+      params: { id },
+      body,
+      files,
+    } = req;
 
     const [count, [updatedProtocol]] = await Protocol.update(body, {
       where: { id },
-      returning: true
+      returning: true,
     });
 
-    if(files?.length) {
-      const images = files.map(file => ({
+    if (files?.length) {
+      const images = files.map((file) => ({
         path: file.filename,
-        protocolId: updatedProtocol.id
+        protocolId: updatedProtocol.id,
       }));
 
       await Image.bulkCreate(images);
     }
 
-    if(count === 0) {
+    if (count === 0) {
       return next(createHttpError(404, 'Protocol not found'));
     }
 
@@ -146,30 +159,32 @@ module.exports.updateProtocolByID = async (req, res, next) => {
         {
           model: ParkOfficer,
           attributes: ['id', 'full_name', 'badge_number'],
-          as: 'parkOfficer'
+          as: 'parkOfficer',
         },
         {
           model: Image,
           attributes: ['id', 'path'],
-          as: 'images'
-        }
+          as: 'images',
+        },
       ],
-      order: [['updated_at', 'DESC']]
+      order: [['updated_at', 'DESC']],
     });
 
     return res.status(200).send({ data: protocolWithData });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports.deleteProtocolByID = async (req, res, next) => {
   try {
-    const { params: { id } } = req;
+    const {
+      params: { id },
+    } = req;
 
     const count = await Protocol.destroy({ where: { id } });
 
-    if(count === 0) {
+    if (count === 0) {
       return next(createHttpError(404, 'Protocol not found'));
     }
 
@@ -177,4 +192,4 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};

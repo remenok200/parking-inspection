@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from '../../API';
+import * as FETCH_API from '../../API/uploadImage';
 
 const SLICE_NAME = 'protocols';
 
@@ -45,6 +46,17 @@ const updateProtocol = createAsyncThunk(
   async ({ parkOfficerID, protocolID, updatedData }, thunkAPI) => {
     try {
       await API.updateProtocol(parkOfficerID, protocolID, updatedData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const addImagesToProtocol = createAsyncThunk(
+  `${SLICE_NAME}/addImagesToProtocol`,
+  async ({ protocolID, images }, thunkAPI) => {
+    try {
+      await FETCH_API.addProtocolImages(images, protocolID);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -152,6 +164,21 @@ const protocolSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(addImagesToProtocol.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(addImagesToProtocol.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+
+    builder.addCase(addImagesToProtocol.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
@@ -163,6 +190,7 @@ export {
   createProtocol,
   updateProtocol,
   getAllProtocolsByOfficerID,
+  addImagesToProtocol
 };
 
 export default reducer;
