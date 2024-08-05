@@ -34,7 +34,10 @@ export const createProtocol = async (parkOfficerID, protocolData) =>
   );
 
 export const updateProtocol = async (parkOfficerID, protocolID, updatedData) =>
-  httpClient.put(
+  await httpClient.put(
     `/parkOfficers/${parkOfficerID}/protocols/${protocolID}`,
     updatedData
   );
+
+export const getAllProtocolsByOfficerID = async (parkOfficerID) =>
+  await httpClient.get(`/parkOfficers/${parkOfficerID}/protocols`);

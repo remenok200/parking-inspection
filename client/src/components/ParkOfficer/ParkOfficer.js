@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ParkOfficer.module.scss';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   deleteParkOfficer,
   getParkOfficers,
@@ -44,6 +45,10 @@ const ParkOfficer = ({ parkOfficer }) => {
       </p>
 
       <div className={styles['button-container']}>
+        <Link to={`/protocols/${parkOfficer.id}/${parkOfficer.fullName}`}>
+          <button>View protocols</button>
+        </Link>
+
         <button onClick={() => setDeleteConfirmationModalOpen(true)}>
           Delete
         </button>

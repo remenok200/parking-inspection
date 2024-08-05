@@ -51,6 +51,21 @@ const updateProtocol = createAsyncThunk(
   }
 );
 
+const getAllProtocolsByOfficerID = createAsyncThunk(
+  `${SLICE_NAME}/getAllProtocolsByOfficerID`,
+  async (parkOfficerID, thunkAPI) => {
+    try {
+      const {
+        data: { data: protocols },
+      } = await API.getAllProtocolsByOfficerID(parkOfficerID);
+
+      return protocols;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   protocols: [],
   isLoading: false,
@@ -121,11 +136,33 @@ const protocolSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(getAllProtocolsByOfficerID.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(getAllProtocolsByOfficerID.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.protocols = action.payload;
+      state.error = null;
+    });
+
+    builder.addCase(getAllProtocolsByOfficerID.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 const { reducer } = protocolSlice;
 
-export { getAllProtocols, deleteProtocolByID, createProtocol, updateProtocol };
+export {
+  getAllProtocols,
+  deleteProtocolByID,
+  createProtocol,
+  updateProtocol,
+  getAllProtocolsByOfficerID,
+};
 
 export default reducer;
