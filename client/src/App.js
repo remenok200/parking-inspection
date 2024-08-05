@@ -1,36 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ParkOfficersPage from './pages/ParkOfficersPage/ParkOfficersPage';
 import ProtocolsPage from './pages/ProtocolsPage/ProtocolsPage';
 import styles from './App.module.scss';
+import NavBar from './components/NavBar/NavBar';
 
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        <ul className={styles['nav-list']}>
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive ? `${styles.link} ${styles.active}` : styles.link
-              }
-            >
-              Officers
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/protocols"
-              className={({ isActive }) =>
-                isActive ? `${styles.link} ${styles.active}` : styles.link
-              }
-            >
-              Protocols
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
+      <NavBar />
 
       <Routes>
         <Route path="/" element={<ParkOfficersPage />} />
