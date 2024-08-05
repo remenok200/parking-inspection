@@ -44,4 +44,9 @@ export const getAllProtocolsByOfficerID = async (parkOfficerID) =>
 
 export const addProtocolImages = async (images, protocolID) => {
   await httpClient.post(`/parkOfficers/protocols/${protocolID}/images`, images);
-}
+};
+
+export const deleteProtocolImageByID = async (protocolID, imageID) =>
+  await httpClient.delete(
+    `/parkOfficers/protocols/${protocolID}/images/${imageID}`
+  );

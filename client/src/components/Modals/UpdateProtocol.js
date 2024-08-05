@@ -12,7 +12,7 @@ import styles from './Modals.module.scss';
 
 Modal.setAppElement('#root');
 
-const UpdateProtocol = ({ open, setIsOpen, protocol }) => {
+const UpdateProtocol = ({ open, setIsOpen, protocol, refreshProtocolsList }) => {
   const dispatch = useDispatch();
 
   const initialValues = {
@@ -31,7 +31,7 @@ const UpdateProtocol = ({ open, setIsOpen, protocol }) => {
           updatedData: values,
         })
       );
-      await dispatch(getAllProtocols());
+      refreshProtocolsList();
       resetForm();
       setIsOpen(false);
     } catch (error) {

@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import {
   deleteProtocolByID,
-  getAllProtocols,
+  deleteProtocolImageByID,
 } from '../../redux/slices/protocolSlice';
 import { useDispatch } from 'react-redux';
 import DeleteConfirmation from '../Modals/DeleteConfirmation';
@@ -19,6 +19,7 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
     useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [addImagesModalOpen, setAddImagesModalOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -32,6 +33,9 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
     arrows: protocol.images.length > 1,
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
+    afterChange: (currentImageIndex) => {
+      setCurrentSlide(currentImageIndex);
+    },
   };
 
   const deleteHandler = async () => {
@@ -41,7 +45,18 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
         protocolID: protocol.id,
       })
     );
-    await dispatch(getAllProtocols());
+    refreshProtocolsList();
+  };
+
+  const deleteImageHandler = async () => {
+    await dispatch(
+      deleteProtocolImageByID({
+        protocolID: protocol.id,
+        imageID: protocol.images[currentSlide].id,
+      })
+    );
+
+    refreshProtocolsList();
   };
 
   return (
@@ -83,6 +98,7 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
             open={editModalOpen}
             setIsOpen={setEditModalOpen}
             protocol={protocol}
+            refreshProtocolsList={refreshProtocolsList}
           />
         )}
 
@@ -111,6 +127,14 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
           ))}
         </Slider>
       )}
+
+      <div className={styles['button-container']}>
+        {protocol.images.length > 0 && (
+          <button onClick={deleteImageHandler}>
+            Delete current image in the slider
+          </button>
+        )}
+      </div>
     </article>
   );
 };
