@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './CustomArrows.module.scss';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
 const CustomPrevArrow = (props) => {
   const { onClick } = props;
@@ -8,9 +9,7 @@ const CustomPrevArrow = (props) => {
       className={`${styles.customArrow} ${styles.prevArrow}`}
       onClick={onClick}
     >
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-        <path d="M15 18l-6-6 6-6" stroke="#007bff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
+      <ArrowBack fontSize="large" className={styles.icon} />
     </div>
   );
 };
@@ -22,9 +21,7 @@ const CustomNextArrow = (props) => {
       className={`${styles.customArrow} ${styles.nextArrow}`}
       onClick={onClick}
     >
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="#007bff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
+      <ArrowForward fontSize="large" className={styles.icon} />
     </div>
   );
 };
