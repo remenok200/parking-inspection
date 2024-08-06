@@ -5,9 +5,11 @@ const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
+require('./models/MongoDB');
+
 app.use(cors());
 
-app.use(express.json()); // body parser
+app.use(express.json());
 
 app.use(express.static('./public'));
 

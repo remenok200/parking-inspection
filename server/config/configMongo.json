@@ -1,0 +1,8 @@
+{
+  "development": {
+    "host": "localhost",
+    "database": "parking_inspection_users"
+  },
+  "test": {},
+  "production": {}
+}

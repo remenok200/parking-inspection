@@ -1,0 +1,7 @@
+POST http://localhost:5001/api/users/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "super-user@gmail.com",
+  "password": "test"
+}
