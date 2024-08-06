@@ -8,7 +8,7 @@ import {
   deleteProtocolImageByID,
 } from '../../redux/slices/protocolSlice';
 import { useDispatch } from 'react-redux';
-import DeleteConfirmation from '../Modals/DeleteConfirmation';
+import ConfirmationModal from '../Modals/ConfirmationModal';
 import UpdateProtocol from '../Modals/UpdateProtocol';
 import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
@@ -16,6 +16,8 @@ import AddImage from '../Modals/AddImage';
 
 const Protocol = ({ protocol, refreshProtocolsList }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+    useState(false);
+  const [deleteImageConfirmationModal, setDeleteImageConfirmationModal] =
     useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [addImagesModalOpen, setAddImagesModalOpen] = useState(false);
@@ -84,9 +86,10 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
           Delete
         </button>
         {deleteConfirmationModalOpen && (
-          <DeleteConfirmation
+          <ConfirmationModal
             open={deleteConfirmationModalOpen}
             setIsOpen={setDeleteConfirmationModalOpen}
+            action={'delete'}
             itemName={`protocol № ${protocol.id}`}
             deleteCallback={deleteHandler}
           />
@@ -130,9 +133,20 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
 
       <div className={styles['button-container']}>
         {protocol.images.length > 0 && (
-          <button onClick={deleteImageHandler}>
-            Delete current image in the slider
-          </button>
+          <>
+            <button onClick={() => setDeleteImageConfirmationModal(true)}>
+              Delete current image in the slider
+            </button>
+            {deleteImageConfirmationModal && (
+              <ConfirmationModal
+                open={deleteImageConfirmationModal}
+                setIsOpen={setDeleteImageConfirmationModal}
+                action={'delete'}
+                itemName={`this image`}
+                deleteCallback={deleteImageHandler}
+              />
+            )}
+          </>
         )}
       </div>
     </article>

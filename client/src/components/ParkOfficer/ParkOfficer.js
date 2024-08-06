@@ -7,13 +7,15 @@ import {
   getParkOfficers,
   dismissParkOfficer,
 } from '../../redux/slices/parkOfficerSlice';
-import DeleteConfirmation from '../Modals/DeleteConfirmation';
+import ConfirmationModal from '../Modals/ConfirmationModal';
 import UpdateParkOfficer from '../Modals/UpdateParkOfficer';
 import CreateProtocol from '../Modals/CreateProtocol';
 import cx from 'classnames';
 
 const ParkOfficer = ({ parkOfficer }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+    useState(false);
+  const [dismissConfirmationModalOpen, setDismissConfirmationModalOpen] =
     useState(false);
   const [updateParkOfficerOpen, setUpdateParkOfficerOpen] = useState(false);
   const [createProtocolModalOpen, setCreateProtocolModalOpen] = useState(false);
@@ -53,9 +55,10 @@ const ParkOfficer = ({ parkOfficer }) => {
           Delete
         </button>
         {deleteConfirmationModalOpen && (
-          <DeleteConfirmation
+          <ConfirmationModal
             open={deleteConfirmationModalOpen}
             setIsOpen={setDeleteConfirmationModalOpen}
+            action={'delete'}
             itemName={parkOfficer.fullName}
             deleteCallback={deleteHandler}
           />
@@ -87,7 +90,20 @@ const ParkOfficer = ({ parkOfficer }) => {
         )}
 
         {parkOfficer.isWorked && (
-          <button onClick={dismissHandler}>Dismiss</button>
+          <>
+            <button onClick={() => setDismissConfirmationModalOpen(true)}>
+              Dismiss
+            </button>
+            {dismissConfirmationModalOpen && (
+              <ConfirmationModal
+                open={dismissConfirmationModalOpen}
+                setIsOpen={setDismissConfirmationModalOpen}
+                action={'dismiss'}
+                itemName={parkOfficer.fullName}
+                deleteCallback={dismissHandler}
+              />
+            )}
+          </>
         )}
       </div>
     </article>
