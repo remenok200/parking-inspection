@@ -103,6 +103,8 @@ const ProtocolsPage = () => {
       )}
 
       {protocolsCards}
+
+      {!protocols.length ? <h1>Oops... No data =)</h1> : null}
     </section>
   );
 };

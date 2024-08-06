@@ -1,5 +1,6 @@
 const { Protocol, ParkOfficer, Image } = require('../models');
 const createHttpError = require('http-errors');
+const { deleteImageFromDisk } = require('../utils');
 
 // getAllProtocols
 // getAllProtocolsByOfficerID
@@ -27,10 +28,6 @@ module.exports.getAllProtocols = async (req, res, next) => {
       order: [['updated_at', 'DESC']],
       ...pagination,
     });
-
-    if (!protocols.length) {
-      return next(createHttpError(404, 'Protocols not found'));
-    }
 
     return res.status(200).send({ data: protocols });
   } catch (error) {
@@ -62,10 +59,6 @@ module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
       order: [['updated_at', 'DESC']],
       ...pagination,
     });
-
-    if (!protocols.length) {
-      return next(createHttpError(404, 'Protocols not found'));
-    }
 
     return res.status(200).send({ data: protocols });
   } catch (error) {
@@ -181,6 +174,31 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
     const {
       params: { id },
     } = req;
+
+    const protocolWithData = await Protocol.findByPk(id, {
+      include: [
+        {
+          model: ParkOfficer,
+          attributes: ['id', 'full_name', 'badge_number'],
+          as: 'parkOfficer',
+        },
+        {
+          model: Image,
+          attributes: ['id', 'path'],
+          as: 'images',
+        },
+      ],
+    });
+
+    if(!protocolWithData) {
+      return next(createHttpError(404));
+    }
+
+    if(protocolWithData.images.length) {
+      protocolWithData.images.forEach(async (currentImage) => {
+        await deleteImageFromDisk(currentImage.path);
+      });
+    }
 
     const count = await Protocol.destroy({ where: { id } });
 

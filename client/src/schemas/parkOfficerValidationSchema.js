@@ -9,6 +9,6 @@ export const parkOfficerValidationSchema = yup.object().shape({
   badgeNumber: yup.string().trim().required(),
   district: yup
     .string()
-    .min(5, 'District must be at least 5 characters')
+    .min(3, 'District must be at least 3 characters')
     .required(),
 });

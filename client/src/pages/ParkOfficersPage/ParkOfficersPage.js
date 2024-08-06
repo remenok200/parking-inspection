@@ -78,6 +78,8 @@ const ParkOfficersPage = () => {
           setIsOpen={setAddParkOfficerModalOpen}
         />
       )}
+
+      {!parkOfficers.length ? <h1>Oops... No data =)</h1> : null}
     </section>
   );
 };
