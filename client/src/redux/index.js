@@ -1,12 +1,14 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 import parkOfficerReducer from './slices/parkOfficerSlice';
-import protocolSlice from './slices/protocolSlice';
+import protocolReducer from './slices/protocolSlice';
+import userReducer from './slices/userSlice';
 
 const store = configureStore({
   reducer: {
     parkOfficers: parkOfficerReducer,
-    protocols: protocolSlice
-  }
+    protocols: protocolReducer,
+    users: userReducer,
+  },
 });
 
 export default store;

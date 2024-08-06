@@ -4,21 +4,23 @@ import ParkOfficersPage from './pages/ParkOfficersPage/ParkOfficersPage';
 import ProtocolsPage from './pages/ProtocolsPage/ProtocolsPage';
 import styles from './App.module.scss';
 import NavBar from './components/NavBar/NavBar';
+import HomePage from './pages/HomePage/HomePage';
 
 function App() {
   return (
-    <BrowserRouter>
-      <NavBar />
+    <HomePage />
+    // <BrowserRouter>
+    //   <NavBar />
 
-      <Routes>
-        <Route path="/" element={<ParkOfficersPage />} />
-        <Route path="/protocols" element={<ProtocolsPage />} />
-        <Route
-          path="/protocols/:parkOfficerID/:parkOfficerFullName"
-          element={<ProtocolsPage />}
-        />
-      </Routes>
-    </BrowserRouter>
+    //   <Routes>
+    //     <Route path="/" element={<ParkOfficersPage />} />
+    //     <Route path="/protocols" element={<ProtocolsPage />} />
+    //     <Route
+    //       path="/protocols/:parkOfficerID/:parkOfficerFullName"
+    //       element={<ProtocolsPage />}
+    //     />
+    //   </Routes>
+    // </BrowserRouter>
   );
 }
 

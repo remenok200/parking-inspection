@@ -24,9 +24,11 @@ module.exports.loginUser = async (req, res, next) => {
     if(foundUser) {
       const result = await bcrypt.compare(password, foundUser.passwordHash);
       if(!result) {
-        return res.status(404).send('User not found');
+        return res.status(404).send('Incorrect email or password');
       }
       return res.status(200).send({ data: foundUser });
+    } else {
+      return res.status(404).send('Incorrect email or password');
     }
   } catch (error) {
     next(error);
