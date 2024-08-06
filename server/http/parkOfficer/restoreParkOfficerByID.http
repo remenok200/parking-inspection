@@ -1,0 +1,1 @@
+PUT http://localhost:5001/api/parkOfficers/1/restore HTTP/1.1

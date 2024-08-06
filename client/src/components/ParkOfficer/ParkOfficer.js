@@ -6,6 +6,7 @@ import {
   deleteParkOfficer,
   getParkOfficers,
   dismissParkOfficer,
+  restoreParkOfficer,
 } from '../../redux/slices/parkOfficerSlice';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import UpdateParkOfficer from '../Modals/UpdateParkOfficer';
@@ -16,6 +17,8 @@ const ParkOfficer = ({ parkOfficer }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [dismissConfirmationModalOpen, setDismissConfirmationModalOpen] =
+    useState(false);
+  const [restoreConfirmationModalOpen, setRestoreConfirmationModalOpen] =
     useState(false);
   const [updateParkOfficerOpen, setUpdateParkOfficerOpen] = useState(false);
   const [createProtocolModalOpen, setCreateProtocolModalOpen] = useState(false);
@@ -29,6 +32,11 @@ const ParkOfficer = ({ parkOfficer }) => {
 
   const dismissHandler = async () => {
     await dispatch(dismissParkOfficer(parkOfficer.id));
+    await dispatch(getParkOfficers());
+  };
+
+  const restoreHandler = async () => {
+    await dispatch(restoreParkOfficer(parkOfficer.id));
     await dispatch(getParkOfficers());
   };
 
@@ -101,6 +109,23 @@ const ParkOfficer = ({ parkOfficer }) => {
                 action={'dismiss'}
                 itemName={parkOfficer.fullName}
                 deleteCallback={dismissHandler}
+              />
+            )}
+          </>
+        )}
+
+        {!parkOfficer.isWorked && (
+          <>
+            <button onClick={() => setRestoreConfirmationModalOpen(true)}>
+              Restore officer
+            </button>
+            {restoreConfirmationModalOpen && (
+              <ConfirmationModal
+                open={restoreConfirmationModalOpen}
+                setIsOpen={setRestoreConfirmationModalOpen}
+                action={'restore'}
+                itemName={parkOfficer.fullName}
+                deleteCallback={restoreHandler}
               />
             )}
           </>

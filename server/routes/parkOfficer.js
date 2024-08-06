@@ -12,6 +12,7 @@ const ProtocolController = require('../controllers/ProtocolController');
 // updateParkOfficerByID
 // deleteParkOfficerByID
 // dismissParkOfficerByID
+// restoreParkOfficerByID
 
 // localhost:5001/api/parkOfficers/protocols
 parkOfficerRouter.
@@ -32,6 +33,10 @@ parkOfficerRouter
 parkOfficerRouter
 .route('/:id/dismiss')
 .put(ParkOfficerController.dismissParkOfficerByID);
+
+parkOfficerRouter
+.route('/:id/restore')
+.put(ParkOfficerController.restoreParkOfficerByID);
 
 // localhost:5001/api/parkOfficers/:id/protocols
 parkOfficerRouter.use('/:officerId/protocols', protocolRouter);

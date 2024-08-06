@@ -7,6 +7,7 @@ const createHttpError = require('http-errors');
 // updateParkOfficerByID
 // deleteParkOfficerByID
 // dismissParkOfficerByID
+// restoreParkOfficerByID
 
 module.exports.getAllParkOfficers = async (req, res, next) => {
   try {
@@ -109,3 +110,27 @@ module.exports.dismissParkOfficerByID = async (req, res, next) => {
     next(error);
   }
 }
+
+module.exports.restoreParkOfficerByID = async (req, res, next) => {
+  try {
+    const { params: { id } } = req;
+
+    const [count, [updatedParkOfficer]] = await ParkOfficer.update(
+      {
+        isWorked: true
+      }, 
+      {
+        where: { id },
+        returning: true
+      }
+    );
+
+    if (count === 0) {
+      return next(createHttpError(404, 'Park officer not found'));
+    }
+
+    return res.status(200).send({ data: updatedParkOfficer });
+  } catch (error) {
+    next(error);
+  }
+};
