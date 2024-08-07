@@ -10,19 +10,19 @@ import withSpinner from './HOC/withSpinner';
 
 function App() {
   return (
-    <HomePage />
-    // <BrowserRouter>
-    //   <NavBar />
+    <BrowserRouter>
+      <NavBar />
 
-    //   <Routes>
-    //     <Route path="/" element={<ParkOfficersPage />} />
-    //     <Route path="/protocols" element={<ProtocolsPage />} />
-    //     <Route
-    //       path="/protocols/:parkOfficerID/:parkOfficerFullName"
-    //       element={<ProtocolsPage />}
-    //     />
-    //   </Routes>
-    // </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/officers" element={<ParkOfficersPage />} />
+        <Route path="/protocols" element={<ProtocolsPage />} />
+        <Route
+          path="/protocols/:parkOfficerID/:parkOfficerFullName"
+          element={<ProtocolsPage />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

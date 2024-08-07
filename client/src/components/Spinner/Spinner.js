@@ -5,8 +5,7 @@ const Spinner = () => {
   return (
     <HashLoader
       color="#007bff"
-      size={100}
-      cssOverride={{ display: 'block', margin: '0 auto' }}
+      size={200}
     />
   );
 };
