@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from '../../API';
+import { toast } from 'react-toastify';
 
 const SLICE_NAME = 'parkOfficer';
 
@@ -23,6 +24,7 @@ const deleteParkOfficer = createAsyncThunk(
   async (parkOfficerID, thunkAPI) => {
     try {
       await API.deleteParkOfficer(parkOfficerID);
+      toast.success('Officer successfully deleted');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -34,6 +36,7 @@ const dismissParkOfficer = createAsyncThunk(
   async (parkOfficerID, thunkAPI) => {
     try {
       await API.dismissParkOfficer(parkOfficerID);
+      toast.success('Officer successfully dismissed');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -45,6 +48,7 @@ const restoreParkOfficer = createAsyncThunk(
   async (parkOfficerID, thunkAPI) => {
     try {
       await API.restoreParkOfficer(parkOfficerID);
+      toast.success('Officer successfully restored');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -56,6 +60,7 @@ const addParkOfficer = createAsyncThunk(
   async (parkOfficer, thunkAPI) => {
     try {
       await API.addParkOfficer(parkOfficer);
+      toast.success('Officer successfully added');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -67,6 +72,7 @@ const updateParkOfficer = createAsyncThunk(
   async ({ parkOfficerID, updatedData }, thunkAPI) => {
     try {
       await API.updateParkOfficer(parkOfficerID, updatedData);
+      toast.success('Officer successfully updated');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from '../../API';
+import { toast } from 'react-toastify';
 
 const SLICE_NAME = 'protocols';
 
@@ -23,6 +24,7 @@ const deleteProtocolByID = createAsyncThunk(
   async ({ parkOfficerID, protocolID }, thunkAPI) => {
     try {
       await API.deleteProtocolByID(parkOfficerID, protocolID);
+      toast.success('Protocol successfully deleted');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -34,6 +36,7 @@ const createProtocol = createAsyncThunk(
   async ({ parkOfficerID, protocolData }, thunkAPI) => {
     try {
       await API.createProtocol(parkOfficerID, protocolData);
+      toast.success('Protocol successfully created');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -45,6 +48,7 @@ const updateProtocol = createAsyncThunk(
   async ({ parkOfficerID, protocolID, updatedData }, thunkAPI) => {
     try {
       await API.updateProtocol(parkOfficerID, protocolID, updatedData);
+      toast.success('Protocol successfully updated');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -56,6 +60,7 @@ const addImagesToProtocol = createAsyncThunk(
   async ({ protocolID, images }, thunkAPI) => {
     try {
       await API.addProtocolImages(images, protocolID);
+      toast.success('Images have been successfully added to the protocol');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -81,6 +86,7 @@ const deleteProtocolImageByID = createAsyncThunk(
   `${SLICE_NAME}/deleteProtocolImageByID`,
   async ({ protocolID, imageID }, thunkAPI) => {
     await API.deleteProtocolImageByID(protocolID, imageID);
+    toast.success('Protocol image deleted');
   }
 );
 
