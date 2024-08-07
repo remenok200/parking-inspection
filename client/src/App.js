@@ -1,5 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  unstable_HistoryRouter as HistoryRouter,
+  Routes,
+  Route,
+} from 'react-router-dom';
 import ParkOfficersPage from './pages/ParkOfficersPage/ParkOfficersPage';
 import ProtocolsPage from './pages/ProtocolsPage/ProtocolsPage';
 import styles from './App.module.scss';
@@ -7,10 +11,11 @@ import NavBar from './components/NavBar/NavBar';
 import HomePage from './pages/HomePage/HomePage';
 import { useSelector } from 'react-redux';
 import withSpinner from './HOC/withSpinner';
+import history from './BrowserHistory';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HistoryRouter history={history}>
       <NavBar />
 
       <Routes>
@@ -22,7 +27,7 @@ function App() {
           element={<ProtocolsPage />}
         />
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
 

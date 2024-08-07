@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 const HomePage = () => {
   const { isLoading, error } = useSelector((state) => state.users);
-  const [state, setState] = useState(false);
+  const [state, setState] = useState(true);
 
   const buttonHandler = () => {
     setState((state) => !state);
