@@ -33,6 +33,7 @@ const SignUp = () => {
               Nickname:
               <Field
                 name="nickname"
+                className={styles['input']}
                 placeholder="superUser123"
                 autoComplete="off"
               />
@@ -47,6 +48,7 @@ const SignUp = () => {
               Email:
               <Field
                 name="email"
+                className={styles['input']}
                 placeholder="superUser@test.com"
                 autoComplete="off"
               />
@@ -62,6 +64,7 @@ const SignUp = () => {
               <Field
                 name="password"
                 type="password"
+                className={styles['input']}
                 placeholder="gr3at@3wdsG"
                 autoComplete="off"
               />
@@ -72,7 +75,7 @@ const SignUp = () => {
               />
             </label>
 
-            <button type='submit'>Registration</button>
+            <button type='submit' className={styles['button']}>Registration</button>
           </Form>
         )}
       </Formik>

@@ -32,6 +32,7 @@ const SignIn = () => {
               Email:
               <Field
                 name="email"
+                className={styles['input']}
                 placeholder="superUser@test.com"
                 autoComplete="off"
               />
@@ -47,6 +48,7 @@ const SignIn = () => {
               <Field
                 name="password"
                 type="password"
+                className={styles['input']}
                 placeholder="gr3at@3wdsG"
                 autoComplete="off"
               />
@@ -57,7 +59,7 @@ const SignIn = () => {
               />
             </label>
 
-            <button type='submit'>Login</button>
+            <button type='submit' className={styles['button']}>Login</button>
           </Form>
         )}
       </Formik>
