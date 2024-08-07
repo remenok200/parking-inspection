@@ -15,7 +15,5 @@ module.exports = async (err, req, res, next) => {
 
   console.log(err);
 
-  return res.status(code).send({
-    errors: [err],
-  });
+  return res.status(code).send(err.message);
 };

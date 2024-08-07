@@ -12,10 +12,28 @@ import HomePage from './pages/HomePage/HomePage';
 import { useSelector } from 'react-redux';
 import withSpinner from './HOC/withSpinner';
 import history from './BrowserHistory';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useErrorToast from './hooks/userErrorToast';
 
 function App() {
+  useErrorToast();
+
   return (
     <HistoryRouter history={history}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        newestOnTop
+        theme="colored"
+      />
+      
       <NavBar />
 
       <Routes>
