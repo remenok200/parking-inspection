@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../BrowserHistory';
 
 const httpClient = axios.create({
   baseURL: 'http://localhost:5001/api',
@@ -53,3 +54,85 @@ export const deleteProtocolImageByID = async (protocolID, imageID) =>
   await httpClient.delete(
     `/parkOfficers/protocols/${protocolID}/images/${imageID}`
   );
+
+// AUTH
+
+export const loginUser = async (userData) => {
+  const response = await httpClient.post('/users/sign-in', userData);
+  if (response.status === 200) {
+    history.push('/officers');
+  }
+};
+
+export const registerUser = async (userData) => {
+  const response = await httpClient.post('/users/sign-up', userData);
+  if (response.status === 201) {
+    history.push('/officers');
+  }
+};
+
+
+// TOKENS
+
+export const authUser = async () => await httpClient.get('/users');
+
+export const refreshUser = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  const { data } = await httpClient.post('/users/refresh', { refreshToken });
+
+  return data;
+};
+
+httpClient.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${accessToken}`,
+      };
+    }
+
+    return config;
+  },
+  (err) => Promise.reject(err)
+);
+
+httpClient.interceptors.response.use(
+  (response) => {
+    const {
+      data: { tokens },
+    } = response;
+
+    if (tokens) {
+      const { accessToken, refreshToken } = tokens;
+
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+
+    return response;
+  },
+  async (err) => {
+    const {
+      response: { status },
+      config,
+    } = err;
+
+    if (status === 403 && localStorage.getItem('refreshToken')) {
+      await refreshUser();
+
+      return await httpClient(config);
+    } else if (status === 401) {
+      localStorage.clear();
+      history.push('/');
+    } else {
+      history.push('/');
+      return Promise.reject(err);
+    }
+
+    return Promise.reject(err);
+  }
+);
