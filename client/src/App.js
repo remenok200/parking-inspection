@@ -7,7 +7,6 @@ import {
 import ParkOfficersPage from './pages/ParkOfficersPage/ParkOfficersPage';
 import ProtocolsPage from './pages/ProtocolsPage/ProtocolsPage';
 import styles from './App.module.scss';
-import NavBar from './components/NavBar/NavBar';
 import HomePage from './pages/HomePage/HomePage';
 import { useSelector } from 'react-redux';
 import withSpinner from './HOC/withSpinner';
@@ -33,8 +32,6 @@ function App() {
         newestOnTop
         theme="colored"
       />
-
-      <NavBar />
 
       <Routes>
         <Route path="/" element={<HomePage />} />

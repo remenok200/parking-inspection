@@ -4,6 +4,7 @@ import { getParkOfficers } from '../../redux/slices/parkOfficerSlice';
 import ParkOfficer from '../../components/ParkOfficer/ParkOfficer';
 import AddParkOfficer from '../../components/Modals/AddParkOfficer';
 import styles from './ParkOfficersPage.module.scss';
+import NavBar from '../../components/NavBar/NavBar';
 
 const ParkOfficersPage = () => {
   const [addParkOfficerModalOpen, setAddParkOfficerModalOpen] = useState(false);
@@ -18,10 +19,6 @@ const ParkOfficersPage = () => {
   useEffect(() => {
     dispatch(getParkOfficers());
   }, []);
-
-  if (isLoading) {
-    return <div>LOADING</div>;
-  }
 
   if (error) {
     return <div>ERROR HAPPENNED</div>;
@@ -46,41 +43,45 @@ const ParkOfficersPage = () => {
   ));
 
   return (
-    <section>
-      <div className={styles['flex-wrapper']}>
-        <input
-          type="text"
-          value={searchValue}
-          onChange={({ target: { value } }) => setSearchValue(value)}
-          placeholder="Search...."
-        />
+    <>
+      <NavBar />
 
-        <button onClick={() => setAddParkOfficerModalOpen(true)}>
-          Add officer
-        </button>
+      <section>
+        <div className={styles['flex-wrapper']}>
+          <input
+            type="text"
+            value={searchValue}
+            onChange={({ target: { value } }) => setSearchValue(value)}
+            placeholder="Search...."
+          />
 
-        <select
-          value={filter}
-          onChange={({ target: { value } }) => setFilter(value)}
-          className={styles['filter-select']}
-        >
-          <option value="all">All Officers</option>
-          <option value="worked">Working Officers</option>
-          <option value="notWorked">Not Working Officers</option>
-        </select>
-      </div>
+          <button onClick={() => setAddParkOfficerModalOpen(true)}>
+            Add officer
+          </button>
 
-      {parkOfficersCards}
+          <select
+            value={filter}
+            onChange={({ target: { value } }) => setFilter(value)}
+            className={styles['filter-select']}
+          >
+            <option value="all">All Officers</option>
+            <option value="worked">Working Officers</option>
+            <option value="notWorked">Not Working Officers</option>
+          </select>
+        </div>
 
-      {addParkOfficerModalOpen && (
-        <AddParkOfficer
-          open={addParkOfficerModalOpen}
-          setIsOpen={setAddParkOfficerModalOpen}
-        />
-      )}
+        {parkOfficersCards}
 
-      {!parkOfficers.length ? <h1>Oops... No data =)</h1> : null}
-    </section>
+        {addParkOfficerModalOpen && (
+          <AddParkOfficer
+            open={addParkOfficerModalOpen}
+            setIsOpen={setAddParkOfficerModalOpen}
+          />
+        )}
+
+        {!parkOfficers.length ? <h1>Oops... No data =)</h1> : null}
+      </section>
+    </>
   );
 };
 

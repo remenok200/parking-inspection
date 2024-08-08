@@ -8,6 +8,7 @@ import Protocol from '../../components/Protocol/Protocol';
 import { useParams } from 'react-router-dom';
 import styles from './ProtocolsPage.module.scss';
 import Pagination from '../../components/Pagination/Pagination';
+import NavBar from '../../components/NavBar/NavBar';
 import CONSTANTS from '../../constants';
 const { LIMIT } = CONSTANTS;
 
@@ -18,12 +19,11 @@ const ProtocolsPage = () => {
     (state) => state.protocols
   );
 
-  const { parkOfficers } = useSelector(
-    (state) => state.parkOfficers
+  const { parkOfficers } = useSelector((state) => state.parkOfficers);
+  const parkOfficer = parkOfficers.find(
+    (officer) => officer.id === parseInt(parkOfficerID)
   );
-  const parkOfficer = parkOfficers.find(officer => officer.id === parseInt(parkOfficerID));
   const parkOfficerFullName = parkOfficer ? parkOfficer.fullName : null;
-
 
   const dispatch = useDispatch();
 
@@ -101,37 +101,41 @@ const ProtocolsPage = () => {
   ));
 
   return (
-    <section>
-      <div className={styles['search-container']}>
-        <input
-          type="text"
-          value={searchValue}
-          onChange={({ target: { value } }) => setSearchValue(value)}
-          placeholder="Search...."
-        />
-        <div className={styles['tooltip']}>
-          {`Search by fine (e.g., >50, <100, =75) or other criteria`}
+    <>
+      <NavBar />
+
+      <section>
+        <div className={styles['search-container']}>
+          <input
+            type="text"
+            value={searchValue}
+            onChange={({ target: { value } }) => setSearchValue(value)}
+            placeholder="Search...."
+          />
+          <div className={styles['tooltip']}>
+            {`Search by fine (e.g., >50, <100, =75) or other criteria`}
+          </div>
         </div>
-      </div>
 
-      {parkOfficerFullName ? (
-        <h1 className={styles.header}>{parkOfficerFullName} | Protocols</h1>
-      ) : (
-        <h1 className={styles.header}>All protocols</h1>
-      )}
+        {parkOfficerFullName ? (
+          <h1 className={styles.header}>{parkOfficerFullName} | Protocols</h1>
+        ) : (
+          <h1 className={styles.header}>All protocols</h1>
+        )}
 
-      {protocolsCards}
+        {protocolsCards}
 
-      {!protocols.length ? <h1>Oops... No data =)</h1> : null}
+        {!protocols.length ? <h1>Oops... No data =)</h1> : null}
 
-      {totalPages > 1 ? (
-        <Pagination
-          currentPage={pageNumber}
-          totalPages={totalPages}
-          onPageChange={setPageNumber}
-        />
-      ) : null}
-    </section>
+        {totalPages > 1 ? (
+          <Pagination
+            currentPage={pageNumber}
+            totalPages={totalPages}
+            onPageChange={setPageNumber}
+          />
+        ) : null}
+      </section>
+    </>
   );
 };
 
