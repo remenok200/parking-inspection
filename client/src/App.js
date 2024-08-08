@@ -33,7 +33,7 @@ function App() {
         newestOnTop
         theme="colored"
       />
-      
+
       <NavBar />
 
       <Routes>
@@ -52,13 +52,9 @@ function App() {
 const AppWithSpinner = withSpinner(App);
 
 const AppWrapper = () => {
-  const loadingStates = [
-    useSelector((state) => state.users.isLoading),
-    useSelector((state) => state.protocols.isLoading),
-    useSelector((state) => state.parkOfficers.isLoading),
-  ];
-
-  const isLoading = loadingStates.some((state) => state);
+  const isLoading = useSelector((state) =>
+    Object.values(state).some((slice) => slice.isLoading)
+  );
 
   return <AppWithSpinner isLoading={isLoading} />;
 };

@@ -3,11 +3,9 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 const useErrorToast = () => {
-  const errors = [
-    useSelector((state) => state.users.error),
-    useSelector((state) => state.protocols.error),
-    useSelector((state) => state.parkOfficers.error),
-  ];
+  const errors = useSelector((state) =>
+    Object.values(state).map((slice) => slice.error)
+  );
 
   useEffect(() => {
     errors.forEach((error) => {
