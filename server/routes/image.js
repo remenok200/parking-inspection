@@ -1,6 +1,7 @@
 const imageRouter = require('express').Router({ mergeParams: true });
 
 const { uploadImages } = require('../middlewares/imagesUpload');
+const { checkToken } = require('../middlewares/checkToken');
 
 const ImageController = require('../controllers/ImageController');
 
@@ -11,12 +12,12 @@ const ImageController = require('../controllers/ImageController');
 
 imageRouter
 .route('/')
-.get(ImageController.getProtocolImages)
-.post(uploadImages, ImageController.addProtocolImages);
+.get(checkToken, ImageController.getProtocolImages)
+.post(checkToken, uploadImages, ImageController.addProtocolImages);
 
 imageRouter
 .route('/:imageId')
-.get(ImageController.getImageByID)
-.delete(ImageController.deleteImageByID);
+.get(checkToken, ImageController.getImageByID)
+.delete(checkToken, ImageController.deleteImageByID);
 
 module.exports = imageRouter;

@@ -4,6 +4,7 @@ const imageRouter = require('./image');
 const protocolRouter = require('./protocol');
 
 const paginate = require('../middlewares/paginate');
+const { checkToken } = require('../middlewares/checkToken');
 
 const ParkOfficerController = require('../controllers/ParkOfficerController');
 const ProtocolController = require('../controllers/ProtocolController');
@@ -19,26 +20,26 @@ const ProtocolController = require('../controllers/ProtocolController');
 // localhost:5001/api/parkOfficers/protocols
 parkOfficerRouter.
 route('/protocols')
-.get(paginate, ProtocolController.getAllProtocols);
+.get(checkToken, paginate, ProtocolController.getAllProtocols);
 
 parkOfficerRouter
 .route('/')
-.get(ParkOfficerController.getAllParkOfficers)
-.post(ParkOfficerController.createParkOfficer);
+.get(checkToken, ParkOfficerController.getAllParkOfficers)
+.post(checkToken, ParkOfficerController.createParkOfficer);
 
 parkOfficerRouter
 .route('/:id')
-.get(ParkOfficerController.getParkOfficerByID)
-.put(ParkOfficerController.updateParkOfficerByID)
-.delete(ParkOfficerController.deleteParkOfficerByID);
+.get(checkToken, ParkOfficerController.getParkOfficerByID)
+.put(checkToken, ParkOfficerController.updateParkOfficerByID)
+.delete(checkToken, ParkOfficerController.deleteParkOfficerByID);
 
 parkOfficerRouter
 .route('/:id/dismiss')
-.put(ParkOfficerController.dismissParkOfficerByID);
+.put(checkToken, ParkOfficerController.dismissParkOfficerByID);
 
 parkOfficerRouter
 .route('/:id/restore')
-.put(ParkOfficerController.restoreParkOfficerByID);
+.put(checkToken, ParkOfficerController.restoreParkOfficerByID);
 
 // localhost:5001/api/parkOfficers/:id/protocols
 parkOfficerRouter.use('/:officerId/protocols', protocolRouter);
