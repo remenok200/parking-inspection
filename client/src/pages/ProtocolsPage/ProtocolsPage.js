@@ -7,28 +7,35 @@ import {
 import Protocol from '../../components/Protocol/Protocol';
 import { useParams } from 'react-router-dom';
 import styles from './ProtocolsPage.module.scss';
+import Pagination from '../../components/Pagination/Pagination';
+import CONSTANTS from '../../constants';
+const { LIMIT } = CONSTANTS;
 
 const ProtocolsPage = () => {
   const { parkOfficerID, parkOfficerFullName } = useParams();
 
-  const { protocols, isLoading, error } = useSelector(
+  const { protocols, isLoading, error, totalProtocolsCount } = useSelector(
     (state) => state.protocols
   );
+  console.log(protocols);
   const dispatch = useDispatch();
 
   const [searchValue, setSearchValue] = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
+  const totalPages = Math.ceil(totalProtocolsCount / LIMIT);
+
 
   const refreshProtocolsList = () => {
     if (parkOfficerID) {
-      dispatch(getAllProtocolsByOfficerID(parkOfficerID));
+      dispatch(getAllProtocolsByOfficerID({ parkOfficerID, page: pageNumber }));
     } else {
-      dispatch(getAllProtocols());
+      dispatch(getAllProtocols(pageNumber));
     }
-  }
+  };
 
   useEffect(() => {
     refreshProtocolsList();
-  }, []);
+  }, [pageNumber]);
 
   if (isLoading) {
     return <div>LOADING</div>;
@@ -79,7 +86,11 @@ const ProtocolsPage = () => {
   const filteredProtocols = filterProtocols(protocols, searchValue);
 
   const protocolsCards = filteredProtocols.map((currentProtocol) => (
-    <Protocol key={currentProtocol.id} protocol={currentProtocol} refreshProtocolsList={refreshProtocolsList} />
+    <Protocol
+      key={currentProtocol.id}
+      protocol={currentProtocol}
+      refreshProtocolsList={refreshProtocolsList}
+    />
   ));
 
   return (
@@ -105,6 +116,12 @@ const ProtocolsPage = () => {
       {protocolsCards}
 
       {!protocols.length ? <h1>Oops... No data =)</h1> : null}
+
+      <Pagination
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        onPageChange={setPageNumber}
+      />
     </section>
   );
 };

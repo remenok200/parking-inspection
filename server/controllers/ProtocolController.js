@@ -29,7 +29,9 @@ module.exports.getAllProtocols = async (req, res, next) => {
       ...pagination,
     });
 
-    return res.status(200).send({ data: protocols });
+    const totalProtocolsCount = await Protocol.count();
+
+    return res.status(200).send({ data: protocols, totalProtocolsCount });
   } catch (error) {
     next(error);
   }
@@ -60,7 +62,11 @@ module.exports.getAllProtocolsByOfficerID = async (req, res, next) => {
       ...pagination,
     });
 
-    return res.status(200).send({ data: protocols });
+    const totalProtocolsCount = await Protocol.count({
+      where: { officerId },
+    });
+
+    return res.status(200).send({ data: protocols, totalProtocolsCount });
   } catch (error) {
     next(error);
   }
@@ -190,11 +196,11 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
       ],
     });
 
-    if(!protocolWithData) {
+    if (!protocolWithData) {
       return next(createHttpError(404));
     }
 
-    if(protocolWithData.images.length) {
+    if (protocolWithData.images.length) {
       protocolWithData.images.forEach(async (currentImage) => {
         await deleteImageFromDisk(currentImage.path);
       });

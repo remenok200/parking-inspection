@@ -6,13 +6,12 @@ const SLICE_NAME = 'protocols';
 
 const getAllProtocols = createAsyncThunk(
   `${SLICE_NAME}/getAllProtocols`,
-  async (param, thunkAPI) => {
+  async (page, thunkAPI) => {
     try {
-      const {
-        data: { data: protocols },
-      } = await API.getAllProtocols();
+      const response = await API.getAllProtocols(page);
+      const { data, totalProtocolsCount } = response.data;
 
-      return protocols;
+      return { protocols: data, totalProtocolsCount };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -69,13 +68,15 @@ const addImagesToProtocol = createAsyncThunk(
 
 const getAllProtocolsByOfficerID = createAsyncThunk(
   `${SLICE_NAME}/getAllProtocolsByOfficerID`,
-  async (parkOfficerID, thunkAPI) => {
+  async ({ parkOfficerID, page }, thunkAPI) => {
     try {
-      const {
-        data: { data: protocols },
-      } = await API.getAllProtocolsByOfficerID(parkOfficerID);
+      const response = await API.getAllProtocolsByOfficerID(
+        parkOfficerID,
+        page
+      );
+      const { data, totalProtocolsCount } = response.data;
 
-      return protocols;
+      return { protocols: data, totalProtocolsCount };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -94,6 +95,7 @@ const initialState = {
   protocols: [],
   isLoading: false,
   error: null,
+  totalProtocolsCount: 0,
 };
 
 const protocolSlice = createSlice({
@@ -108,7 +110,8 @@ const protocolSlice = createSlice({
     builder.addCase(getAllProtocols.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = null;
-      state.protocols = action.payload;
+      state.totalProtocolsCount = action.payload.totalProtocolsCount;
+      state.protocols = action.payload.protocols;
     });
 
     builder.addCase(getAllProtocols.rejected, (state, action) => {
@@ -168,7 +171,8 @@ const protocolSlice = createSlice({
 
     builder.addCase(getAllProtocolsByOfficerID.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.protocols = action.payload;
+      state.protocols = action.payload.protocols;
+      state.totalProtocolsCount = action.payload.totalProtocolsCount;
       state.error = null;
     });
 

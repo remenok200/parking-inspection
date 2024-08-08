@@ -22,8 +22,8 @@ export const addParkOfficer = async (parkOfficer) =>
 export const updateParkOfficer = async (parkOfficerID, updatedData) =>
   await httpClient.put(`/parkOfficers/${parkOfficerID}`, updatedData);
 
-export const getAllProtocols = async () =>
-  await httpClient.get('/parkOfficers/protocols');
+export const getAllProtocols = async (page = 1) =>
+  await httpClient.get(`/parkOfficers/protocols?page=${page}`);
 
 export const deleteProtocolByID = async (parkOfficerID, protocolID) =>
   await httpClient.delete(
@@ -42,8 +42,8 @@ export const updateProtocol = async (parkOfficerID, protocolID, updatedData) =>
     updatedData
   );
 
-export const getAllProtocolsByOfficerID = async (parkOfficerID) =>
-  await httpClient.get(`/parkOfficers/${parkOfficerID}/protocols`);
+export const getAllProtocolsByOfficerID = async (parkOfficerID, page = 1) =>
+  await httpClient.get(`/parkOfficers/${parkOfficerID}/protocols?page=${page}`);
 
 export const addProtocolImages = async (images, protocolID) => {
   await httpClient.post(`/parkOfficers/protocols/${protocolID}/images`, images);

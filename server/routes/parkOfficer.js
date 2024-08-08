@@ -3,6 +3,8 @@ const parkOfficerRouter = require('express').Router();
 const imageRouter = require('./image');
 const protocolRouter = require('./protocol');
 
+const paginate = require('../middlewares/paginate');
+
 const ParkOfficerController = require('../controllers/ParkOfficerController');
 const ProtocolController = require('../controllers/ProtocolController');
 
@@ -17,7 +19,7 @@ const ProtocolController = require('../controllers/ProtocolController');
 // localhost:5001/api/parkOfficers/protocols
 parkOfficerRouter.
 route('/protocols')
-.get(ProtocolController.getAllProtocols);
+.get(paginate, ProtocolController.getAllProtocols);
 
 parkOfficerRouter
 .route('/')
