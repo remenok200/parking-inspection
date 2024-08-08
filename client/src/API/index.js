@@ -57,20 +57,32 @@ export const deleteProtocolImageByID = async (protocolID, imageID) =>
 
 // AUTH
 
+let geolocation;
+navigator.geolocation.getCurrentPosition(
+  ({ coords: { latitude, longitude } }) => {
+    geolocation = `${latitude} ${longitude}`;
+  }
+);
+
 export const loginUser = async (userData) => {
-  const response = await httpClient.post('/users/sign-in', userData);
+  const response = await httpClient.post('/users/sign-in', {
+    ...userData,
+    geolocation,
+  });
   if (response.status === 200) {
     history.push('/officers');
   }
 };
 
 export const registerUser = async (userData) => {
-  const response = await httpClient.post('/users/sign-up', userData);
+  const response = await httpClient.post('/users/sign-up', {
+    ...userData,
+    geolocation,
+  });
   if (response.status === 201) {
     history.push('/officers');
   }
 };
-
 
 // TOKENS
 
@@ -79,7 +91,10 @@ export const authUser = async () => await httpClient.get('/users');
 export const refreshUser = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
 
-  const { data } = await httpClient.post('/users/refresh', { refreshToken });
+  const { data } = await httpClient.post('/users/refresh', {
+    refreshToken,
+    geolocation,
+  });
 
   return data;
 };
