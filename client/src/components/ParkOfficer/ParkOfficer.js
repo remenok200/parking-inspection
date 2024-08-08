@@ -55,7 +55,7 @@ const ParkOfficer = ({ parkOfficer }) => {
       </p>
 
       <div className={styles['button-container']}>
-        <Link to={`/protocols/${parkOfficer.id}/${parkOfficer.fullName}`}>
+        <Link to={`/protocols/${parkOfficer.id}`}>
           <button>View protocols</button>
         </Link>
 

@@ -12,11 +12,19 @@ import CONSTANTS from '../../constants';
 const { LIMIT } = CONSTANTS;
 
 const ProtocolsPage = () => {
-  const { parkOfficerID, parkOfficerFullName } = useParams();
+  const { parkOfficerID } = useParams();
 
   const { protocols, isLoading, error, totalProtocolsCount } = useSelector(
     (state) => state.protocols
   );
+
+  const { parkOfficers } = useSelector(
+    (state) => state.parkOfficers
+  );
+  const parkOfficer = parkOfficers.find(officer => officer.id === parseInt(parkOfficerID));
+  const parkOfficerFullName = parkOfficer ? parkOfficer.fullName : null;
+
+
   const dispatch = useDispatch();
 
   const [searchValue, setSearchValue] = useState('');
