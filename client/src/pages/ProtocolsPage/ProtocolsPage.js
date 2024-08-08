@@ -17,13 +17,11 @@ const ProtocolsPage = () => {
   const { protocols, isLoading, error, totalProtocolsCount } = useSelector(
     (state) => state.protocols
   );
-  console.log(protocols);
   const dispatch = useDispatch();
 
   const [searchValue, setSearchValue] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const totalPages = Math.ceil(totalProtocolsCount / LIMIT);
-
+  const [totalPages, setTotalPages] = useState(1);
 
   const refreshProtocolsList = () => {
     if (parkOfficerID) {
@@ -34,8 +32,9 @@ const ProtocolsPage = () => {
   };
 
   useEffect(() => {
+    setTotalPages(Math.ceil(totalProtocolsCount / LIMIT));
     refreshProtocolsList();
-  }, [pageNumber]);
+  }, [pageNumber, totalProtocolsCount, dispatch, parkOfficerID]);
 
   if (isLoading) {
     return <div>LOADING</div>;
@@ -117,11 +116,13 @@ const ProtocolsPage = () => {
 
       {!protocols.length ? <h1>Oops... No data =)</h1> : null}
 
-      <Pagination
-        currentPage={pageNumber}
-        totalPages={totalPages}
-        onPageChange={setPageNumber}
-      />
+      {totalPages > 1 ? (
+        <Pagination
+          currentPage={pageNumber}
+          totalPages={totalPages}
+          onPageChange={setPageNumber}
+        />
+      ) : null}
     </section>
   );
 };

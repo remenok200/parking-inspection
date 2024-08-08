@@ -1,0 +1,41 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 40px 0;
+
+  button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1.125rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    &:disabled {
+      background-color: #ddd;
+      color: #888;
+      cursor: not-allowed;
+      border: 1px solid #ccc;
+      transition: background-color 0.3s ease;
+      
+      &:hover {
+        background-color: #ddd;
+        transform: none;
+      }
+    }
+  }
+
+  span {
+    font-size: 1rem;
+    color: #333;
+  }
+}
