@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { User, RefreshToken } = require('../models/MongoDB');
+const { User, RefreshToken, Banlist } = require('../models/MongoDB');
 const {
   createAccessToken,
   createRefreshToken,

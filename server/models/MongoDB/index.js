@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const User = require('./User');
 const RefreshToken = require('./RefreshToken');
+const Banlist = require('./Banlist');
 
 const env = process.env.NODE_ENV || 'development';
 const configPath = path.join(__dirname, '..', '..', '/config/configMongo.json');
@@ -12,7 +13,9 @@ const mongoURI = `mongodb://${host}:27017/${database}`;
 
 mongoose
   .connect(mongoURI)
-  .then(() => console.log(`Connection to MongoDB <<< ${config.database} >>> is OK`))
+  .then(() =>
+    console.log(`Connection to MongoDB <<< ${config.database} >>> is OK`)
+  )
   .catch((err) => {
     console.log('connect failed');
     console.log(err);
@@ -20,5 +23,7 @@ mongoose
   });
 
 module.exports = {
-  User, RefreshToken
+  User,
+  RefreshToken,
+  Banlist,
 };
