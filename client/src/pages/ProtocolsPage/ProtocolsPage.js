@@ -115,13 +115,15 @@ const ProtocolsPage = () => {
           />
         ) : null}
 
-        <div className={styles['pagination-toggle-wrapper']}>
-          <button onClick={() => setShowPagination(!showPagination)}>
-            {showPagination
-              ? 'Show All Protocols (without pages)'
-              : 'Return pages'}
-          </button>
-        </div>
+        {totalPages > 1 ? (
+          <div className={styles['pagination-toggle-wrapper']}>
+            <button onClick={() => setShowPagination(!showPagination)}>
+              {showPagination
+                ? 'Show All Protocols (without pages)'
+                : 'Return pages'}
+            </button>
+          </div>
+        ) : null}
       </section>
     </>
   );
