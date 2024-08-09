@@ -8,7 +8,7 @@ import {
   dismissParkOfficer,
   restoreParkOfficer,
 } from '../../redux/slices/parkOfficerSlice';
-import ConfirmationModal from '../Modals/ConfirmationModal';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import cx from 'classnames';
 
 const ParkOfficer = ({ parkOfficer }) => {

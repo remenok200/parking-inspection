@@ -19,6 +19,7 @@ import CreateProtocol from './components/CreateProtocol/CreateProtocol';
 import UpdateParkOfficer from './components/UpdateParkOfficer/UpdateParkOfficer';
 import UpdateProtocol from './components/UpdateProtocol/UpdateProtocol';
 import AdminPanelPage from './pages/AdminPanelPage/AdminPanelPage';
+import AddImage from './components/AddImage/AddImage';
 
 function App() {
   useErrorToast();
@@ -51,6 +52,7 @@ function App() {
           path="/protocols/create/:parkOfficerID"
           element={<CreateProtocol />}
         />
+        <Route path="/protocols/:protocolID/add/image" element={<AddImage />} />
         <Route
           path="/protocols/edit/:protocolID"
           element={<UpdateProtocol />}

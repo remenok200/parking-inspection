@@ -8,11 +8,10 @@ import {
   deleteProtocolImageByID,
 } from '../../redux/slices/protocolSlice';
 import { useDispatch } from 'react-redux';
-import ConfirmationModal from '../Modals/ConfirmationModal';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import { Link } from 'react-router-dom';
 import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
-import AddImage from '../Modals/AddImage';
 
 const Protocol = ({ protocol, refreshProtocolsList }) => {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
@@ -98,17 +97,9 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
           <button>Edit</button>
         </Link>
 
-        <button onClick={() => setAddImagesModalOpen(true)}>
-          Add image(s)
-        </button>
-        {addImagesModalOpen && (
-          <AddImage
-            open={addImagesModalOpen}
-            setIsOpen={setAddImagesModalOpen}
-            protocolID={protocol.id}
-            refreshProtocolsList={refreshProtocolsList}
-          />
-        )}
+        <Link to={`/protocols/${protocol.id}/add/image`}>
+          <button>Add image(s)</button>
+        </Link>
       </div>
 
       {protocol.images.length > 0 && (
