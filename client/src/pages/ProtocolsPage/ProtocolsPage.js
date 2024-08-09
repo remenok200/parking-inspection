@@ -10,6 +10,7 @@ import styles from './ProtocolsPage.module.scss';
 import Pagination from '../../components/Pagination/Pagination';
 import NavBar from '../../components/NavBar/NavBar';
 import CONSTANTS from '../../constants';
+import filterProtocols from '../../utils/filterProtocols';
 const { LIMIT } = CONSTANTS;
 
 const ProtocolsPage = () => {
@@ -69,44 +70,6 @@ const ProtocolsPage = () => {
     return <div>ERROR HAPPENNED</div>;
   }
 
-  const filterProtocols = (protocols, query) => {
-    const lowerCaseQuery = query.toLowerCase().trim();
-
-    // Разделяем запрос на оператор и значение
-    const operator = ['<', '>', '='].find((op) =>
-      lowerCaseQuery.startsWith(op)
-    );
-    const amount = parseFloat(lowerCaseQuery.slice(1).trim());
-
-    return protocols.filter((protocol) => {
-      const fineAmount = protocol.fineAmount;
-
-      // Фильтруем по fineAmount
-      if (operator) {
-        switch (operator) {
-          case '>':
-            return fineAmount > amount;
-          case '<':
-            return fineAmount < amount;
-          case '=':
-            return fineAmount === amount;
-          default:
-            return false;
-        }
-      }
-
-      // Фильтруем по другим критериям, если оператор не указан
-      return (
-        protocol.violatorFullName.toLowerCase().includes(lowerCaseQuery) ||
-        protocol.violatorPassportNumber
-          .toLowerCase()
-          .includes(lowerCaseQuery) ||
-        protocol.parkOfficer.full_name.toLowerCase().includes(lowerCaseQuery) ||
-        protocol.parkOfficer.badge_number.toLowerCase().includes(lowerCaseQuery)
-      );
-    });
-  };
-
   const filteredProtocols = filterProtocols(protocols, searchValue);
 
   const protocolsCards = filteredProtocols.map((currentProtocol) => (
@@ -144,14 +107,6 @@ const ProtocolsPage = () => {
 
         {!protocols.length ? <h1>Oops... No data =)</h1> : null}
 
-        <div className={styles.paginationToggle}>
-          <button onClick={() => setShowPagination(!showPagination)}>
-            {showPagination
-              ? 'Show All Protocols (without pages)'
-              : 'Return pages'}
-          </button>
-        </div>
-
         {showPagination && totalPages > 1 ? (
           <Pagination
             currentPage={pageNumber}
@@ -159,6 +114,14 @@ const ProtocolsPage = () => {
             onPageChange={setPageNumber}
           />
         ) : null}
+
+        <div className={styles['pagination-toggle-wrapper']}>
+          <button onClick={() => setShowPagination(!showPagination)}>
+            {showPagination
+              ? 'Show All Protocols (without pages)'
+              : 'Return pages'}
+          </button>
+        </div>
       </section>
     </>
   );

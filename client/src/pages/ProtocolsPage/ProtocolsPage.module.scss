@@ -7,6 +7,7 @@
 .search-container {
   position: relative;
   display: inline-block;
+  margin-left: 20px;
 }
 
 .search-container .tooltip {
@@ -28,4 +29,10 @@
 .search-container:hover .tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+.pagination-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
