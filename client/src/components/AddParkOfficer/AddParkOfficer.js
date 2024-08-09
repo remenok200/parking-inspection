@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { parkOfficerValidationSchema } from '../../schemas/parkOfficerValidationSchema';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddParkOfficer.module.scss';
-import { Link } from 'react-router-dom';
 
 const initialValues = {
   fullName: '',
@@ -69,9 +68,9 @@ const AddParkOfficer = () => {
 
             <div className={styles['button-container']}>
               <button type="submit">Add officer</button>
-              <Link to="/officers">
-                <button>Cancel</button>
-              </Link>
+              <button type="button" onClick={() => navigate(-1)}>
+                Cancel
+              </button>
             </div>
           </Form>
         )}

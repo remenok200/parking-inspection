@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useErrorToast from './hooks/userErrorToast';
 import AddParkOfficer from './components/AddParkOfficer/AddParkOfficer';
 import CreateProtocol from './components/CreateProtocol/CreateProtocol';
+import UpdateParkOfficer from './components/UpdateParkOfficer/UpdateParkOfficer';
 
 function App() {
   useErrorToast();
@@ -39,6 +40,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/officers" element={<ParkOfficersPage />} />
         <Route path="/officers/add" element={<AddParkOfficer />} />
+        <Route
+          path="/officers/edit/:parkOfficerID"
+          element={<UpdateParkOfficer />}
+        />
         <Route path="/protocols" element={<ProtocolsPage />} />
         <Route
           path="/protocols/create/:parkOfficerID"

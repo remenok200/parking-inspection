@@ -1,19 +1,33 @@
-import React from 'react';
-import Modal from 'react-modal';
+import React, { useState, useEffect } from 'react';
 import { parkOfficerValidationSchema } from '../../schemas/parkOfficerValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import {
-  updateParkOfficer,
-  getParkOfficers,
-} from '../../redux/slices/parkOfficerSlice';
-import { useDispatch } from 'react-redux';
-import { customStyles } from '../../common/modals/customStyles';
-import styles from './Modals.module.scss';
+import { updateParkOfficer } from '../../redux/slices/parkOfficerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from './UpdateParkOfficer.module.scss';
+import { useNavigate, useParams } from 'react-router-dom';
 
-Modal.setAppElement('#root');
-
-const UpdateParkOfficer = ({ open, setIsOpen, officer }) => {
+const UpdateParkOfficer = () => {
+  const { parkOfficerID } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { parkOfficers } = useSelector((state) => state.parkOfficers);
+  const [officer, setOfficer] = useState(null);
+
+  useEffect(() => {
+    const fetchOfficer = () => {
+      const foundOfficer = parkOfficers.find(
+        (officer) => officer.id === parseInt(parkOfficerID)
+      );
+      setOfficer(foundOfficer);
+    };
+
+    fetchOfficer();
+  }, [parkOfficerID, parkOfficers, dispatch]);
+
+  if (!officer) {
+    return;
+  }
 
   const initialValues = {
     fullName: officer.fullName,
@@ -26,20 +40,16 @@ const UpdateParkOfficer = ({ open, setIsOpen, officer }) => {
       await dispatch(
         updateParkOfficer({ parkOfficerID: officer.id, updatedData: values })
       );
-      await dispatch(getParkOfficers());
       resetForm();
-      setIsOpen(false);
+
+      navigate('/officers');
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <Modal
-      isOpen={open}
-      onRequestClose={() => setIsOpen(false)}
-      style={customStyles}
-    >
+    <>
       <h2 className={styles['form-title']}>{officer.fullName} | Edit</h2>
       <Formik
         initialValues={initialValues}
@@ -80,14 +90,14 @@ const UpdateParkOfficer = ({ open, setIsOpen, officer }) => {
 
             <div className={styles['button-container']}>
               <button type="submit">Update officer</button>
-              <button type="button" onClick={() => setIsOpen(false)}>
+              <button type="button" onClick={() => navigate(-1)}>
                 Cancel
               </button>
             </div>
           </Form>
         )}
       </Formik>
-    </Modal>
+    </>
   );
 };
 

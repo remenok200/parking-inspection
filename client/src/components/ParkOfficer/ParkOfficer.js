@@ -9,7 +9,6 @@ import {
   restoreParkOfficer,
 } from '../../redux/slices/parkOfficerSlice';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import UpdateParkOfficer from '../Modals/UpdateParkOfficer';
 import cx from 'classnames';
 
 const ParkOfficer = ({ parkOfficer }) => {
@@ -19,7 +18,6 @@ const ParkOfficer = ({ parkOfficer }) => {
     useState(false);
   const [restoreConfirmationModalOpen, setRestoreConfirmationModalOpen] =
     useState(false);
-  const [updateParkOfficerOpen, setUpdateParkOfficerOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -70,14 +68,9 @@ const ParkOfficer = ({ parkOfficer }) => {
           />
         )}
 
-        <button onClick={() => setUpdateParkOfficerOpen(true)}>Edit</button>
-        {updateParkOfficerOpen && (
-          <UpdateParkOfficer
-            open={updateParkOfficerOpen}
-            setIsOpen={setUpdateParkOfficerOpen}
-            officer={parkOfficer}
-          />
-        )}
+        <Link to={`/officers/edit/${parkOfficer.id}`}>
+          <button>Edit</button>
+        </Link>
 
         {parkOfficer.isWorked && (
           <>

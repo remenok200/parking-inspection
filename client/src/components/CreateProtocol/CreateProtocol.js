@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 const initialValues = {
   serviceNotes: '',
@@ -96,9 +95,9 @@ const CreateProtocol = () => {
 
             <div className={styles['button-container']}>
               <button type="submit">Create protocol</button>
-              <Link to="/officers">
-                <button>Cancel</button>
-              </Link>
+              <button type="button" onClick={() => navigate(-1)}>
+                Cancel
+              </button>
             </div>
           </Form>
         )}
