@@ -9,7 +9,7 @@ import {
 } from '../../redux/slices/protocolSlice';
 import { useDispatch } from 'react-redux';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import UpdateProtocol from '../Modals/UpdateProtocol';
+import { Link } from 'react-router-dom';
 import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import AddImage from '../Modals/AddImage';
@@ -19,7 +19,6 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
     useState(false);
   const [deleteImageConfirmationModal, setDeleteImageConfirmationModal] =
     useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
   const [addImagesModalOpen, setAddImagesModalOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -95,15 +94,9 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
           />
         )}
 
-        <button onClick={() => setEditModalOpen(true)}>Edit</button>
-        {editModalOpen && (
-          <UpdateProtocol
-            open={editModalOpen}
-            setIsOpen={setEditModalOpen}
-            protocol={protocol}
-            refreshProtocolsList={refreshProtocolsList}
-          />
-        )}
+        <Link to={`/protocols/edit/${protocol.id}`}>
+          <button>Edit</button>
+        </Link>
 
         <button onClick={() => setAddImagesModalOpen(true)}>
           Add image(s)

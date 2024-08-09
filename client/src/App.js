@@ -17,6 +17,7 @@ import useErrorToast from './hooks/userErrorToast';
 import AddParkOfficer from './components/AddParkOfficer/AddParkOfficer';
 import CreateProtocol from './components/CreateProtocol/CreateProtocol';
 import UpdateParkOfficer from './components/UpdateParkOfficer/UpdateParkOfficer';
+import UpdateProtocol from './components/UpdateProtocol/UpdateProtocol';
 
 function App() {
   useErrorToast();
@@ -48,6 +49,10 @@ function App() {
         <Route
           path="/protocols/create/:parkOfficerID"
           element={<CreateProtocol />}
+        />
+        <Route
+          path="/protocols/edit/:protocolID"
+          element={<UpdateProtocol />}
         />
         <Route path="/protocols/:parkOfficerID/" element={<ProtocolsPage />} />
       </Routes>

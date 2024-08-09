@@ -1,0 +1,17 @@
+@use '../../common/styles/template';
+
+.form-container {
+  @extend %form-container;
+}
+
+.form-title {
+  @extend %form-title;
+}
+
+.input {
+  @extend %input;
+}
+
+.button {
+  @extend %button;
+}

@@ -1,19 +1,33 @@
-import React from 'react';
-import Modal from 'react-modal';
+import React, { useState, useEffect } from 'react';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import {
-  updateProtocol,
-  getAllProtocols,
-} from '../../redux/slices/protocolSlice';
-import { useDispatch } from 'react-redux';
-import { customStyles } from '../../common/modals/customStyles';
-import styles from './Modals.module.scss';
+import { updateProtocol } from '../../redux/slices/protocolSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from './UpdateProtocol.module.scss';
+import { useNavigate, useParams } from 'react-router-dom';
 
-Modal.setAppElement('#root');
-
-const UpdateProtocol = ({ open, setIsOpen, protocol, refreshProtocolsList }) => {
+const UpdateProtocol = () => {
+  const { protocolID } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { protocols } = useSelector((state) => state.protocols);
+  const [protocol, setProtocol] = useState(null);
+
+  useEffect(() => {
+    const fetchProtocol = () => {
+      const foundProtocol = protocols.find(
+        (protocol) => protocol.id === parseInt(protocolID)
+      );
+      setProtocol(foundProtocol);
+    };
+
+    fetchProtocol();
+  }, [protocolID, protocols, dispatch]);
+
+  if (!protocol) {
+    return;
+  }
 
   const initialValues = {
     serviceNotes: protocol.serviceNotes,
@@ -31,20 +45,17 @@ const UpdateProtocol = ({ open, setIsOpen, protocol, refreshProtocolsList }) => 
           updatedData: values,
         })
       );
-      refreshProtocolsList();
+
       resetForm();
-      setIsOpen(false);
+
+      navigate('/protocols');
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <Modal
-      isOpen={open}
-      onRequestClose={() => setIsOpen(false)}
-      style={customStyles}
-    >
+    <>
       <h2 className={styles['form-title']}>Protocol № {protocol.id} | Edit</h2>
       <Formik
         initialValues={initialValues}
@@ -55,7 +66,7 @@ const UpdateProtocol = ({ open, setIsOpen, protocol, refreshProtocolsList }) => 
           <Form className={styles['form-container']}>
             <label>
               Service Notes:
-              <Field name="serviceNotes" autoComplete="off" />
+              <Field as="textarea" name="serviceNotes" autoComplete="off" />
               <ErrorMessage
                 name="serviceNotes"
                 component="div"
@@ -96,14 +107,14 @@ const UpdateProtocol = ({ open, setIsOpen, protocol, refreshProtocolsList }) => 
 
             <div className={styles['button-container']}>
               <button type="submit">Update protocol</button>
-              <button type="button" onClick={() => setIsOpen(false)}>
+              <button type="button" onClick={() => navigate(-1)}>
                 Cancel
               </button>
             </div>
           </Form>
         )}
       </Formik>
-    </Modal>
+    </>
   );
 };
 
