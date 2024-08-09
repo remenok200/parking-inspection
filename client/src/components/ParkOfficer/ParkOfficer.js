@@ -10,7 +10,6 @@ import {
 } from '../../redux/slices/parkOfficerSlice';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import UpdateParkOfficer from '../Modals/UpdateParkOfficer';
-import CreateProtocol from '../Modals/CreateProtocol';
 import cx from 'classnames';
 
 const ParkOfficer = ({ parkOfficer }) => {
@@ -21,7 +20,6 @@ const ParkOfficer = ({ parkOfficer }) => {
   const [restoreConfirmationModalOpen, setRestoreConfirmationModalOpen] =
     useState(false);
   const [updateParkOfficerOpen, setUpdateParkOfficerOpen] = useState(false);
-  const [createProtocolModalOpen, setCreateProtocolModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -83,17 +81,9 @@ const ParkOfficer = ({ parkOfficer }) => {
 
         {parkOfficer.isWorked && (
           <>
-            <button onClick={() => setCreateProtocolModalOpen(true)}>
-              Create protocol
-            </button>
-            {createProtocolModalOpen && (
-              <CreateProtocol
-                open={createProtocolModalOpen}
-                setIsOpen={setCreateProtocolModalOpen}
-                parkOfficerID={parkOfficer.id}
-                parkOfficerFullName={parkOfficer.fullName}
-              />
-            )}
+            <Link to={`/protocols/create/${parkOfficer.id}`}>
+              <button>Create protocol</button>
+            </Link>
           </>
         )}
 

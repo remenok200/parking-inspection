@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParkOfficers } from '../../redux/slices/parkOfficerSlice';
 import ParkOfficer from '../../components/ParkOfficer/ParkOfficer';
-import AddParkOfficer from '../../components/Modals/AddParkOfficer';
 import styles from './ParkOfficersPage.module.scss';
 import NavBar from '../../components/NavBar/NavBar';
+import { Link } from 'react-router-dom';
 
 const ParkOfficersPage = () => {
-  const [addParkOfficerModalOpen, setAddParkOfficerModalOpen] = useState(false);
   const [filter, setFilter] = useState('worked');
 
   const { parkOfficers, isLoading, error } = useSelector(
@@ -55,9 +54,9 @@ const ParkOfficersPage = () => {
             placeholder="Search...."
           />
 
-          <button onClick={() => setAddParkOfficerModalOpen(true)}>
-            Add officer
-          </button>
+          <Link to="/officers/add">
+            <button>Add Officer</button>
+          </Link>
 
           <select
             value={filter}
@@ -71,13 +70,6 @@ const ParkOfficersPage = () => {
         </div>
 
         {parkOfficersCards}
-
-        {addParkOfficerModalOpen && (
-          <AddParkOfficer
-            open={addParkOfficerModalOpen}
-            setIsOpen={setAddParkOfficerModalOpen}
-          />
-        )}
 
         {!parkOfficers.length ? <h1>Oops... No data =)</h1> : null}
       </section>

@@ -1,14 +1,11 @@
-import React from 'react';
-import Modal from 'react-modal';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import {
-  createProtocol,
-  getAllProtocols,
-} from '../../redux/slices/protocolSlice';
-import { useDispatch } from 'react-redux';
+import { createProtocol } from '../../redux/slices/protocolSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
-import { customStyles } from '../../common/modals/customStyles';
-import styles from './Modals.module.scss';
+import styles from './CreateProtocol.module.scss';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const initialValues = {
   serviceNotes: '',
@@ -17,33 +14,36 @@ const initialValues = {
   violatorPassportNumber: '',
 };
 
-Modal.setAppElement('#root');
-
-const CreateProtocol = ({
-  open,
-  setIsOpen,
-  parkOfficerID,
-  parkOfficerFullName,
-}) => {
+const CreateProtocol = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { parkOfficerID } = useParams();
+
+  const [parkOfficerFullName, setParkOfficerFullName] = useState('');
+
+  const { parkOfficers } = useSelector((state) => state.parkOfficers);
+
+  useEffect(() => {
+    const officer = parkOfficers.find(
+      (officer) => officer.id === parseInt(parkOfficerID)
+    );
+    if (officer) {
+      setParkOfficerFullName(officer.fullName);
+    }
+  }, [parkOfficerID, parkOfficers]);
 
   const handleCreateProtocolSubmit = async (values, { resetForm }) => {
     try {
       await dispatch(createProtocol({ parkOfficerID, protocolData: values }));
-      await dispatch(getAllProtocols());
+      navigate(`/protocols/${parkOfficerID}/`);
       resetForm();
-      setIsOpen(false);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <Modal
-      isOpen={open}
-      onRequestClose={() => setIsOpen(false)}
-      style={customStyles}
-    >
+    <>
       <h2 className={styles['form-title']}>
         {parkOfficerFullName} | Create protocol
       </h2>
@@ -96,14 +96,14 @@ const CreateProtocol = ({
 
             <div className={styles['button-container']}>
               <button type="submit">Create protocol</button>
-              <button type="button" onClick={() => setIsOpen(false)}>
-                Cancel
-              </button>
+              <Link to="/officers">
+                <button>Cancel</button>
+              </Link>
             </div>
           </Form>
         )}
       </Formik>
-    </Modal>
+    </>
   );
 };
 

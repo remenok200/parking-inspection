@@ -14,6 +14,8 @@ import history from './BrowserHistory';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useErrorToast from './hooks/userErrorToast';
+import AddParkOfficer from './components/AddParkOfficer/AddParkOfficer';
+import CreateProtocol from './components/CreateProtocol/CreateProtocol';
 
 function App() {
   useErrorToast();
@@ -36,11 +38,13 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/officers" element={<ParkOfficersPage />} />
+        <Route path="/officers/add" element={<AddParkOfficer />} />
         <Route path="/protocols" element={<ProtocolsPage />} />
         <Route
-          path="/protocols/:parkOfficerID/"
-          element={<ProtocolsPage />}
+          path="/protocols/create/:parkOfficerID"
+          element={<CreateProtocol />}
         />
+        <Route path="/protocols/:parkOfficerID/" element={<ProtocolsPage />} />
       </Routes>
     </HistoryRouter>
   );
