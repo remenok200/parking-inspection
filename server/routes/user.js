@@ -18,11 +18,11 @@ userRouter
 
 userRouter
 .route('/')
-.get(checkToken, checkBan, UserController.checkAuth);
+.get(UserController.checkAuth);
 
 userRouter
 .route('/refresh')
-.post(checkBan, UserController.refreshSession);
+.post(UserController.refreshSession);
 
 userRouter
 .route('/banlist')
@@ -30,7 +30,7 @@ userRouter
 .delete(checkToken, checkBan, checkAdmin, AdminController.unban);
 
 userRouter
-.route('/all/users')
+.route('/all')
 .get(checkToken, checkBan, checkAdmin, AdminController.getAllUsers);
 
 userRouter

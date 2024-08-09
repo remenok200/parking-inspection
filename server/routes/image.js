@@ -3,7 +3,7 @@ const imageRouter = require('express').Router({ mergeParams: true });
 const { uploadImages } = require('../middlewares/imagesUpload');
 const { checkToken } = require('../middlewares/checkToken');
 const { checkAdmin } = require('../middlewares/checkAdmin');
-const checkBan = require('../middlewares/checkBan');
+const { checkBan } = require('../middlewares/checkBan');
 
 const ImageController = require('../controllers/ImageController');
 

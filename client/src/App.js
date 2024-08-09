@@ -18,6 +18,7 @@ import AddParkOfficer from './components/AddParkOfficer/AddParkOfficer';
 import CreateProtocol from './components/CreateProtocol/CreateProtocol';
 import UpdateParkOfficer from './components/UpdateParkOfficer/UpdateParkOfficer';
 import UpdateProtocol from './components/UpdateProtocol/UpdateProtocol';
+import AdminPanelPage from './pages/AdminPanelPage/AdminPanelPage';
 
 function App() {
   useErrorToast();
@@ -55,6 +56,8 @@ function App() {
           element={<UpdateProtocol />}
         />
         <Route path="/protocols/:parkOfficerID/" element={<ProtocolsPage />} />
+
+        <Route path="/admin" element={<AdminPanelPage />} />
       </Routes>
     </HistoryRouter>
   );
