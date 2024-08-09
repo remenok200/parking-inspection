@@ -22,7 +22,7 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    role: 'user',
+    default: 'user',
   },
 });
 
