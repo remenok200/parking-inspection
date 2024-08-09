@@ -8,7 +8,13 @@ const getAllProtocols = createAsyncThunk(
   `${SLICE_NAME}/getAllProtocols`,
   async (page, thunkAPI) => {
     try {
-      const response = await API.getAllProtocols(page);
+      let response;
+      if (page) {
+        response = await API.getAllProtocols(page);
+      } else {
+        response = await API.getAllProtocols();
+      }
+
       const { data, totalProtocolsCount } = response.data;
 
       return { protocols: data, totalProtocolsCount };
@@ -70,10 +76,13 @@ const getAllProtocolsByOfficerID = createAsyncThunk(
   `${SLICE_NAME}/getAllProtocolsByOfficerID`,
   async ({ parkOfficerID, page }, thunkAPI) => {
     try {
-      const response = await API.getAllProtocolsByOfficerID(
-        parkOfficerID,
-        page
-      );
+      let response;
+      if (page) {
+        response = await API.getAllProtocolsByOfficerID(parkOfficerID, page);
+      } else {
+        response = await API.getAllProtocolsByOfficerID(parkOfficerID);
+      }
+
       const { data, totalProtocolsCount } = response.data;
 
       return { protocols: data, totalProtocolsCount };

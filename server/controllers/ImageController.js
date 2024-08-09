@@ -2,11 +2,6 @@ const { Image } = require('../models');
 const createHttpError = require('http-errors');
 const { deleteImageFromDisk } = require('../utils');
 
-// getProtocolImages
-// addProtocolImages
-// getImageByID
-// deleteImageByID
-
 module.exports.getProtocolImages = async (req, res, next) => {
   try {
     const { params: { protocolId } } = req;

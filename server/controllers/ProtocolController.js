@@ -2,12 +2,6 @@ const { Protocol, ParkOfficer, Image } = require('../models');
 const createHttpError = require('http-errors');
 const { deleteImageFromDisk } = require('../utils');
 
-// getAllProtocols
-// getAllProtocolsByOfficerID
-// createProtocol
-// updateProtocolByID
-// deleteProtocolByID
-
 module.exports.getAllProtocols = async (req, res, next) => {
   try {
     const { pagination } = req;

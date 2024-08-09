@@ -23,8 +23,13 @@ export const addParkOfficer = async (parkOfficer) =>
 export const updateParkOfficer = async (parkOfficerID, updatedData) =>
   await httpClient.put(`/parkOfficers/${parkOfficerID}`, updatedData);
 
-export const getAllProtocols = async (page = 1) =>
-  await httpClient.get(`/parkOfficers/protocols?page=${page}`);
+export const getAllProtocols = async (page) => {
+  if(page) {
+    return await httpClient.get(`/parkOfficers/protocols?page=${page}`);
+  } else {
+    return await httpClient.get(`/parkOfficers/protocols`);
+  }
+}
 
 export const deleteProtocolByID = async (parkOfficerID, protocolID) =>
   await httpClient.delete(
@@ -43,8 +48,13 @@ export const updateProtocol = async (parkOfficerID, protocolID, updatedData) =>
     updatedData
   );
 
-export const getAllProtocolsByOfficerID = async (parkOfficerID, page = 1) =>
-  await httpClient.get(`/parkOfficers/${parkOfficerID}/protocols?page=${page}`);
+export const getAllProtocolsByOfficerID = async (parkOfficerID, page) => {
+  if (page) {
+    return await httpClient.get(`/parkOfficers/${parkOfficerID}/protocols?page=${page}`);
+  } else {
+    return await httpClient.get(`/parkOfficers/${parkOfficerID}/protocols`);
+  }
+}
 
 export const addProtocolImages = async (images, protocolID) => {
   await httpClient.post(`/parkOfficers/protocols/${protocolID}/images`, images);

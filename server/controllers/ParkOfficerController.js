@@ -1,14 +1,6 @@
 const { ParkOfficer } = require('../models');
 const createHttpError = require('http-errors');
 
-// getAllParkOfficers
-// getParkOfficerByID
-// createParkOfficer
-// updateParkOfficerByID
-// deleteParkOfficerByID
-// dismissParkOfficerByID
-// restoreParkOfficerByID
-
 module.exports.getAllParkOfficers = async (req, res, next) => {
   try {
     const parkOfficers = await ParkOfficer.findAll();

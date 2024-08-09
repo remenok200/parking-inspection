@@ -30,19 +30,36 @@ const ProtocolsPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showPagination, setShowPagination] = useState(true);
 
   const refreshProtocolsList = () => {
-    if (parkOfficerID) {
-      dispatch(getAllProtocolsByOfficerID({ parkOfficerID, page: pageNumber }));
+    if (showPagination) {
+      if (parkOfficerID) {
+        dispatch(
+          getAllProtocolsByOfficerID({ parkOfficerID, page: pageNumber })
+        );
+      } else {
+        dispatch(getAllProtocols(pageNumber));
+      }
     } else {
-      dispatch(getAllProtocols(pageNumber));
+      if (parkOfficerID) {
+        dispatch(getAllProtocolsByOfficerID({ parkOfficerID }));
+      } else {
+        dispatch(getAllProtocols());
+      }
     }
   };
 
   useEffect(() => {
     setTotalPages(Math.ceil(totalProtocolsCount / LIMIT));
     refreshProtocolsList();
-  }, [pageNumber, totalProtocolsCount, dispatch, parkOfficerID]);
+  }, [
+    pageNumber,
+    totalProtocolsCount,
+    dispatch,
+    parkOfficerID,
+    showPagination,
+  ]);
 
   if (isLoading) {
     return <div>LOADING</div>;
@@ -127,7 +144,15 @@ const ProtocolsPage = () => {
 
         {!protocols.length ? <h1>Oops... No data =)</h1> : null}
 
-        {totalPages > 1 ? (
+        <div className={styles.paginationToggle}>
+          <button onClick={() => setShowPagination(!showPagination)}>
+            {showPagination
+              ? 'Show All Protocols (without pages)'
+              : 'Return pages'}
+          </button>
+        </div>
+
+        {showPagination && totalPages > 1 ? (
           <Pagination
             currentPage={pageNumber}
             totalPages={totalPages}
