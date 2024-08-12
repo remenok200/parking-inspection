@@ -47,24 +47,29 @@ const AddImage = () => {
   }
 
   return (
-    <div className={styles['add-image-container']}>
-      <h2 className={styles['add-image-title']}>
-        Protocol № {protocol.id} | Add images
-      </h2>
+    <div className={styles['add-image-wrapper']}>
+      <div className={styles['add-image-container']}>
+        <h2 className={styles['add-image-title']}>
+          Protocol № {protocol.id} | Add images
+        </h2>
 
-      <UploadImage setFile={setFile} />
+        <UploadImage setFile={setFile} />
 
-      {file ? (
+        {file ? (
+          <button
+            className={styles['upload-button']}
+            onClick={uploadImageHandler}
+          >
+            Upload
+          </button>
+        ) : null}
         <button
           className={styles['upload-button']}
-          onClick={uploadImageHandler}
+          onClick={() => navigate(-1)}
         >
-          Upload
+          Cancel
         </button>
-      ) : null}
-      <button className={styles['upload-button']} onClick={() => navigate(-1)}>
-        Cancel
-      </button>
+      </div>
     </div>
   );
 };
