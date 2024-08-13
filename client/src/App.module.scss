@@ -1,5 +1,9 @@
 @use './common/styles/template';
 
+body {
+  background-color: #f4f7f9;
+}
+
 button {
   @extend %button;
 }

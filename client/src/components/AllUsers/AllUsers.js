@@ -1,10 +1,16 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { banUser, getAllUsers } from '../../redux/slices/adminSlice';
 import styles from './AllUsers.module.scss';
+import AdminSidebar from '../AdminSidebar/AdminSidebar';
 
-const AllUsers = ({ users }) => {
+const AllUsers = () => {
   const dispatch = useDispatch();
+  const { allUsers } = useSelector((state) => state.admins);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
   const handleBan = async (userId) => {
     const reason = prompt('Enter the reason for banning this user:');
@@ -17,7 +23,7 @@ const AllUsers = ({ users }) => {
   return (
     <div className={styles['all-users']}>
       <h2>All Users</h2>
-      {users && users.length > 0 ? (
+      {allUsers && allUsers.length > 0 ? (
         <table className={styles['user-table']}>
           <thead>
             <tr>
@@ -28,7 +34,7 @@ const AllUsers = ({ users }) => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {allUsers.map((user) => (
               <tr key={user._id}>
                 <td>{user._id}</td>
                 <td>{user.nickname}</td>

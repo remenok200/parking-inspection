@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './AdminSidebar.module.scss';
+import cx from 'classnames';
 
-const AdminSidebar = ({ isOpen, toggleSidebar, setActivePage }) => {
+const AdminSidebar = ({ isOpen, toggleSidebar, setActivePage, activePage }) => {
   const sidebarRef = useRef(null);
   const [showHamburger, setShowHamburger] = useState(!isOpen);
 
@@ -26,7 +27,6 @@ const AdminSidebar = ({ isOpen, toggleSidebar, setActivePage }) => {
     if (isOpen) {
       setShowHamburger(false);
     } else {
-      // Добавляем задержку перед показом кнопки гамбургера
       const timer = setTimeout(() => setShowHamburger(true), 300); // Задержка соответствует времени анимации
       return () => clearTimeout(timer);
     }
@@ -44,12 +44,18 @@ const AdminSidebar = ({ isOpen, toggleSidebar, setActivePage }) => {
         {isOpen && (
           <ul className={styles.menu}>
             <li>
-              <button onClick={() => setActivePage('allUsers')}>
+              <button
+                className={cx({ [styles.active]: activePage === 'allUsers' })}
+                onClick={() => setActivePage('allUsers')}
+              >
                 All Users
               </button>
             </li>
             <li>
-              <button onClick={() => setActivePage('bannedUsers')}>
+              <button
+                className={cx({ [styles.active]: activePage === 'bannedUsers' })}
+                onClick={() => setActivePage('bannedUsers')}
+              >
                 Banned Users
               </button>
             </li>

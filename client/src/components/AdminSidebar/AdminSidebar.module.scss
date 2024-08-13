@@ -56,6 +56,11 @@
       &:hover {
         background-color: #444;
       }
+
+      &.active {
+        background-color: #007bff;
+        color: #fff;
+      }
     }
   }
 }
@@ -75,15 +80,9 @@
   justify-content: center;
   cursor: pointer;
   z-index: 1001;
-  transition: background-color 0.3s ease;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-
-  &.visible {
-    opacity: 1;
-    visibility: visible;
-  }
+  transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #0056b3;

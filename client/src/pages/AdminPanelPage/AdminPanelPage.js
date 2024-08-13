@@ -1,52 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers, getAllBannedUsers } from '../../redux/slices/adminSlice';
-import AdminSidebar from '../../components/AdminSidebar/AdminSidebar';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './AdminPanelPage.module.scss';
-import cx from 'classnames';
-import AllUsers from '../../components/AllUsers/AllUsers';
-import BannedUsers from '../../components/BannedUsers/BannedUsers';
-import NavBar from '../../components/NavBar/NavBar';
 
 const AdminPanelPage = () => {
-  const dispatch = useDispatch();
-  const { allUsers, bannedUsers } = useSelector((state) => state.admins);
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activePage, setActivePage] = useState('allUsers');
-
-  useEffect(() => {
-    if (activePage === 'allUsers') {
-      dispatch(getAllUsers());
-    } else {
-      dispatch(getAllBannedUsers());
-    }
-  }, [activePage, dispatch]);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   return (
-    <div>
-      <NavBar />
-
-      <AdminSidebar
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        setActivePage={setActivePage}
-      />
-      <div
-        className={cx(styles.content, {
-          [styles.sidebarOpen]: isSidebarOpen,
-          [styles.sidebarClosed]: !isSidebarOpen,
-        })}
-      >
-        {activePage === 'allUsers' ? (
-          <AllUsers users={allUsers} />
-        ) : (
-          <BannedUsers users={bannedUsers} />
-        )}
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1>Admin Panel</h1>
+      </div>
+      <div className={styles.navigation}>
+        <Link to="/admin/users" className={styles['nav-link']}>
+          <div className={styles['nav-item']}>
+            <h2>All Users</h2>
+            <p>Manage and view all users in the system.</p>
+          </div>
+        </Link>
+        <Link to="/admin/users/banned" className={styles['nav-link']}>
+          <div className={styles['nav-item']}>
+            <h2>Banned Users</h2>
+            <p>View and manage banned users.</p>
+          </div>
+        </Link>
       </div>
     </div>
   );

@@ -1,10 +1,15 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { unbanUser, getAllBannedUsers } from '../../redux/slices/adminSlice';
 import styles from './BannedUsers.module.scss';
 
-const BannedUsers = ({ users }) => {
+const BannedUsers = () => {
   const dispatch = useDispatch();
+  const { bannedUsers } = useSelector((state) => state.admins); 
+
+  useEffect(() => {
+    dispatch(getAllBannedUsers());
+  }, [dispatch]);
 
   const handleUnban = async (userId) => {
     await dispatch(unbanUser(userId));
@@ -14,7 +19,7 @@ const BannedUsers = ({ users }) => {
   return (
     <div className={styles['banned-users']}>
       <h2>Banned Users</h2>
-      {users && users.length > 0 ? (
+      {bannedUsers && bannedUsers.length > 0 ? (
         <table className={styles['user-table']}>
           <thead>
             <tr>
@@ -26,7 +31,7 @@ const BannedUsers = ({ users }) => {
             </tr>
           </thead>
           <tbody>
-            {users.map((ban) => (
+            {bannedUsers.map((ban) => (
               <tr key={ban.user._id}>
                 <td>{ban.user._id}</td>
                 <td>{ban.user.nickname}</td>
