@@ -47,8 +47,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
             <li>
               <NavLink
                 to="/admin/users"
-                className={({ isActive }) => cx({ [styles.active]: isActive })}
-                onClick={() => isOpen && toggleSidebar()} // Закрыть сайдбар при клике на ссылку
+                className={({ isActive }) =>
+                  cx(styles.navLink, { [styles.active]: isActive })
+                }
+                onClick={toggleSidebar}
               >
                 All Users
               </NavLink>
@@ -56,8 +58,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
             <li>
               <NavLink
                 to="/admin/users/banned"
-                className={({ isActive }) => cx({ [styles.active]: isActive })}
-                onClick={() => isOpen && toggleSidebar()} // Закрыть сайдбар при клике на ссылку
+                className={({ isActive }) =>
+                  cx(styles.navLink, { [styles.active]: isActive })
+                }
+                onClick={toggleSidebar}
               >
                 Banned Users
               </NavLink>
@@ -66,7 +70,12 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         )}
       </div>
       {showHamburger && (
-        <button className={styles['sidebar-open-btn']} onClick={toggleSidebar}>
+        <button
+          className={cx(styles['sidebar-open-btn'], {
+            [styles.visible]: showHamburger,
+          })}
+          onClick={toggleSidebar}
+        >
           <MenuIcon />
         </button>
       )}
