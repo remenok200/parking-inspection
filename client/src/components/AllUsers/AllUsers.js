@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { banUser, getAllUsers } from '../../redux/slices/adminSlice';
 import styles from './AllUsers.module.scss';
@@ -7,6 +7,8 @@ import AdminSidebar from '../AdminSidebar/AdminSidebar';
 const AllUsers = () => {
   const dispatch = useDispatch();
   const { allUsers } = useSelector((state) => state.admins);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -22,38 +24,41 @@ const AllUsers = () => {
 
   return (
     <div className={styles['all-users']}>
-      <h2>All Users</h2>
-      {allUsers && allUsers.length > 0 ? (
-        <table className={styles['user-table']}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nickname</th>
-              <th>Email</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allUsers.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.nickname}</td>
-                <td>{user.email}</td>
-                <td>
-                  <button
-                    className={styles['ban-button']}
-                    onClick={() => handleBan(user._id)}
-                  >
-                    Ban
-                  </button>
-                </td>
+      <AdminSidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <div className={styles['content']}>
+        <h2>All Users</h2>
+        {allUsers && allUsers.length > 0 ? (
+          <table className={styles['user-table']}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nickname</th>
+                <th>Email</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No users found.</p>
-      )}
+            </thead>
+            <tbody>
+              {allUsers.map((user) => (
+                <tr key={user._id}>
+                  <td>{user._id}</td>
+                  <td>{user.nickname}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <button
+                      className={styles['ban-button']}
+                      onClick={() => handleBan(user._id)}
+                    >
+                      Ban
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No users found.</p>
+        )}
+      </div>
     </div>
   );
 };

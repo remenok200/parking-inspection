@@ -42,16 +42,18 @@
   li {
     margin-bottom: 10px;
 
-    button {
+    a {
+      display: block;
       width: 100%;
       padding: 15px;
       background-color: transparent;
       color: #fff;
-      border: none;
+      text-decoration: none;
       text-align: left;
       padding-left: 20px;
       font-size: 16px;
-      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
 
       &:hover {
         background-color: #444;
@@ -80,15 +82,5 @@
   justify-content: center;
   cursor: pointer;
   z-index: 1001;
-  opacity: 1;
-  visibility: visible;
   transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  .MuiSvgIcon-root {
-    font-size: 24px;
-  }
 }

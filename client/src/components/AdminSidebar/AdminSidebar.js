@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './AdminSidebar.module.scss';
 import cx from 'classnames';
 
-const AdminSidebar = ({ isOpen, toggleSidebar, setActivePage, activePage }) => {
+const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
   const [showHamburger, setShowHamburger] = useState(!isOpen);
 
@@ -44,20 +45,22 @@ const AdminSidebar = ({ isOpen, toggleSidebar, setActivePage, activePage }) => {
         {isOpen && (
           <ul className={styles.menu}>
             <li>
-              <button
-                className={cx({ [styles.active]: activePage === 'allUsers' })}
-                onClick={() => setActivePage('allUsers')}
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) => cx({ [styles.active]: isActive })}
+                onClick={() => isOpen && toggleSidebar()} // Закрыть сайдбар при клике на ссылку
               >
                 All Users
-              </button>
+              </NavLink>
             </li>
             <li>
-              <button
-                className={cx({ [styles.active]: activePage === 'bannedUsers' })}
-                onClick={() => setActivePage('bannedUsers')}
+              <NavLink
+                to="/admin/users/banned"
+                className={({ isActive }) => cx({ [styles.active]: isActive })}
+                onClick={() => isOpen && toggleSidebar()} // Закрыть сайдбар при клике на ссылку
               >
                 Banned Users
-              </button>
+              </NavLink>
             </li>
           </ul>
         )}
