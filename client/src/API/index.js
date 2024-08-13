@@ -103,6 +103,12 @@ export const getAllUsers = async () => await httpClient.get('/users/all');
 export const getAllBannedUsers = async () =>
   await httpClient.get('/users/all/banned');
 
+export const banUser = async (userId, reason) =>
+  await httpClient.post('/users/banlist', { userId, reason });
+
+export const unbanUser = async (userId) =>
+  await httpClient.delete(`/users/banlist/unban/${userId}`);
+
 // TOKENS
 
 export const authUser = async () => await httpClient.get('/users');

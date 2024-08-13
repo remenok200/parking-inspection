@@ -34,7 +34,7 @@ module.exports.unban = async (req, res, next) => {
   try {
     const {
       tokenPayload: { userId: adminId },
-      body: { userId },
+      params: { userId },
     } = req;
 
     const result = await Banlist.deleteOne({ adminId, userId });

@@ -26,7 +26,10 @@ userRouter
 
 userRouter
 .route('/banlist')
-.post(checkToken, checkBan, checkAdmin, AdminController.ban)
+.post(checkToken, checkBan, checkAdmin, AdminController.ban);
+
+userRouter
+.route('/banlist/unban/:userId')
 .delete(checkToken, checkBan, checkAdmin, AdminController.unban);
 
 userRouter
