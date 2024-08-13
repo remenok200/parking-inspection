@@ -6,12 +6,13 @@ import styles from './AdminPanelPage.module.scss';
 import cx from 'classnames';
 import AllUsers from '../../components/AllUsers/AllUsers';
 import BannedUsers from '../../components/BannedUsers/BannedUsers';
+import NavBar from '../../components/NavBar/NavBar';
 
 const AdminPanelPage = () => {
   const dispatch = useDispatch();
   const { allUsers, bannedUsers } = useSelector((state) => state.admins);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activePage, setActivePage] = useState('allUsers');
 
   useEffect(() => {
@@ -27,7 +28,9 @@ const AdminPanelPage = () => {
   };
 
   return (
-    <div className={styles.adminPanel}>
+    <div>
+      <NavBar />
+
       <AdminSidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
