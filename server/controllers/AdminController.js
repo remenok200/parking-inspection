@@ -51,20 +51,12 @@ module.exports.unban = async (req, res, next) => {
 
 module.exports.getAllBannedUsers = async (req, res, next) => {
   try {
-    const bannedUsers = await Banlist.find();
+    const bannedUsers = await Banlist.find().populate('userId');
 
-    const usersWithBans = [];
-
-    for (const ban of bannedUsers) {
-      const user = await User.findOne({ userId: ban.userId });
-
-      const userInfo = {
-        user,
-        banInfo: ban,
-      };
-
-      usersWithBans.push(userInfo);
-    }
+    const usersWithBans = bannedUsers.map((ban) => ({
+      user: ban.userId,
+      banInfo: ban,
+    }));
 
     return res.status(200).send({ data: usersWithBans });
   } catch (error) {
@@ -74,14 +66,12 @@ module.exports.getAllBannedUsers = async (req, res, next) => {
 
 module.exports.getAllUsers = async (req, res, next) => {
   try {
-    const allUsers = await User.find();
+    const bannedUsers = await Banlist.find().select('userId');
+    const bannedUserIds = bannedUsers.map((ban) => ban.userId);
 
-    const bannedUsers = await Banlist.find();
-    const bannedUsersIds = bannedUsers.map((ban) => ban.userId);
-
-    const filteredUsers = allUsers.filter(
-      (user) => !bannedUsersIds.includes(user._id)
-    );
+    const filteredUsers = await User.find({
+      _id: { $nin: bannedUserIds },
+    });
 
     return res.status(200).send({ data: filteredUsers });
   } catch (error) {
