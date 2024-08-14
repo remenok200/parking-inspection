@@ -43,7 +43,7 @@ const AllUsers = () => {
                 <th>ID</th>
                 <th>Nickname</th>
                 <th>Email</th>
-                <th>Actions</th>
+                <th colSpan="2">Actions</th>
               </tr>
             </thead>
             <tbody>

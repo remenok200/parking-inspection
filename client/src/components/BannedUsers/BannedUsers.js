@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { unbanUser, getAllBannedUsers } from '../../redux/slices/adminSlice';
 import styles from './BannedUsers.module.scss';
 import AdminSidebar from '../AdminSidebar/AdminSidebar';
+import { useNavigate } from 'react-router-dom';
 
 const BannedUsers = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { bannedUsers } = useSelector((state) => state.admins);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -17,6 +19,10 @@ const BannedUsers = () => {
   const handleUnban = async (userId) => {
     await dispatch(unbanUser(userId));
     await dispatch(getAllBannedUsers());
+  };
+
+  const handleViewSessions = (userId) => {
+    navigate(`/admin/users/sessions/${userId}`);
   };
 
   return (
@@ -35,7 +41,7 @@ const BannedUsers = () => {
                 <th>Nickname</th>
                 <th>Email</th>
                 <th>Ban Reason</th>
-                <th>Actions</th>
+                <th colSpan="2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -51,6 +57,14 @@ const BannedUsers = () => {
                       onClick={() => handleUnban(ban.user._id)}
                     >
                       Unban
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={styles['view-button']}
+                      onClick={() => handleViewSessions(ban.user._id)}
+                    >
+                      Sessions
                     </button>
                   </td>
                 </tr>
