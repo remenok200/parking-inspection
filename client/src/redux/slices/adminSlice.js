@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from '../../API';
+import { toast } from 'react-toastify';
 
 const SLICE_NAME = 'admins';
 
@@ -38,6 +39,8 @@ const banUser = createAsyncThunk(
   async ({ userId, reason }, thunkAPI) => {
     try {
       await API.banUser(userId, reason);
+
+      toast.success('User successfully banned');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -49,6 +52,8 @@ const unbanUser = createAsyncThunk(
   async (userId, thunkAPI) => {
     try {
       await API.unbanUser(userId);
+
+      toast.success('User successfully unbanned');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }

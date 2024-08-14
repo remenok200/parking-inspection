@@ -17,6 +17,10 @@ const refreshTokenSchema = new Schema({
   geolocation: {
     type: String,
   },
+  ipAddress: {
+    type: String,
+    required: true,
+  },
 });
 
 const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema);

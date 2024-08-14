@@ -10,7 +10,13 @@ const createHttpError = require('http-errors');
 
 module.exports.registrationUser = async (req, res, next) => {
   try {
-    const { body, passwordHash } = req;
+    const {
+      body,
+      body: { geolocation, ipAddress },
+      passwordHash,
+    } = req;
+
+    console.log(ipAddress);
 
     const createdUser = await User.create({ ...body, passwordHash });
 
@@ -18,20 +24,21 @@ module.exports.registrationUser = async (req, res, next) => {
       userId: createdUser._id,
       email: createdUser.email,
       role: createdUser.role,
-      geolocation: body.geolocation,
+      geolocation,
     });
 
     const refreshToken = await createRefreshToken({
       userId: createdUser._id,
       email: createdUser.email,
       role: createdUser.role,
-      geolocation: body.geolocation,
+      geolocation,
     });
 
     await RefreshToken.create({
       token: refreshToken,
       userId: createdUser._id,
-      geolocation: body.geolocation,
+      geolocation,
+      ipAddress,
     });
 
     return res
@@ -45,7 +52,7 @@ module.exports.registrationUser = async (req, res, next) => {
 module.exports.loginUser = async (req, res, next) => {
   try {
     const {
-      body: { email, password, geolocation },
+      body: { email, password, geolocation, ipAddress },
     } = req;
 
     const foundUser = await User.findOne({
@@ -76,6 +83,7 @@ module.exports.loginUser = async (req, res, next) => {
         token: refreshToken,
         userId: foundUser._id,
         geolocation,
+        ipAddress,
       });
 
       return res
@@ -107,7 +115,7 @@ module.exports.checkAuth = async (req, res, next) => {
 
 module.exports.refreshSession = async (req, res, next) => {
   const {
-    body: { refreshToken, geolocation },
+    body: { refreshToken, geolocation, ipAddress },
   } = req;
 
   let verifyResult;
@@ -149,6 +157,7 @@ module.exports.refreshSession = async (req, res, next) => {
           token: newRefreshToken,
           userId: user._id,
           geolocation,
+          ipAddress,
         });
 
         return res.status(200).send({

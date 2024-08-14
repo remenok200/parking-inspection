@@ -76,10 +76,22 @@ navigator.geolocation.getCurrentPosition(
   }
 );
 
+const getIPFromAmazon = async () => {
+  try {
+    const response = await axios.get('https://checkip.amazonaws.com/');
+    return response.data.trim();
+  } catch (error) {
+    console.error('Error fetching IP address:', error);
+  }
+};
+
 export const loginUser = async (userData) => {
+  const ipAddress = await getIPFromAmazon();
+
   const response = await httpClient.post('/users/sign-in', {
     ...userData,
     geolocation,
+    ipAddress,
   });
   if (response.status === 200) {
     history.push('/officers');
@@ -87,9 +99,12 @@ export const loginUser = async (userData) => {
 };
 
 export const registerUser = async (userData) => {
+  const ipAddress = await getIPFromAmazon();
+
   const response = await httpClient.post('/users/sign-up', {
     ...userData,
     geolocation,
+    ipAddress,
   });
   if (response.status === 201) {
     history.push('/officers');
@@ -114,11 +129,14 @@ export const unbanUser = async (userId) =>
 export const authUser = async () => await httpClient.get('/users');
 
 export const refreshUser = async () => {
+  const ipAddress = await getIPFromAmazon();
+
   const refreshToken = localStorage.getItem('refreshToken');
 
   const { data } = await httpClient.post('/users/refresh', {
     refreshToken,
     geolocation,
+    ipAddress
   });
 
   return data;
