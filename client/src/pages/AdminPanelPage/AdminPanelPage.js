@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './AdminPanelPage.module.scss';
+import NavBar from '../../components/NavBar/NavBar';
 
 const AdminPanelPage = () => {
   return (
-    <div className={styles.container}>
+    <>
+      <NavBar />
+      
+      <div className={styles.container}>
       <div className={styles.header}>
         <h1>Admin Panel</h1>
       </div>
@@ -23,6 +27,7 @@ const AdminPanelPage = () => {
         </Link>
       </div>
     </div>
+    </>
   );
 };
 

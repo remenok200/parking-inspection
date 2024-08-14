@@ -26,6 +26,16 @@ const NavBar = () => {
             Protocols
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              isActive ? `${styles.link} ${styles.active}` : styles.link
+            }
+          >
+            A-Panel
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
