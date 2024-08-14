@@ -37,7 +37,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     <>
       <div
         ref={sidebarRef}
-        className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}
+        className={cx(styles.sidebar, {
+          [styles.open]: isOpen,
+          [styles.closed]: !isOpen,
+        })}
       >
         <button className={styles['toggle-btn']} onClick={toggleSidebar}>
           {isOpen ? 'Close' : 'Open'}
@@ -48,7 +51,10 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
               <NavLink
                 to="/admin/users"
                 className={({ isActive }) =>
-                  cx(styles.navLink, { [styles.active]: isActive })
+                  cx(styles.navLink, {
+                    [styles.active]:
+                      isActive && window.location.pathname === '/admin/users',
+                  })
                 }
                 onClick={toggleSidebar}
               >
@@ -59,7 +65,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
               <NavLink
                 to="/admin/users/banned"
                 className={({ isActive }) =>
-                  cx(styles.navLink, { [styles.active]: isActive })
+                  cx(styles.navLink, {
+                    [styles.active]:
+                      isActive &&
+                      window.location.pathname === '/admin/users/banned',
+                  })
                 }
                 onClick={toggleSidebar}
               >
