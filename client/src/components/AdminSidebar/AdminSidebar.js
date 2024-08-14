@@ -49,6 +49,20 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
           <ul className={styles.menu}>
             <li>
               <NavLink
+                to="/admin"
+                className={({ isActive }) =>
+                  cx(styles.navLink, {
+                    [styles.active]:
+                      isActive && window.location.pathname === '/admin',
+                  })
+                }
+                onClick={toggleSidebar}
+              >
+                Back to A-Panel
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="/admin/users"
                 className={({ isActive }) =>
                   cx(styles.navLink, {
