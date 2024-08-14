@@ -1,49 +1,60 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getUserSessions } from '../../redux/slices/adminSlice';
-//import styles from './UserSessions.module.scss';
+import { getUserSessions, getAllUsers } from '../../redux/slices/adminSlice';
+import styles from './UserSessions.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 const UserSessions = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
-  const { userSessions, error } = useSelector((state) => state.admins);
+  const navigate = useNavigate();
+  const { userSessions, allUsers } = useSelector((state) => state.admins);
 
   useEffect(() => {
     if (userId) {
       dispatch(getUserSessions(userId));
+      dispatch(getAllUsers());
     }
   }, [dispatch, userId]);
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  const user = allUsers?.find((user) => user._id === userId);
+
+  const handleBack = () => {
+    navigate('/admin/users');
+  };
 
   return (
-    <div>
-      <h2>User Sessions</h2>
-      {userSessions && userSessions.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Session Created At</th>
-              <th>IP Address</th>
-              <th>Geolocation</th>
-            </tr>
-          </thead>
-          <tbody>
-            {userSessions.map((session) => (
-              <tr key={session.token}>
-                <td>{new Date(session.createdAt).toLocaleString()}</td>
-                <td>{session.ipAddress}</td>
-                <td>{session.geolocation}</td>
+    <div className={styles['user-sessions']}>
+      <div className={styles['content']}>
+        <button className={styles['back-button']} onClick={handleBack}>
+          Back to Users
+        </button>
+        <h2>User Sessions</h2>
+        {user && <h3>{user.nickname}'s Sessions</h3>}{' '}
+        {userSessions && userSessions.length > 0 ? (
+          <table className={styles['sessions-table']}>
+            <thead>
+              <tr>
+                <th>Session Created At</th>
+                <th>IP Address</th>
+                <th>Geolocation</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No sessions found.</p>
-      )}
+            </thead>
+            <tbody>
+              {userSessions.map((session) => (
+                <tr key={session.token}>
+                  <td>{new Date(session.createdAt).toLocaleString()}</td>
+                  <td>{session.ipAddress}</td>
+                  <td>{session.geolocation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No sessions found.</p>
+        )}
+      </div>
     </div>
   );
 };

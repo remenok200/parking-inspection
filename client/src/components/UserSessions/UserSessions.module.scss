@@ -1,0 +1,47 @@
+.user-sessions {
+  display: flex;
+  padding-top: 30px;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f4f7f9;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+}
+
+.button-base {
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.back-button {
+  @extend .button-base;
+  background-color: #007bff;
+  margin-bottom: 20px;
+}
