@@ -22,6 +22,7 @@ import AdminPanelPage from './pages/AdminPanelPage/AdminPanelPage';
 import AddImage from './components/AddImage/AddImage';
 import AllUsers from './components/AllUsers/AllUsers';
 import BannedUsers from './components/BannedUsers/BannedUsers';
+import UserSessions from './components/UserSessions/UserSessions';
 
 function App() {
   useErrorToast();
@@ -64,6 +65,10 @@ function App() {
         <Route path="/admin" element={<AdminPanelPage />} />
         <Route path="/admin/users" element={<AllUsers />} />
         <Route path="/admin/users/banned" element={<BannedUsers />} />
+        <Route
+          path="/admin/users/sessions/:userId"
+          element={<UserSessions />}
+        />
       </Routes>
     </HistoryRouter>
   );

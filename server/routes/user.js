@@ -40,4 +40,8 @@ userRouter
 .route('/all/banned')
 .get(checkToken, checkBan, checkAdmin, AdminController.getAllBannedUsers);
 
+userRouter
+.route('/tokens/:userId')
+.get(checkToken, checkBan, checkAdmin, AdminController.getUserRefreshTokens);
+
 module.exports = userRouter;

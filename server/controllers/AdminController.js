@@ -1,4 +1,4 @@
-const { User, Banlist } = require('../models/MongoDB');
+const { User, Banlist, RefreshToken } = require('../models/MongoDB');
 const createHttpError = require('http-errors');
 
 module.exports.ban = async (req, res, next) => {
@@ -74,6 +74,20 @@ module.exports.getAllUsers = async (req, res, next) => {
     });
 
     return res.status(200).send({ data: filteredUsers });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.getUserRefreshTokens = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+    } = req;
+
+    const refreshTokens = await RefreshToken.find({ userId });
+
+    return res.status(200).send({ data: refreshTokens });
   } catch (error) {
     next(error);
   }

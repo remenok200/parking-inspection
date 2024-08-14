@@ -31,16 +31,21 @@
   }
 }
 
-.ban-button {
-  background-color: #dc3545;
+.button-base {
   color: #fff;
   border: none;
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.3s;
+}
 
-  &:hover {
-    background-color: #c82333;
-  }
+.ban-button {
+  @extend .button-base;
+  background-color: #dc3545;
+}
+
+.view-button {
+  @extend .button-base;
+  background-color: #007bff;
 }

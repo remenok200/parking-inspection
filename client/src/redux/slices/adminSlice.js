@@ -60,9 +60,27 @@ const unbanUser = createAsyncThunk(
   }
 );
 
+const getUserSessions = createAsyncThunk(
+  `${SLICE_NAME}/getUserSessions`,
+  async (userId, thunkAPI) => {
+    try {
+      const {
+        data: { data: refreshTokens },
+      } = await API.getUserSessions(userId);
+
+      toast.success('User sessions received');
+      
+      return refreshTokens;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   allUsers: null,
   bannedUsers: null,
+  userSessions: null,
   isLoading: false,
   error: null,
 };
@@ -132,11 +150,27 @@ const adminSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(getUserSessions.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(getUserSessions.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+      state.userSessions = action.payload;
+    });
+
+    builder.addCase(getUserSessions.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 const { reducer } = adminSlice;
 
-export { getAllUsers, getAllBannedUsers, banUser, unbanUser };
+export { getAllUsers, getAllBannedUsers, banUser, unbanUser, getUserSessions };
 
 export default reducer;

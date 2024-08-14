@@ -116,6 +116,9 @@ export const banUser = async (userId, reason) =>
 export const unbanUser = async (userId) =>
   await httpClient.delete(`/users/banlist/unban/${userId}`);
 
+export const getUserSessions = async (userId) =>
+  await httpClient.get(`/users/tokens/${userId}`);
+
 // TOKENS
 
 export const authUser = async () => await httpClient.get('/users');
