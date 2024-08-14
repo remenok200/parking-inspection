@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getUserSessions, getAllUsers } from '../../redux/slices/adminSlice';
 import styles from './UserSessions.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 
 const UserSessions = () => {
   const { userId } = useParams();
@@ -31,7 +32,7 @@ const UserSessions = () => {
           Back to Users
         </button>
         <h2>User Sessions</h2>
-        {user && <h3>{user.nickname}'s Sessions</h3>}{' '}
+        {user && <h3>{user.nickname}'s Sessions</h3>}
         {userSessions && userSessions.length > 0 ? (
           <table className={styles['sessions-table']}>
             <thead>
@@ -44,7 +45,7 @@ const UserSessions = () => {
             <tbody>
               {userSessions.map((session) => (
                 <tr key={session.token}>
-                  <td>{new Date(session.createdAt).toLocaleString()}</td>
+                  <td>{`${formatDateTime(session.createdAt)} | ${timeAgo(session.createdAt)}`}</td>
                   <td>{session.ipAddress}</td>
                   <td>{session.geolocation}</td>
                 </tr>
