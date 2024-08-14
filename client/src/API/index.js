@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from '../BrowserHistory';
+import { getIPFromAmazon } from '../utils/getIPFromAmazon';
 
 const httpClient = axios.create({
   baseURL: 'http://localhost:5001/api',
@@ -75,15 +76,6 @@ navigator.geolocation.getCurrentPosition(
     geolocation = `${latitude} ${longitude}`;
   }
 );
-
-const getIPFromAmazon = async () => {
-  try {
-    const response = await axios.get('https://checkip.amazonaws.com/');
-    return response.data.trim();
-  } catch (error) {
-    console.error('Error fetching IP address:', error);
-  }
-};
 
 export const loginUser = async (userData) => {
   const ipAddress = await getIPFromAmazon();
