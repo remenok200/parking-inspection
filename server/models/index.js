@@ -27,7 +27,7 @@ sequelize
     console.log(`Connection to PostgreSQL <<< ${config.database} >>> is OK`);
   })
   .catch((err) => {
-    console.error('Unable to connect to the PostgreSQL:', err);
+    console.log('Unable to connect to the PostgreSQL:', err);
     process.exit(1);
   });
 
