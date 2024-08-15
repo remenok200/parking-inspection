@@ -17,8 +17,7 @@ mongoose
     console.log(`Connection to MongoDB <<< ${config.database} >>> is OK`)
   )
   .catch((err) => {
-    console.log('connect failed');
-    console.log(err);
+    console.error('Unable to connect to the MongoDB:', err);
     process.exit(1);
   });
 
