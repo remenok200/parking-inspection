@@ -47,14 +47,14 @@ const UserSessions = () => {
   const user = allUsers?.find(({ _id }) => _id === userId);
 
   const handleBack = () => {
-    navigate('/admin/users');
+    navigate(-1);
   };
 
   return (
     <div className={styles['user-sessions']}>
       <div className={styles['content']}>
         <button className={styles['back-button']} onClick={handleBack}>
-          Back to Users
+          Back
         </button>
         <h2>User Sessions</h2>
         {user && <h3>{user.nickname}'s Sessions</h3>}
