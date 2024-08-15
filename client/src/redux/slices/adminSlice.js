@@ -69,8 +69,12 @@ const getUserSessions = createAsyncThunk(
       } = await API.getUserSessions(userId);
 
       toast.success('User sessions received');
-      
-      return refreshTokens;
+
+      const sortedRefreshTokens = refreshTokens.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
+      return sortedRefreshTokens;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
