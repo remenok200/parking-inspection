@@ -84,7 +84,9 @@ const UserSessions = () => {
             </thead>
             <tbody>
               {userSessions.map((session) => {
-                const sessionDetail = sessionDetails.find((detail) => detail.token === session.token);
+                const sessionDetail = sessionDetails.find(
+                  (detail) => detail.token === session.token
+                );
                 return (
                   <tr key={session.token}>
                     <td>{`${formatDateTime(session.createdAt)} | ${timeAgo(
@@ -107,17 +109,22 @@ const UserSessions = () => {
                     <td>{session.geolocation}</td>
                     <td>
                       {sessionDetail && sessionDetail.geoInfo ? (
-                        <span
-                          className={styles['geo-link']}
-                          onClick={() =>
-                            handleGeolocationClick(
-                              sessionDetail.geoInfo.latitude,
-                              sessionDetail.geoInfo.longitude
-                            )
-                          }
-                        >
-                          {`${sessionDetail.geoInfo.country}, ${sessionDetail.geoInfo.region}, ${sessionDetail.geoInfo.city}, ${sessionDetail.geoInfo.street}`}
-                        </span>
+                        <div className={styles['geo-link']}>
+                          <img
+                            src={`https://flagcdn.com/16x12/${sessionDetail.geoInfo.countryCode}.png`}
+                            alt={`${sessionDetail.geoInfo.country}`}
+                          />
+                          <span
+                            onClick={() =>
+                              handleGeolocationClick(
+                                sessionDetail.geoInfo.latitude,
+                                sessionDetail.geoInfo.longitude
+                              )
+                            }
+                          >
+                            {`${sessionDetail.geoInfo.country}, ${sessionDetail.geoInfo.region}, ${sessionDetail.geoInfo.city}, ${sessionDetail.geoInfo.street}`}
+                          </span>
+                        </div>
                       ) : (
                         'Loading...'
                       )}
