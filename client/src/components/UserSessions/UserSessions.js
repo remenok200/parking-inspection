@@ -14,8 +14,6 @@ const UserSessions = () => {
   const { userSessions, allUsers } = useSelector((state) => state.admins);
 
   const [sessionDetails, setSessionDetails] = useState([]);
-  const [loadingGeolocation, setLoadingGeolocation] = useState(false);
-  const [loadingIP, setLoadingIP] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -27,8 +25,6 @@ const UserSessions = () => {
   useEffect(() => {
     if (userSessions && userSessions.length > 0) {
       const fetchSessionDetails = async () => {
-        setLoadingGeolocation(true);
-        setLoadingIP(true);
         const details = await Promise.all(
           userSessions.map(async (session) => {
             const geolocationInfo = session.geolocation
@@ -43,8 +39,6 @@ const UserSessions = () => {
           })
         );
         setSessionDetails(details);
-        setLoadingGeolocation(false);
-        setLoadingIP(false);
       };
       fetchSessionDetails();
     }
@@ -54,13 +48,6 @@ const UserSessions = () => {
 
   const handleBack = () => {
     navigate('/admin/users');
-  };
-
-  const handleGeolocationClick = (latitude, longitude) => {
-    window.open(
-      `https://www.google.com/maps?q=${latitude},${longitude}`,
-      '_blank'
-    );
   };
 
   return (
@@ -87,46 +74,55 @@ const UserSessions = () => {
                 const sessionDetail = sessionDetails.find(
                   (detail) => detail.token === session.token
                 );
+
                 return (
                   <tr key={session.token}>
                     <td>{`${formatDateTime(session.createdAt)} | ${timeAgo(
                       session.createdAt
                     )}`}</td>
-                    <td>{session.ipAddress}</td>
+                    <td>{session.ipAddress || 'Unknown'}</td>
                     <td>
                       {sessionDetail && sessionDetail.ipInfo ? (
                         <>
                           <img
-                            src={`https://flagcdn.com/16x12/${sessionDetail.ipInfo.countryCode}.png`}
-                            alt={`${sessionDetail.ipInfo.country}`}
+                            src={`https://flagcdn.com/16x12/${
+                              sessionDetail.ipInfo.countryCode || 'unknown'
+                            }.png`}
+                            alt={`${sessionDetail.ipInfo.country || 'Unknown'}`}
                           />
-                          {` ${sessionDetail.ipInfo.country}, ${sessionDetail.ipInfo.city}, ${sessionDetail.ipInfo.provider}`}
+                          {` ${sessionDetail.ipInfo.country || 'Unknown'}, ${
+                            sessionDetail.ipInfo.city || 'Unknown'
+                          }, ${sessionDetail.ipInfo.provider || 'Unknown'}`}
                         </>
                       ) : (
-                        'Loading...'
+                        'Unknown'
                       )}
                     </td>
-                    <td>{session.geolocation}</td>
+                    <td>{session.geolocation || 'Unknown'}</td>
                     <td>
                       {sessionDetail && sessionDetail.geoInfo ? (
-                        <div className={styles['geo-link']}>
+                        <a
+                          href={`https://www.google.com/maps?q=${sessionDetail.geoInfo.latitude},${sessionDetail.geoInfo.longitude}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles['geo-link']}
+                        >
                           <img
-                            src={`https://flagcdn.com/16x12/${sessionDetail.geoInfo.countryCode}.png`}
-                            alt={`${sessionDetail.geoInfo.country}`}
+                            src={`https://flagcdn.com/16x12/${
+                              sessionDetail.geoInfo.countryCode || 'unknown'
+                            }.png`}
+                            alt={`${
+                              sessionDetail.geoInfo.country || 'Unknown'
+                            }`}
                           />
-                          <span
-                            onClick={() =>
-                              handleGeolocationClick(
-                                sessionDetail.geoInfo.latitude,
-                                sessionDetail.geoInfo.longitude
-                              )
-                            }
-                          >
-                            {`${sessionDetail.geoInfo.country}, ${sessionDetail.geoInfo.region}, ${sessionDetail.geoInfo.city}, ${sessionDetail.geoInfo.street}`}
-                          </span>
-                        </div>
+                          {`${sessionDetail.geoInfo.country || 'Unknown'}, ${
+                            sessionDetail.geoInfo.region || 'Unknown'
+                          }, ${sessionDetail.geoInfo.city || 'Unknown'}, ${
+                            sessionDetail.geoInfo.street || 'Unknown'
+                          }`}
+                        </a>
                       ) : (
-                        'Loading...'
+                        'Unknown'
                       )}
                     </td>
                   </tr>
