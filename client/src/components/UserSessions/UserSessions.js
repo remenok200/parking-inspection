@@ -35,7 +35,7 @@ const UserSessions = () => {
               ? await getIPInfo(session.ipAddress)
               : null;
 
-            return { ...session, geoInfo: geolocationInfo, ipInfo: ipInfo };
+            return { ...session, geoInfo: geolocationInfo, ipInfo };
           })
         );
         setSessionDetails(details);
@@ -44,7 +44,7 @@ const UserSessions = () => {
     }
   }, [userSessions]);
 
-  const user = allUsers?.find((user) => user._id === userId);
+  const user = allUsers?.find(({ _id }) => _id === userId);
 
   const handleBack = () => {
     navigate('/admin/users');
@@ -71,55 +71,57 @@ const UserSessions = () => {
             </thead>
             <tbody>
               {userSessions.map((session) => {
+                const { token, createdAt, ipAddress, geolocation } = session;
                 const sessionDetail = sessionDetails.find(
-                  (detail) => detail.token === session.token
+                  ({ token: detailToken }) => detailToken === token
                 );
+                const { ipInfo, geoInfo } = sessionDetail || {};
+
+                const ipCountryCode = ipInfo?.countryCode || 'unknown';
+                const ipCountry = ipInfo?.country || 'Unknown';
+                const ipCity = ipInfo?.city || 'Unknown';
+                const ipProvider = ipInfo?.provider || 'Unknown';
+
+                const geoCountryCode = geoInfo?.countryCode || 'unknown';
+                const geoCountry = geoInfo?.country || 'Unknown';
+                const geoRegion = geoInfo?.region || 'Unknown';
+                const geoCity = geoInfo?.city || 'Unknown';
+                const geoStreet = geoInfo?.street || 'Unknown';
+                const { latitude, longitude } = geoInfo || {};
 
                 return (
-                  <tr key={session.token}>
-                    <td>{`${formatDateTime(session.createdAt)} | ${timeAgo(
-                      session.createdAt
+                  <tr key={token}>
+                    <td>{`${formatDateTime(createdAt)} | ${timeAgo(
+                      createdAt
                     )}`}</td>
-                    <td>{session.ipAddress || 'Unknown'}</td>
+                    <td>{ipAddress || 'Unknown'}</td>
                     <td>
-                      {sessionDetail && sessionDetail.ipInfo ? (
+                      {ipInfo ? (
                         <>
                           <img
-                            src={`https://flagcdn.com/16x12/${
-                              sessionDetail.ipInfo.countryCode || 'unknown'
-                            }.png`}
-                            alt={`${sessionDetail.ipInfo.country || 'Unknown'}`}
+                            src={`https://flagcdn.com/16x12/${ipCountryCode}.png`}
+                            alt={ipCountry}
                           />
-                          {` ${sessionDetail.ipInfo.country || 'Unknown'}, ${
-                            sessionDetail.ipInfo.city || 'Unknown'
-                          }, ${sessionDetail.ipInfo.provider || 'Unknown'}`}
+                          {` ${ipCountry}, ${ipCity}, ${ipProvider}`}
                         </>
                       ) : (
                         'Unknown'
                       )}
                     </td>
-                    <td>{session.geolocation || 'Unknown'}</td>
+                    <td>{geolocation || 'Unknown'}</td>
                     <td>
-                      {sessionDetail && sessionDetail.geoInfo ? (
+                      {geoInfo ? (
                         <a
-                          href={`https://www.google.com/maps?q=${sessionDetail.geoInfo.latitude},${sessionDetail.geoInfo.longitude}`}
+                          href={`https://www.google.com/maps?q=${latitude},${longitude}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={styles['geo-link']}
                         >
                           <img
-                            src={`https://flagcdn.com/16x12/${
-                              sessionDetail.geoInfo.countryCode || 'unknown'
-                            }.png`}
-                            alt={`${
-                              sessionDetail.geoInfo.country || 'Unknown'
-                            }`}
+                            src={`https://flagcdn.com/16x12/${geoCountryCode}.png`}
+                            alt={geoCountry}
                           />
-                          {`${sessionDetail.geoInfo.country || 'Unknown'}, ${
-                            sessionDetail.geoInfo.region || 'Unknown'
-                          }, ${sessionDetail.geoInfo.city || 'Unknown'}, ${
-                            sessionDetail.geoInfo.street || 'Unknown'
-                          }`}
+                          {`${geoCountry}, ${geoRegion}, ${geoCity}, ${geoStreet}`}
                         </a>
                       ) : (
                         'Unknown'

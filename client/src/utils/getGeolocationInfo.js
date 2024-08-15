@@ -2,17 +2,28 @@ import axios from 'axios';
 
 export const getGeolocationInfo = async (geolocation) => {
   const [latitude, longitude] = geolocation.split(' ');
+
   try {
-    const response = await axios.get(
+    const { data } = await axios.get(
       `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=en`
     );
-    
+
+    const { address } = data;
+    const {
+      country,
+      state: region,
+      city,
+      town,
+      road: street,
+      country_code: countryCode,
+    } = address;
+
     return {
-      country: response.data.address.country,
-      region: response.data.address.state,
-      city: response.data.address.city || response.data.address.town,
-      street: response.data.address.road,
-      countryCode: response.data.address.country_code,
+      country: country || 'Unknown',
+      region: region || 'Unknown',
+      city: city || town || 'Unknown',
+      street: street || 'Unknown',
+      countryCode: countryCode || 'unknown',
       latitude,
       longitude,
     };
