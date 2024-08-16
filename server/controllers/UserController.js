@@ -24,14 +24,12 @@ module.exports.registrationUser = async (req, res, next) => {
       userId: createdUser._id,
       email: createdUser.email,
       role: createdUser.role,
-      geolocation,
     });
 
     const refreshToken = await createRefreshToken({
       userId: createdUser._id,
       email: createdUser.email,
       role: createdUser.role,
-      geolocation,
     });
 
     await RefreshToken.create({
@@ -40,7 +38,7 @@ module.exports.registrationUser = async (req, res, next) => {
       geolocation,
       ipAddress,
       operatingSystem,
-      browser
+      browser,
     });
 
     return res
@@ -54,7 +52,14 @@ module.exports.registrationUser = async (req, res, next) => {
 module.exports.loginUser = async (req, res, next) => {
   try {
     const {
-      body: { email, password, geolocation, ipAddress, operatingSystem, browser },
+      body: {
+        email,
+        password,
+        geolocation,
+        ipAddress,
+        operatingSystem,
+        browser,
+      },
     } = req;
 
     const foundUser = await User.findOne({
@@ -71,14 +76,12 @@ module.exports.loginUser = async (req, res, next) => {
         userId: foundUser._id,
         email: foundUser.email,
         role: foundUser.role,
-        geolocation,
       });
 
       const refreshToken = await createRefreshToken({
         userId: foundUser._id,
         email: foundUser.email,
         role: foundUser.role,
-        geolocation,
       });
 
       await RefreshToken.create({
@@ -87,7 +90,7 @@ module.exports.loginUser = async (req, res, next) => {
         geolocation,
         ipAddress,
         operatingSystem,
-        browser
+        browser,
       });
 
       return res
@@ -147,14 +150,12 @@ module.exports.refreshSession = async (req, res, next) => {
           userId: user._id,
           email: user.email,
           role: user.role,
-          geolocation,
         });
 
         const newRefreshToken = await createRefreshToken({
           userId: user._id,
           email: user.email,
           role: user.role,
-          geolocation,
         });
 
         await RefreshToken.create({
@@ -163,7 +164,7 @@ module.exports.refreshSession = async (req, res, next) => {
           geolocation,
           ipAddress,
           operatingSystem,
-          browser
+          browser,
         });
 
         return res.status(200).send({
