@@ -67,11 +67,20 @@ const UserSessions = () => {
                 <th>Provider Info</th>
                 <th>Geolocation</th>
                 <th>Geolocation Info</th>
+                <th>Operating System</th>
+                <th>Browser</th>
               </tr>
             </thead>
             <tbody>
               {userSessions.map((session) => {
-                const { token, createdAt, ipAddress, geolocation } = session;
+                const {
+                  token,
+                  createdAt,
+                  ipAddress,
+                  geolocation,
+                  operatingSystem,
+                  browser,
+                } = session;
                 const sessionDetail = sessionDetails.find(
                   ({ token: detailToken }) => detailToken === token
                 );
@@ -127,6 +136,8 @@ const UserSessions = () => {
                         'Unknown'
                       )}
                     </td>
+                    <td>{operatingSystem || 'Unknown'}</td>
+                    <td>{browser || 'Unknown'}</td>
                   </tr>
                 );
               })}

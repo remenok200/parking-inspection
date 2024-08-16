@@ -19,8 +19,13 @@ const refreshTokenSchema = new Schema({
   },
   ipAddress: {
     type: String,
-    required: true,
   },
+  operatingSystem: {
+    type: String,
+  },
+  browser: {
+    type: String,
+  }
 });
 
 const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema);

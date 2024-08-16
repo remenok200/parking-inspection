@@ -1,6 +1,7 @@
 import axios from 'axios';
 import history from '../BrowserHistory';
 import { getIPFromAmazon } from '../utils/getIPFromAmazon';
+import { getBrowserAndOSInfo } from '../utils/getBrowserAndOSInfo';
 
 const httpClient = axios.create({
   baseURL: 'http://localhost:5001/api',
@@ -79,11 +80,14 @@ navigator.geolocation.getCurrentPosition(
 
 export const loginUser = async (userData) => {
   const ipAddress = await getIPFromAmazon();
+  const { operatingSystem, browser } = getBrowserAndOSInfo();
 
   const response = await httpClient.post('/users/sign-in', {
     ...userData,
     geolocation,
     ipAddress,
+    operatingSystem,
+    browser
   });
   if (response.status === 200) {
     history.push('/officers');
@@ -92,11 +96,14 @@ export const loginUser = async (userData) => {
 
 export const registerUser = async (userData) => {
   const ipAddress = await getIPFromAmazon();
+  const { operatingSystem, browser } = getBrowserAndOSInfo();
 
   const response = await httpClient.post('/users/sign-up', {
     ...userData,
     geolocation,
     ipAddress,
+    operatingSystem,
+    browser
   });
   if (response.status === 201) {
     history.push('/officers');
@@ -125,13 +132,16 @@ export const authUser = async () => await httpClient.get('/users');
 
 export const refreshUser = async () => {
   const ipAddress = await getIPFromAmazon();
+  const { operatingSystem, browser } = getBrowserAndOSInfo();
 
   const refreshToken = localStorage.getItem('refreshToken');
 
   const { data } = await httpClient.post('/users/refresh', {
     refreshToken,
     geolocation,
-    ipAddress
+    ipAddress,
+    operatingSystem,
+    browser
   });
 
   return data;

@@ -12,7 +12,7 @@ module.exports.registrationUser = async (req, res, next) => {
   try {
     const {
       body,
-      body: { geolocation, ipAddress },
+      body: { geolocation, ipAddress, operatingSystem, browser },
       passwordHash,
     } = req;
 
@@ -39,6 +39,8 @@ module.exports.registrationUser = async (req, res, next) => {
       userId: createdUser._id,
       geolocation,
       ipAddress,
+      operatingSystem,
+      browser
     });
 
     return res
@@ -52,7 +54,7 @@ module.exports.registrationUser = async (req, res, next) => {
 module.exports.loginUser = async (req, res, next) => {
   try {
     const {
-      body: { email, password, geolocation, ipAddress },
+      body: { email, password, geolocation, ipAddress, operatingSystem, browser },
     } = req;
 
     const foundUser = await User.findOne({
@@ -84,6 +86,8 @@ module.exports.loginUser = async (req, res, next) => {
         userId: foundUser._id,
         geolocation,
         ipAddress,
+        operatingSystem,
+        browser
       });
 
       return res
@@ -115,7 +119,7 @@ module.exports.checkAuth = async (req, res, next) => {
 
 module.exports.refreshSession = async (req, res, next) => {
   const {
-    body: { refreshToken, geolocation, ipAddress },
+    body: { refreshToken, geolocation, ipAddress, operatingSystem, browser },
   } = req;
 
   let verifyResult;
@@ -158,6 +162,8 @@ module.exports.refreshSession = async (req, res, next) => {
           userId: user._id,
           geolocation,
           ipAddress,
+          operatingSystem,
+          browser
         });
 
         return res.status(200).send({
