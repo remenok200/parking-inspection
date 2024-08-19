@@ -25,7 +25,11 @@ const refreshTokenSchema = new Schema({
   },
   browser: {
     type: String,
-  }
+  },
+  isRevoked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema);

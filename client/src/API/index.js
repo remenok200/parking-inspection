@@ -87,7 +87,7 @@ export const loginUser = async (userData) => {
     geolocation,
     ipAddress,
     operatingSystem,
-    browser
+    browser,
   });
   if (response.status === 200) {
     history.push('/officers');
@@ -103,7 +103,7 @@ export const registerUser = async (userData) => {
     geolocation,
     ipAddress,
     operatingSystem,
-    browser
+    browser,
   });
   if (response.status === 201) {
     history.push('/officers');
@@ -126,6 +126,9 @@ export const unbanUser = async (userId) =>
 export const getUserSessions = async (userId) =>
   await httpClient.get(`/users/tokens/${userId}`);
 
+export const endSession = async (tokenId) =>
+  await httpClient.put(`/users/tokens/${tokenId}/revoke`);
+
 // TOKENS
 
 export const authUser = async () => await httpClient.get('/users');
@@ -141,7 +144,7 @@ export const refreshUser = async () => {
     geolocation,
     ipAddress,
     operatingSystem,
-    browser
+    browser,
   });
 
   return data;

@@ -92,3 +92,25 @@ module.exports.getUserRefreshTokens = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.revokeRefreshToken = async (req, res, next) => {
+  try {
+    const {
+      params: { tokenId },
+    } = req;
+
+    const refreshToken = await RefreshToken.findOneAndUpdate(
+      { _id: tokenId },
+      { $unset: { token: 1 }, $set: { isRevoked: true } },
+      { new: true }
+    );
+
+    if (!refreshToken) {
+      return next(createHttpError(404, 'Refresh token not found'));
+    }
+
+    return res.status(200).send({ data: 'Refresh token revoked successfully' });
+  } catch (error) {
+    next(error);
+  }
+};

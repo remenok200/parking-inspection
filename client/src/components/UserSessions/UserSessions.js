@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getUserSessions, getAllUsers } from '../../redux/slices/adminSlice';
+import {
+  getUserSessions,
+  getAllUsers,
+  endSession,
+} from '../../redux/slices/adminSlice';
 import styles from './UserSessions.module.scss';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import { getIPInfo } from '../../utils/getIPInfo';
 import { getGeolocationInfo } from '../../utils/getGeolocationInfo';
+import CONSTANTS from '../../constants';
+const { SESSION_EXPIRES_TIME } = CONSTANTS;
 
 const UserSessions = () => {
   const { userId } = useParams();
@@ -50,6 +56,16 @@ const UserSessions = () => {
     navigate(-1);
   };
 
+  const handleEndSession = (tokenId) => {
+    dispatch(endSession(tokenId));
+    dispatch(getUserSessions(userId));
+  };
+
+  const isSessionExpired = (createdAt) => {
+    const sessionAge = Date.now() - new Date(createdAt).getTime();
+    return sessionAge > SESSION_EXPIRES_TIME * 1000;
+  };
+
   return (
     <div className={styles['user-sessions']}>
       <div className={styles['content']}>
@@ -69,17 +85,20 @@ const UserSessions = () => {
                 <th>Geolocation Info</th>
                 <th>Operating System</th>
                 <th>Browser</th>
+                <th>Session Status</th>
               </tr>
             </thead>
             <tbody>
               {userSessions.map((session) => {
                 const {
+                  _id,
                   token,
                   createdAt,
                   ipAddress,
                   geolocation,
                   operatingSystem,
                   browser,
+                  isRevoked,
                 } = session;
                 const sessionDetail = sessionDetails.find(
                   ({ token: detailToken }) => detailToken === token
@@ -99,7 +118,7 @@ const UserSessions = () => {
                 const { latitude, longitude } = geoInfo || {};
 
                 return (
-                  <tr key={token}>
+                  <tr key={_id}>
                     <td>{`${formatDateTime(createdAt)} | ${timeAgo(
                       createdAt
                     )}`}</td>
@@ -138,6 +157,17 @@ const UserSessions = () => {
                     </td>
                     <td>{operatingSystem || 'Unknown'}</td>
                     <td>{browser || 'Unknown'}</td>
+                    <td>
+                      {isRevoked ? (
+                        'Revoked'
+                      ) : isSessionExpired(createdAt) ? (
+                        'Session expired'
+                      ) : (
+                        <button onClick={() => handleEndSession(_id)}>
+                          End session
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}

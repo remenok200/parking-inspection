@@ -1,5 +1,6 @@
 const CONSTANTS = {
-  LIMIT: 5
+  LIMIT: 5,
+  SESSION_EXPIRES_TIME: 3600
 }
 
 export default CONSTANTS;
