@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { User, RefreshToken, Banlist } = require('../models/MongoDB');
+const { User, RefreshToken } = require('../models/MongoDB');
 const {
   createAccessToken,
   createRefreshToken,
@@ -15,8 +15,6 @@ module.exports.registrationUser = async (req, res, next) => {
       body: { geolocation, ipAddress, operatingSystem, browser },
       passwordHash,
     } = req;
-
-    console.log(ipAddress);
 
     const createdUser = await User.create({ ...body, passwordHash });
 

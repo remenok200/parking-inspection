@@ -1,10 +1,13 @@
 const { Protocol, ParkOfficer, Image } = require('../models');
+const { Log } = require('../models/MongoDB');
 const createHttpError = require('http-errors');
 const { deleteImageFromDisk } = require('../utils');
 
 module.exports.getAllProtocols = async (req, res, next) => {
   try {
-    const { pagination } = req;
+    const {
+      pagination,
+    } = req;
 
     const protocols = await Protocol.findAll({
       include: [
@@ -72,6 +75,7 @@ module.exports.createProtocol = async (req, res, next) => {
       params: { officerId },
       body,
       files,
+      tokenPayload: { userId },
     } = req;
 
     const officer = await ParkOfficer.findByPk(officerId);
@@ -114,6 +118,11 @@ module.exports.createProtocol = async (req, res, next) => {
       order: [['updated_at', 'DESC']],
     });
 
+    await Log.create({
+      action: `ID: ${userId} create protocol. Protocol ID: ${createdProtocol.id} (created protocol)`,
+      performedBy: userId,
+    });
+
     return res.status(201).send({ data: protocolWithData });
   } catch (error) {
     next(error);
@@ -126,6 +135,7 @@ module.exports.updateProtocolByID = async (req, res, next) => {
       params: { id },
       body,
       files,
+      tokenPayload: { userId },
     } = req;
 
     const [count, [updatedProtocol]] = await Protocol.update(body, {
@@ -163,6 +173,11 @@ module.exports.updateProtocolByID = async (req, res, next) => {
       order: [['updated_at', 'DESC']],
     });
 
+    await Log.create({
+      action: `ID: ${userId} update protocol. Protocol ID: ${id}`,
+      performedBy: userId,
+    });
+
     return res.status(200).send({ data: protocolWithData });
   } catch (error) {
     next(error);
@@ -173,6 +188,7 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
   try {
     const {
       params: { id },
+      tokenPayload: { userId },
     } = req;
 
     const protocolWithData = await Protocol.findByPk(id, {
@@ -205,6 +221,11 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
     if (count === 0) {
       return next(createHttpError(404, 'Protocol not found'));
     }
+
+    await Log.create({
+      action: `ID: ${userId} delete protocol. Protocol ID: ${id} (protocol deleted)`,
+      performedBy: userId,
+    });
 
     return res.status(200).end();
   } catch (error) {
