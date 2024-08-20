@@ -22,7 +22,7 @@ import AdminPanelPage from './pages/AdminPanelPage/AdminPanelPage';
 import AddImage from './components/AddImage/AddImage';
 import AllUsers from './components/AllUsers/AllUsers';
 import BannedUsers from './components/BannedUsers/BannedUsers';
-import UserSessions from './components/UserSessions/UserSessions';
+import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 
 function App() {
@@ -68,7 +68,7 @@ function App() {
         <Route path="/admin/users/banned" element={<BannedUsers />} />
         <Route
           path="/admin/users/sessions/:userId"
-          element={<UserSessions />}
+          element={<UserSessionsPage />}
         />
         <Route path="/admin/users/logs/" element={<UserLogsPage />} />
         <Route path="/admin/users/logs/:userId" element={<UserLogsPage />} />

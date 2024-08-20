@@ -6,7 +6,7 @@ import {
   getAllUsers,
   endSession,
 } from '../../redux/slices/adminSlice';
-import styles from './UserSessions.module.scss';
+import styles from './UserSessionsPage.module.scss';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import { getIPInfo } from '../../utils/getIPInfo';
 import { getGeolocationInfo } from '../../utils/getGeolocationInfo';
