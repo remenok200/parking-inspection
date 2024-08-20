@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { banUser, getAllUsers } from '../../redux/slices/adminSlice';
-import styles from './AllUsers.module.scss';
-import AdminSidebar from '../AdminSidebar/AdminSidebar';
+import styles from './AllUsersPage.module.scss';
+import AdminSidebar from '../../components/AdminSidebar/AdminSidebar';
 import { useNavigate } from 'react-router-dom';
 
 const AllUsers = () => {

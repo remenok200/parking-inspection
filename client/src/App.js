@@ -20,8 +20,8 @@ import UpdateParkOfficer from './components/UpdateParkOfficer/UpdateParkOfficer'
 import UpdateProtocol from './components/UpdateProtocol/UpdateProtocol';
 import AdminPanelPage from './pages/AdminPanelPage/AdminPanelPage';
 import AddImage from './components/AddImage/AddImage';
-import AllUsers from './components/AllUsers/AllUsers';
-import BannedUsers from './components/BannedUsers/BannedUsers';
+import AllUsersPage from './pages/AllUsersPage/AllUsersPage';
+import BannedUsersPage from './pages/BannedUsersPage/BannedUsersPage';
 import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 
@@ -64,8 +64,8 @@ function App() {
         <Route path="/protocols/:parkOfficerID/" element={<ProtocolsPage />} />
 
         <Route path="/admin" element={<AdminPanelPage />} />
-        <Route path="/admin/users" element={<AllUsers />} />
-        <Route path="/admin/users/banned" element={<BannedUsers />} />
+        <Route path="/admin/users" element={<AllUsersPage />} />
+        <Route path="/admin/users/banned" element={<BannedUsersPage />} />
         <Route
           path="/admin/users/sessions/:userId"
           element={<UserSessionsPage />}
