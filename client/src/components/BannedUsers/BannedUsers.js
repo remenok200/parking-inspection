@@ -25,6 +25,10 @@ const BannedUsers = () => {
     navigate(`/admin/users/sessions/${userId}`);
   };
 
+  const handleViewLogs = (userId) => {
+    navigate(`/admin/users/logs/${userId}`);
+  };
+
   return (
     <div className={styles['banned-users']}>
       <AdminSidebar
@@ -41,7 +45,7 @@ const BannedUsers = () => {
                 <th>Nickname</th>
                 <th>Email</th>
                 <th>Ban Reason</th>
-                <th colSpan="2">Actions</th>
+                <th colSpan="3">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -65,6 +69,14 @@ const BannedUsers = () => {
                       onClick={() => handleViewSessions(ban.user._id)}
                     >
                       Sessions
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={styles['view-button']}
+                      onClick={() => handleViewLogs(ban.user._id)}
+                    >
+                      Logs
                     </button>
                   </td>
                 </tr>

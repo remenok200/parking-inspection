@@ -129,6 +129,11 @@ export const getUserSessions = async (userId) =>
 export const endSession = async (tokenId) =>
   await httpClient.put(`/users/tokens/${tokenId}/revoke`);
 
+export const getAllLogs = async () => await httpClient.get('/users/logs/all');
+
+export const getAllLogsByUserID = async (userId) =>
+  await httpClient.get(`/users/logs/${userId}/all`);
+
 // TOKENS
 
 export const authUser = async () => await httpClient.get('/users');

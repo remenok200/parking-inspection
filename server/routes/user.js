@@ -48,4 +48,12 @@ userRouter
 .route('/tokens/:tokenId/revoke')
 .put(checkToken, checkBan, checkAdmin, AdminController.revokeRefreshToken);
 
+userRouter
+.route('/logs/all')
+.get(checkToken, checkBan, checkAdmin, AdminController.getAllLogs);
+
+userRouter
+.route('/logs/:userId/all')
+.get(checkToken, checkBan, checkAdmin, AdminController.getAllLogsByUserID);
+
 module.exports = userRouter;

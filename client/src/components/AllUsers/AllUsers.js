@@ -20,6 +20,10 @@ const AllUsers = () => {
     navigate(`/admin/users/sessions/${userId}`);
   };
 
+  const handleViewLogs = (userId) => {
+    navigate(`/admin/users/logs/${userId}`);
+  };
+
   const handleBan = async (userId) => {
     const reason = prompt('Enter the reason for banning this user:');
     if (reason) {
@@ -43,7 +47,7 @@ const AllUsers = () => {
                 <th>ID</th>
                 <th>Nickname</th>
                 <th>Email</th>
-                <th colSpan="2">Actions</th>
+                <th colSpan="3">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -66,6 +70,14 @@ const AllUsers = () => {
                       onClick={() => handleViewSessions(user._id)}
                     >
                       Sessions
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className={styles['view-button']}
+                      onClick={() => handleViewLogs(user._id)}
+                    >
+                      Logs
                     </button>
                   </td>
                 </tr>

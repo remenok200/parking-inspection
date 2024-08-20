@@ -25,6 +25,12 @@ const AdminPanelPage = () => {
             <p>View and manage banned users.</p>
           </div>
         </Link>
+        <Link to="/admin/users/logs" className={styles['nav-link']}>
+          <div className={styles['nav-item']}>
+            <h2>Logs</h2>
+            <p>View all actions.</p>
+          </div>
+        </Link>
       </div>
     </div>
     </>

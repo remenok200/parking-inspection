@@ -157,3 +157,42 @@ module.exports.revokeRefreshToken = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.getAllLogs = async (req, res, next) => {
+  try {
+    const {
+      tokenPayload: { userId },
+    } = req;
+
+    const logs = await Log.find();
+
+    await Log.create({
+      action: `ADMIN ID: ${userId} get all logs`,
+      performedBy: userId,
+    });
+
+    return res.status(200).send({ data: logs });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.getAllLogsByUserID = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+      tokenPayload: { userId: adminId },
+    } = req;
+
+    const logs = await Log.find({ performedBy: userId });
+
+    await Log.create({
+      action: `ADMIN ID: ${adminId} get all user logs. User ID: ${userId}`,
+      performedBy: adminId,
+    });
+
+    return res.status(200).send({ data: logs });
+  } catch (error) {
+    next(error);
+  }
+};

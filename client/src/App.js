@@ -23,6 +23,7 @@ import AddImage from './components/AddImage/AddImage';
 import AllUsers from './components/AllUsers/AllUsers';
 import BannedUsers from './components/BannedUsers/BannedUsers';
 import UserSessions from './components/UserSessions/UserSessions';
+import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 
 function App() {
   useErrorToast();
@@ -69,6 +70,8 @@ function App() {
           path="/admin/users/sessions/:userId"
           element={<UserSessions />}
         />
+        <Route path="/admin/users/logs/" element={<UserLogsPage />} />
+        <Route path="/admin/users/logs/:userId" element={<UserLogsPage />} />
       </Routes>
     </HistoryRouter>
   );

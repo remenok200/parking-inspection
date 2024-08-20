@@ -94,10 +94,53 @@ const getUserSessions = createAsyncThunk(
   }
 );
 
+const getAllLogs = createAsyncThunk(
+  `${SLICE_NAME}/getAllLogs`,
+  async (_, thunkAPI) => {
+    try {
+      const {
+        data: { data: userLogs },
+      } = await API.getAllLogs();
+
+      const sortedLogs = userLogs.sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+
+      toast.success('User logs received');
+
+      return sortedLogs;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const getAllLogsByUserID = createAsyncThunk(
+  `${SLICE_NAME}/getAllLogsByUserID`,
+  async (userId, thunkAPI) => {
+    try {
+      const {
+        data: { data: userLogs },
+      } = await API.getAllLogsByUserID(userId);
+
+      const sortedLogs = userLogs.sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+
+      toast.success('User logs received');
+
+      return sortedLogs;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   allUsers: null,
   bannedUsers: null,
   userSessions: null,
+  userLogs: null,
   isLoading: false,
   error: null,
 };
@@ -198,6 +241,38 @@ const adminSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(getAllLogs.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(getAllLogs.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.userLogs = action.payload;
+      state.error = null;
+    });
+
+    builder.addCase(getAllLogs.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(getAllLogsByUserID.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(getAllLogsByUserID.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.userLogs = action.payload;
+      state.error = null;
+    });
+
+    builder.addCase(getAllLogsByUserID.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
@@ -210,6 +285,8 @@ export {
   unbanUser,
   getUserSessions,
   endSession,
+  getAllLogs,
+  getAllLogsByUserID,
 };
 
 export default reducer;
