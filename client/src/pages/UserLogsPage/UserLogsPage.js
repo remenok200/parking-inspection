@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAllLogs, getAllLogsByUserID } from '../../redux/slices/adminSlice';
 import styles from './UserLogs.module.scss';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
+import AdminSidebar from '../../components/AdminSidebar/AdminSidebar';
 
 const UserLogsPage = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userLogs } = useSelector((state) => state.admins);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -26,9 +29,16 @@ const UserLogsPage = () => {
   return (
     <div className={styles['user-logs']}>
       <div className={styles['content']}>
-        <button className={styles['back-button']} onClick={handleBack}>
-          Back
-        </button>
+        {userId ? (
+          <button className={styles['back-button']} onClick={handleBack}>
+            Back
+          </button>
+        ) : (
+          <AdminSidebar
+            isOpen={isSidebarOpen}
+            toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          />
+        )}
         <h2>User Logs</h2>
         {userId && <h3>Logs for User ID: {userId}</h3>}
         {userLogs && userLogs.length > 0 ? (

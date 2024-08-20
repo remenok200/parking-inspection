@@ -28,7 +28,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     if (isOpen) {
       setShowHamburger(false);
     } else {
-      const timer = setTimeout(() => setShowHamburger(true), 300); // Задержка соответствует времени анимации
+      const timer = setTimeout(() => setShowHamburger(true), 300);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -88,6 +88,21 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                 onClick={toggleSidebar}
               >
                 Banned Users
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/admin/users/logs"
+                className={({ isActive }) =>
+                  cx(styles.navLink, {
+                    [styles.active]:
+                      isActive &&
+                      window.location.pathname === '/admin/users/logs',
+                  })
+                }
+                onClick={toggleSidebar}
+              >
+                Logs
               </NavLink>
             </li>
           </ul>
