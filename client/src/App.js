@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   unstable_HistoryRouter as HistoryRouter,
   Routes,
@@ -8,7 +8,7 @@ import ParkOfficersPage from './pages/ParkOfficersPage/ParkOfficersPage';
 import ProtocolsPage from './pages/ProtocolsPage/ProtocolsPage';
 import styles from './App.module.scss';
 import HomePage from './pages/HomePage/HomePage';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import withSpinner from './HOC/withSpinner';
 import history from './BrowserHistory';
 import { ToastContainer } from 'react-toastify';
@@ -24,9 +24,20 @@ import AllUsersPage from './pages/AllUsersPage/AllUsersPage';
 import BannedUsersPage from './pages/BannedUsersPage/BannedUsersPage';
 import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
+import { authUser } from './redux/slices/userSlice';
 
 function App() {
   useErrorToast();
+
+  const { user } = useSelector(state => state.users);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!user) {
+      if (localStorage.getItem('refreshToken')) {
+        dispatch(authUser());
+      }
+    }
+  }, [dispatch, user]);
 
   return (
     <HistoryRouter history={history}>

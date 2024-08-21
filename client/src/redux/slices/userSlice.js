@@ -33,6 +33,21 @@ const loginUser = createAsyncThunk(
   }
 );
 
+const authUser = createAsyncThunk(
+  `${SLICE_NAME}/authUser`,
+  async (_, thunkAPI) => {
+    try {
+      const {
+        data: { data: user },
+      } = await API.authUser();
+
+      return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   user: null,
   isLoading: false,
@@ -74,11 +89,27 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(authUser.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(authUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+      state.user = action.payload;
+    });
+
+    builder.addCase(authUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 const { reducer } = userSlice;
 
-export { loginUser, registerUser };
+export { loginUser, registerUser, authUser };
 
 export default reducer;

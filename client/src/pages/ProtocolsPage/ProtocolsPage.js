@@ -62,10 +62,6 @@ const ProtocolsPage = () => {
     showPagination,
   ]);
 
-  if (isLoading) {
-    return <div>LOADING</div>;
-  }
-
   if (error) {
     return <div>ERROR HAPPENNED</div>;
   }

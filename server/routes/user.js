@@ -1,7 +1,11 @@
 const userRouter = require('express').Router();
+
 const UserController = require('../controllers/UserController');
+
 const adminRouter = require('./admin');
+
 const { hashPass } = require('../middlewares/hashPassword');
+const { checkToken } = require('../middlewares/checkToken');
 
 userRouter
 .route('/sign-up')
@@ -13,7 +17,7 @@ userRouter
 
 userRouter
 .route('/')
-.get(UserController.checkAuth);
+.get(checkToken, UserController.checkAuth);
 
 userRouter
 .route('/refresh')

@@ -73,7 +73,7 @@ const UserSessions = () => {
           Back
         </button>
         <h2>User Sessions</h2>
-        {user && <h3>{user.nickname}'s Sessions</h3>}
+        {user && <h3>{user.nickname} | Sessions</h3>}
         {userSessions && userSessions.length > 0 ? (
           <table className={styles['sessions-table']}>
             <thead>
