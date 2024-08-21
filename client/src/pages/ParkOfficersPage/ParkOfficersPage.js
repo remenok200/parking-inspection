@@ -17,10 +17,10 @@ const ParkOfficersPage = () => {
 
   useEffect(() => {
     dispatch(getParkOfficers());
-  }, []);
+  }, [dispatch]);
 
   if (error) {
-    return <div>ERROR HAPPENNED</div>;
+    return <div>ERROR HAPPENED</div>;
   }
 
   const filteredParkOfficers = parkOfficers.filter(
@@ -47,12 +47,17 @@ const ParkOfficersPage = () => {
 
       <section>
         <div className={styles['flex-wrapper']}>
-          <input
-            type="text"
-            value={searchValue}
-            onChange={({ target: { value } }) => setSearchValue(value)}
-            placeholder="Search...."
-          />
+          <div className={styles['search-container']}>
+            <input
+              type="text"
+              value={searchValue}
+              onChange={({ target: { value } }) => setSearchValue(value)}
+              placeholder="Search...."
+            />
+            <div className={styles['tooltip']}>
+              {`Search by full name, badge number, or district`}
+            </div>
+          </div>
 
           <Link to="/officers/add">
             <button>Add Officer</button>
@@ -71,7 +76,7 @@ const ParkOfficersPage = () => {
 
         {parkOfficersCards}
 
-        {!parkOfficers.length ? <h1>Oops... No data =)</h1> : null}
+        {!parkOfficers.length && <h1>Oops... No data =)</h1>}
       </section>
     </>
   );
