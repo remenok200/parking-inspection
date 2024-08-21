@@ -140,7 +140,7 @@ export const authUser = async () => await httpClient.get('/users');
 
 export const refreshUser = async () => {
   const ipAddress = await getIPFromAmazon();
-  const { operatingSystem, browser } = getBrowserAndOSInfo();
+  const { operatingSystem, browser } = await getBrowserAndOSInfo();
 
   const refreshToken = localStorage.getItem('refreshToken');
 
