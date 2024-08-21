@@ -8,27 +8,32 @@
   position: relative;
   display: inline-block;
   margin-left: 20px;
-}
 
-.search-container .tooltip {
-  visibility: hidden;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+  .tooltip {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    bottom: auto;
+    left: 100%;
+    top: 50%;
+    margin-left: 10px;
+    transform: translateY(-50%);
+    width: 200px;
+    white-space: normal;
+    word-wrap: break-word;
+  }
 
-.search-container:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
+  &:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 .pagination-toggle-wrapper {
