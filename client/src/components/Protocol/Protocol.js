@@ -45,6 +45,9 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
         protocolID: protocol.id,
       })
     );
+
+    setDeleteConfirmationModalOpen(false);
+
     refreshProtocolsList();
   };
 
@@ -55,6 +58,7 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
         imageID: protocol.images[currentSlide].id,
       })
     );
+    setDeleteConfirmationModalOpen(false);
 
     refreshProtocolsList();
   };
