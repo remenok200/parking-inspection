@@ -30,13 +30,32 @@ const UserLogsPage = () => {
 
   const filteredLogs = filterAction
     ? userLogs.filter((log) => {
+        const exactMatchActions = [
+          'get user refresh tokens (sessions)',
+        ];
+        
+        if (exactMatchActions.includes(filterAction)) {
+          const cleanedLogAction = log.action
+            .replace(/\d+/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toLowerCase();
+
+          return cleanedLogAction.includes(filterAction.toLowerCase());
+        }
+        
         const actionPattern = new RegExp(
-          `\\b${filterAction.replace(/\d+/g, '').replace(/\s+/g, '\\s+')}`,
+          `\\b${filterAction.replace(/\d+/g, '').replace(/\s+/g, '\\s+')}\\b`,
           'i'
         );
-        return actionPattern.test(
-          log.action.replace(/\d+/g, '').replace(/\s+/g, ' ')
-        );
+
+        const cleanedLogAction = log.action
+          .replace(/\d+/g, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+
+        return actionPattern.test(cleanedLogAction);
       })
     : userLogs;
 
