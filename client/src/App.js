@@ -25,11 +25,12 @@ import BannedUsersPage from './pages/BannedUsersPage/BannedUsersPage';
 import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 import { authUser } from './redux/slices/userSlice';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 function App() {
   useErrorToast();
 
-  const { user } = useSelector(state => state.users);
+  const { user } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!user) {
@@ -83,6 +84,8 @@ function App() {
         />
         <Route path="/admin/users/logs/" element={<UserLogsPage />} />
         <Route path="/admin/users/logs/:userId" element={<UserLogsPage />} />
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </HistoryRouter>
   );
