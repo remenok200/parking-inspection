@@ -22,7 +22,7 @@ module.exports.ban = async (req, res, next) => {
       const banned = await Banlist.create({ adminId, userId, reason });
 
       await Log.create({
-        action: `ADMIN ID: ${adminId} banned user. User ID: ${userId}`,
+        action: `ADMIN ID: ${adminId} ban user. User ID: ${userId}`,
         performedBy: adminId,
       });
 
@@ -46,7 +46,7 @@ module.exports.unban = async (req, res, next) => {
 
     if (result.deletedCount > 0) {
       await Log.create({
-        action: `ADMIN ID: ${adminId} unbanned user. User ID: ${userId}`,
+        action: `ADMIN ID: ${adminId} unban user. User ID: ${userId}`,
         performedBy: adminId,
       });
 
