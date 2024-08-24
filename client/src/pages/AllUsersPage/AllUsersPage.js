@@ -11,6 +11,8 @@ const AllUsers = () => {
   const { allUsers } = useSelector((state) => state.admins);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -32,6 +34,17 @@ const AllUsers = () => {
     }
   };
 
+  const filteredUsers = (allUsers || []).filter(user => {
+    const matchesSearch =
+      user.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+      user.nickname.toLowerCase().includes(searchValue.toLowerCase());
+
+    const matchesRole =
+      roleFilter === 'all' || user.role === roleFilter;
+
+    return matchesSearch && matchesRole;
+  });
+
   return (
     <div className={styles['all-users']}>
       <AdminSidebar
@@ -40,7 +53,25 @@ const AllUsers = () => {
       />
       <div className={styles['content']}>
         <h2>All Users</h2>
-        {allUsers && allUsers.length > 0 ? (
+        <div className={styles['filter-container']}>
+          <input
+            type="text"
+            value={searchValue}
+            onChange={({ target: { value } }) => setSearchValue(value)}
+            placeholder="Search by email or nickname"
+            className={styles['search-input']}
+          />
+          <select
+            value={roleFilter}
+            onChange={({ target: { value } }) => setRoleFilter(value)}
+            className={styles['role-select']}
+          >
+            <option value="all">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+        {filteredUsers && filteredUsers.length > 0 ? (
           <table className={styles['user-table']}>
             <thead>
               <tr>
@@ -52,7 +83,7 @@ const AllUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {allUsers.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user._id}>
                   <td>{user._id}</td>
                   <td>{user.nickname}</td>

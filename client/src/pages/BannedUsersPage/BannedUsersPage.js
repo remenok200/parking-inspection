@@ -11,6 +11,8 @@ const BannedUsers = () => {
   const { bannedUsers } = useSelector((state) => state.admins);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
 
   useEffect(() => {
     dispatch(getAllBannedUsers());
@@ -29,6 +31,18 @@ const BannedUsers = () => {
     navigate(`/admin/users/logs/${userId}`);
   };
 
+  // Add a default value to prevent errors
+  const filteredBannedUsers = (bannedUsers || []).filter((ban) => {
+    const user = ban.user;
+    const matchesSearch =
+      user.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+      user.nickname.toLowerCase().includes(searchValue.toLowerCase());
+
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+
+    return matchesSearch && matchesRole;
+  });
+
   return (
     <div className={styles['banned-users']}>
       <AdminSidebar
@@ -37,7 +51,25 @@ const BannedUsers = () => {
       />
       <div className={styles['content']}>
         <h2>Banned Users</h2>
-        {bannedUsers && bannedUsers.length > 0 ? (
+        <div className={styles['filter-container']}>
+          <input
+            type="text"
+            value={searchValue}
+            onChange={({ target: { value } }) => setSearchValue(value)}
+            placeholder="Search by email or nickname"
+            className={styles['search-input']}
+          />
+          <select
+            value={roleFilter}
+            onChange={({ target: { value } }) => setRoleFilter(value)}
+            className={styles['role-select']}
+          >
+            <option value="all">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+        {filteredBannedUsers && filteredBannedUsers.length > 0 ? (
           <table className={styles['user-table']}>
             <thead>
               <tr>
@@ -50,7 +82,7 @@ const BannedUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {bannedUsers.map((ban) => (
+              {filteredBannedUsers.map((ban) => (
                 <tr key={ban.user._id}>
                   <td>{ban.user._id}</td>
                   <td>{ban.user.nickname}</td>
