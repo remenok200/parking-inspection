@@ -47,6 +47,7 @@ const AllUsers = () => {
                 <th>ID</th>
                 <th>Nickname</th>
                 <th>Email</th>
+                <th>Role</th>
                 <th colSpan="3">Actions</th>
               </tr>
             </thead>
@@ -56,6 +57,7 @@ const AllUsers = () => {
                   <td>{user._id}</td>
                   <td>{user.nickname}</td>
                   <td>{user.email}</td>
+                  <td>{user.role}</td>
                   <td>
                     <button
                       className={styles['ban-button']}

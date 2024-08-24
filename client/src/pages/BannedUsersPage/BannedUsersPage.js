@@ -44,6 +44,7 @@ const BannedUsers = () => {
                 <th>ID</th>
                 <th>Nickname</th>
                 <th>Email</th>
+                <th>Role</th>
                 <th>Ban Reason</th>
                 <th colSpan="3">Actions</th>
               </tr>
@@ -54,6 +55,7 @@ const BannedUsers = () => {
                   <td>{ban.user._id}</td>
                   <td>{ban.user.nickname}</td>
                   <td>{ban.user.email}</td>
+                  <td>{ban.user.role}</td>
                   <td>{ban.banInfo.reason}</td>
                   <td>
                     <button
