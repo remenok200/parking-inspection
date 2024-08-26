@@ -88,3 +88,12 @@
   @extend .button-base;
   background-color: #007bff;
 }
+
+.admin-toggle-button {
+  @extend .button-base;
+  background-color: #28a745;
+
+  &:hover {
+    background-color: #218838;
+  }
+}

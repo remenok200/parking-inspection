@@ -38,4 +38,9 @@ adminRouter
 .route('/logs/:userId/all')
 .get(checkToken, checkBan, checkAdmin, AdminController.getAllLogsByUserID);
 
+adminRouter
+.route('/admins/:userId')
+.put(checkToken, checkBan, checkAdmin, AdminController.makeAdmin)
+.delete(checkToken, checkBan, checkAdmin, AdminController.removeAdmin);
+
 module.exports = adminRouter;

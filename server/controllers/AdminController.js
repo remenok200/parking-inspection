@@ -196,3 +196,61 @@ module.exports.getAllLogsByUserID = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.makeAdmin = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+      tokenPayload: { userId: adminId },
+    } = req;
+
+    const user = await User.findOneAndUpdate(
+      { _id: userId, role: { $ne: 'admin' } },
+      { $set: { role: 'admin' } },
+      { new: true }
+    );
+
+    if (!user) {
+      return next(createHttpError(404, 'User not found or already an admin'));
+    }
+
+    await Log.create({
+      action: `ADMIN ID: ${adminId} make user admin. User ID: ${userId}`,
+      performedBy: adminId,
+    });
+
+    return res
+      .status(200)
+      .send({ data: 'User promoted to admin successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.removeAdmin = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+      tokenPayload: { userId: adminId },
+    } = req;
+
+    const user = await User.findOneAndUpdate(
+      { _id: userId, role: 'admin' },
+      { $set: { role: 'user' } },
+      { new: true }
+    );
+
+    if (!user) {
+      return next(createHttpError(404, 'User not found or not an admin'));
+    }
+
+    await Log.create({
+      action: `ADMIN ID: ${adminId} removed user admin. User ID: ${userId}`,
+      performedBy: adminId,
+    });
+
+    return res.status(200).send({ data: 'Admin role removed successfully' });
+  } catch (error) {
+    next(error);
+  }
+};

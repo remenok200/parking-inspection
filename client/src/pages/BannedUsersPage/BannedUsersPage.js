@@ -30,8 +30,7 @@ const BannedUsers = () => {
   const handleViewLogs = (userId) => {
     navigate(`/admin/users/logs/${userId}`);
   };
-
-  // Add a default value to prevent errors
+  
   const filteredBannedUsers = (bannedUsers || []).filter((ban) => {
     const user = ban.user;
     const matchesSearch =

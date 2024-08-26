@@ -134,6 +134,12 @@ export const getAllLogs = async () => await httpClient.get('/users/logs/all');
 export const getAllLogsByUserID = async (userId) =>
   await httpClient.get(`/users/logs/${userId}/all`);
 
+export const makeAdmin = async (userId) =>
+  await httpClient.put(`/users/admins/${userId}`);
+
+export const removeAdmin = async (userId) =>
+  await httpClient.delete(`/users/admins/${userId}`);
+
 // TOKENS
 
 export const authUser = async () => await httpClient.get('/users');

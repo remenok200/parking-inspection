@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { banUser, getAllUsers } from '../../redux/slices/adminSlice';
+import {
+  banUser,
+  getAllUsers,
+  makeAdmin,
+  removeAdmin,
+} from '../../redux/slices/adminSlice';
 import styles from './AllUsersPage.module.scss';
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar';
 import { useNavigate } from 'react-router-dom';
@@ -34,13 +39,21 @@ const AllUsers = () => {
     }
   };
 
-  const filteredUsers = (allUsers || []).filter(user => {
+  const handleAdminToggle = async (user) => {
+    if (user.role === 'admin') {
+      await dispatch(removeAdmin(user._id));
+    } else {
+      await dispatch(makeAdmin(user._id));
+    }
+    await dispatch(getAllUsers());
+  };
+
+  const filteredUsers = (allUsers || []).filter((user) => {
     const matchesSearch =
       user.email.toLowerCase().includes(searchValue.toLowerCase()) ||
       user.nickname.toLowerCase().includes(searchValue.toLowerCase());
 
-    const matchesRole =
-      roleFilter === 'all' || user.role === roleFilter;
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
 
     return matchesSearch && matchesRole;
   });
@@ -79,7 +92,7 @@ const AllUsers = () => {
                 <th>Nickname</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th colSpan="3">Actions</th>
+                <th colSpan="4">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -89,6 +102,14 @@ const AllUsers = () => {
                   <td>{user.nickname}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
+                  <td>
+                    <button
+                      className={styles['admin-toggle-button']}
+                      onClick={() => handleAdminToggle(user)}
+                    >
+                      {user.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
+                    </button>
+                  </td>
                   <td>
                     <button
                       className={styles['ban-button']}

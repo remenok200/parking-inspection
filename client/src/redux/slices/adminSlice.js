@@ -136,6 +136,32 @@ const getAllLogsByUserID = createAsyncThunk(
   }
 );
 
+const makeAdmin = createAsyncThunk(
+  `${SLICE_NAME}/makeAdmin`,
+  async (userId, thunkAPI) => {
+    try {
+      await API.makeAdmin(userId);
+
+      toast.success('User promoted to admin successfully');
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const removeAdmin = createAsyncThunk(
+  `${SLICE_NAME}/removeAdmin`,
+  async (userId, thunkAPI) => {
+    try {
+      await API.removeAdmin(userId);
+
+      toast.success('Admin role removed successfully');
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   allUsers: null,
   bannedUsers: null,
@@ -273,6 +299,36 @@ const adminSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(makeAdmin.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(makeAdmin.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+
+    builder.addCase(makeAdmin.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(removeAdmin.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(removeAdmin.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+
+    builder.addCase(removeAdmin.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
@@ -287,6 +343,8 @@ export {
   endSession,
   getAllLogs,
   getAllLogsByUserID,
+  makeAdmin,
+  removeAdmin,
 };
 
 export default reducer;
