@@ -19,6 +19,10 @@ const UserLogsPage = () => {
 
   const filteredLogsArray = filteredLogs(userLogs, filterAction);
 
+  const [visibleLogs, setVisibleLogs] = useState(10);
+  const totalLogs = filteredLogsArray ? filteredLogsArray.length : 0;
+  const hasMoreLogs = visibleLogs < totalLogs;
+
   useEffect(() => {
     if (userId) {
       dispatch(getAllLogsByUserID(userId));
@@ -29,6 +33,14 @@ const UserLogsPage = () => {
 
   const handleBack = () => {
     navigate(-1);
+  };
+
+  const handleLoadMore = () => {
+    setVisibleLogs((prev) => Math.min(prev + 10, totalLogs));
+  };
+
+  const handleLoadAll = () => {
+    setVisibleLogs(totalLogs);
   };
 
   return (
@@ -65,29 +77,48 @@ const UserLogsPage = () => {
         </div>
 
         {filteredLogsArray && filteredLogsArray.length > 0 ? (
-          <table className={styles['logs-table']}>
-            <thead>
-              <tr>
-                <th>Timestamp</th>
-                <th>Action</th>
-                <th>Performed By</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredLogsArray.map((log) => {
-                const { _id, action, performedBy, timestamp } = log;
-                return (
-                  <tr key={_id}>
-                    <td>{`${formatDateTime(timestamp)} | ${timeAgo(
-                      timestamp
-                    )}`}</td>
-                    <td>{action}</td>
-                    <td>{performedBy}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div>
+            <table className={styles['logs-table']}>
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action</th>
+                  <th>Performed By</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLogsArray.slice(0, visibleLogs).map((log) => {
+                  const { _id, action, performedBy, timestamp } = log;
+                  return (
+                    <tr key={_id}>
+                      <td>{`${formatDateTime(timestamp)} | ${timeAgo(
+                        timestamp
+                      )}`}</td>
+                      <td>{action}</td>
+                      <td>{performedBy}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <div className={styles['load-buttons']}>
+              <button
+                onClick={handleLoadMore}
+                disabled={!hasMoreLogs}
+                className={styles['load-more-button']}
+              >
+                Load More
+              </button>
+              <button
+                onClick={handleLoadAll}
+                disabled={!hasMoreLogs}
+                className={styles['load-all-button']}
+              >
+                Load All
+              </button>
+            </div>
+          </div>
         ) : (
           <p>No logs found.</p>
         )}
