@@ -68,3 +68,21 @@
     vertical-align: middle;
   }
 }
+
+.load-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.load-more-button,
+.load-all-button {
+  @extend .button-base;
+  background-color: #007bff;
+
+  &:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+}

@@ -21,6 +21,18 @@ const UserSessions = () => {
 
   const [sessionDetails, setSessionDetails] = useState([]);
 
+  const [visibleSessions, setVisibleSessions] = useState(10);
+  const totalSessions = userSessions ? userSessions.length : 0;
+  const hasMoreSessions = visibleSessions < totalSessions;
+
+  const handleLoadMore = () => {
+    setVisibleSessions((prev) => Math.min(prev + 10, totalSessions));
+  };
+
+  const handleLoadAll = () => {
+    setVisibleSessions(totalSessions);
+  };
+
   useEffect(() => {
     if (userId) {
       dispatch(getUserSessions(userId));
@@ -75,104 +87,123 @@ const UserSessions = () => {
         <h2>User Sessions</h2>
         {user && <h3>{user.nickname} | Sessions</h3>}
         {userSessions && userSessions.length > 0 ? (
-          <table className={styles['sessions-table']}>
-            <thead>
-              <tr>
-                <th>Session Created At</th>
-                <th>IP Address</th>
-                <th>Provider Info</th>
-                <th>Geolocation</th>
-                <th>Geolocation Info</th>
-                <th>Operating System</th>
-                <th>Browser</th>
-                <th>Session Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {userSessions.map((session) => {
-                const {
-                  _id,
-                  token,
-                  createdAt,
-                  ipAddress,
-                  geolocation,
-                  operatingSystem,
-                  browser,
-                  isRevoked,
-                } = session;
-                const sessionDetail = sessionDetails.find(
-                  ({ token: detailToken }) => detailToken === token
-                );
-                const { ipInfo, geoInfo } = sessionDetail || {};
+          <div>
+            <table className={styles['sessions-table']}>
+              <thead>
+                <tr>
+                  <th>Session Created At</th>
+                  <th>IP Address</th>
+                  <th>Provider Info</th>
+                  <th>Geolocation</th>
+                  <th>Geolocation Info</th>
+                  <th>Operating System</th>
+                  <th>Browser</th>
+                  <th>Session Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {userSessions.slice(0, visibleSessions).map((session) => {
+                  const {
+                    _id,
+                    token,
+                    createdAt,
+                    ipAddress,
+                    geolocation,
+                    operatingSystem,
+                    browser,
+                    isRevoked,
+                  } = session;
+                  const sessionDetail = sessionDetails.find(
+                    ({ token: detailToken }) => detailToken === token
+                  );
+                  const { ipInfo, geoInfo } = sessionDetail || {};
 
-                const ipCountryCode = ipInfo?.countryCode || 'unknown';
-                const ipCountry = ipInfo?.country || 'Unknown';
-                const ipCity = ipInfo?.city || 'Unknown';
-                const ipProvider = ipInfo?.provider || 'Unknown';
+                  const ipCountryCode = ipInfo?.countryCode || 'unknown';
+                  const ipCountry = ipInfo?.country || 'Unknown';
+                  const ipCity = ipInfo?.city || 'Unknown';
+                  const ipProvider = ipInfo?.provider || 'Unknown';
 
-                const geoCountryCode = geoInfo?.countryCode || 'unknown';
-                const geoCountry = geoInfo?.country || 'Unknown';
-                const geoRegion = geoInfo?.region || 'Unknown';
-                const geoCity = geoInfo?.city || 'Unknown';
-                const geoStreet = geoInfo?.street || 'Unknown';
-                const { latitude, longitude } = geoInfo || {};
+                  const geoCountryCode = geoInfo?.countryCode || 'unknown';
+                  const geoCountry = geoInfo?.country || 'Unknown';
+                  const geoRegion = geoInfo?.region || 'Unknown';
+                  const geoCity = geoInfo?.city || 'Unknown';
+                  const geoStreet = geoInfo?.street || 'Unknown';
+                  const { latitude, longitude } = geoInfo || {};
 
-                return (
-                  <tr key={_id}>
-                    <td>{`${formatDateTime(createdAt)} | ${timeAgo(
-                      createdAt
-                    )}`}</td>
-                    <td>{ipAddress || 'Unknown'}</td>
-                    <td>
-                      {ipInfo ? (
-                        <>
-                          <img
-                            src={`https://flagcdn.com/16x12/${ipCountryCode}.png`}
-                            alt={ipCountry}
-                          />
-                          {` ${ipCountry}, ${ipCity}, ${ipProvider}`}
-                        </>
-                      ) : (
-                        'Unknown'
-                      )}
-                    </td>
-                    <td>{geolocation || 'Unknown'}</td>
-                    <td>
-                      {geoInfo ? (
-                        <a
-                          href={`https://www.google.com/maps?q=${latitude},${longitude}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles['geo-link']}
-                        >
-                          <img
-                            src={`https://flagcdn.com/16x12/${geoCountryCode}.png`}
-                            alt={geoCountry}
-                          />
-                          {`${geoCountry}, ${geoRegion}, ${geoCity}, ${geoStreet}`}
-                        </a>
-                      ) : (
-                        'Unknown'
-                      )}
-                    </td>
-                    <td>{operatingSystem || 'Unknown'}</td>
-                    <td>{browser || 'Unknown'}</td>
-                    <td>
-                      {isRevoked ? (
-                        'Revoked'
-                      ) : isSessionExpired(createdAt) ? (
-                        'Session expired'
-                      ) : (
-                        <button onClick={() => handleEndSession(_id)}>
-                          End session
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr key={_id}>
+                      <td>{`${formatDateTime(createdAt)} | ${timeAgo(
+                        createdAt
+                      )}`}</td>
+                      <td>{ipAddress || 'Unknown'}</td>
+                      <td>
+                        {ipInfo ? (
+                          <>
+                            <img
+                              src={`https://flagcdn.com/16x12/${ipCountryCode}.png`}
+                              alt={ipCountry}
+                            />
+                            {` ${ipCountry}, ${ipCity}, ${ipProvider}`}
+                          </>
+                        ) : (
+                          'Unknown'
+                        )}
+                      </td>
+                      <td>{geolocation || 'Unknown'}</td>
+                      <td>
+                        {geoInfo ? (
+                          <a
+                            href={`https://www.google.com/maps?q=${latitude},${longitude}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles['geo-link']}
+                          >
+                            <img
+                              src={`https://flagcdn.com/16x12/${geoCountryCode}.png`}
+                              alt={geoCountry}
+                            />
+                            {`${geoCountry}, ${geoRegion}, ${geoCity}, ${geoStreet}`}
+                          </a>
+                        ) : (
+                          'Unknown'
+                        )}
+                      </td>
+                      <td>{operatingSystem || 'Unknown'}</td>
+                      <td>{browser || 'Unknown'}</td>
+                      <td>
+                        {isRevoked ? (
+                          'Revoked'
+                        ) : isSessionExpired(createdAt) ? (
+                          'Session expired'
+                        ) : (
+                          <button onClick={() => handleEndSession(_id)}>
+                            End session
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <div className={styles['load-buttons']}>
+              <button
+                onClick={handleLoadMore}
+                disabled={!hasMoreSessions}
+                className={styles['load-more-button']}
+              >
+                Load More
+              </button>
+              <button
+                onClick={handleLoadAll}
+                disabled={!hasMoreSessions}
+                className={styles['load-all-button']}
+              >
+                Load All
+              </button>
+            </div>
+          </div>
         ) : (
           <p>No sessions found.</p>
         )}
