@@ -23,7 +23,9 @@ export const ACTION_TYPES_FILTER = {
   BAN_USER: 'ban user',
   UNBAN_USER: 'unban user',
   GET_ALL_BANNED_USERS: 'get all banned users',
-  GET_ALL_USERS: 'get all users'
+  GET_ALL_USERS: 'get all users',
+  MAKE_ADMIN: 'make user admin',
+  REMOVE_ADMIN: 'removed user admin'
 };
 
 export default CONSTANTS;
