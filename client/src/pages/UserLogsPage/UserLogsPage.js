@@ -6,6 +6,7 @@ import styles from './UserLogs.module.scss';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar';
 import { ACTION_TYPES_FILTER } from '../../constants';
+import { filteredLogs } from '../../utils/filteredLogs';
 
 const UserLogsPage = () => {
   const { userId } = useParams();
@@ -15,6 +16,8 @@ const UserLogsPage = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [filterAction, setFilterAction] = useState('');
+
+  const filteredLogsArray = filteredLogs(userLogs, filterAction);
 
   useEffect(() => {
     if (userId) {
@@ -27,37 +30,6 @@ const UserLogsPage = () => {
   const handleBack = () => {
     navigate(-1);
   };
-
-  const filteredLogs = filterAction
-    ? userLogs.filter((log) => {
-        const exactMatchActions = [
-          'get user refresh tokens (sessions)',
-        ];
-        
-        if (exactMatchActions.includes(filterAction)) {
-          const cleanedLogAction = log.action
-            .replace(/\d+/g, '')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .toLowerCase();
-
-          return cleanedLogAction.includes(filterAction.toLowerCase());
-        }
-        
-        const actionPattern = new RegExp(
-          `\\b${filterAction.replace(/\d+/g, '').replace(/\s+/g, '\\s+')}\\b`,
-          'i'
-        );
-
-        const cleanedLogAction = log.action
-          .replace(/\d+/g, '')
-          .replace(/\s+/g, ' ')
-          .trim()
-          .toLowerCase();
-
-        return actionPattern.test(cleanedLogAction);
-      })
-    : userLogs;
 
   return (
     <div className={styles['user-logs']}>
@@ -92,7 +64,7 @@ const UserLogsPage = () => {
           </select>
         </div>
 
-        {filteredLogs && filteredLogs.length > 0 ? (
+        {filteredLogsArray && filteredLogsArray.length > 0 ? (
           <table className={styles['logs-table']}>
             <thead>
               <tr>
@@ -102,7 +74,7 @@ const UserLogsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredLogs.map((log) => {
+              {filteredLogsArray.map((log) => {
                 const { _id, action, performedBy, timestamp } = log;
                 return (
                   <tr key={_id}>
