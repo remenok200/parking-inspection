@@ -172,9 +172,9 @@ module.exports.refreshSession = async (req, res, next) => {
           },
         });
       }
-    } else {
-      return next(createHttpError(401, 'Token not found!'));
     }
+
+    return next(createHttpError(401, 'Token not found!'));
   } catch (error) {
     next(error);
   }
