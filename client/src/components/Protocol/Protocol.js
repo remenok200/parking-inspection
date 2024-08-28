@@ -117,20 +117,31 @@ const Protocol = () => {
       <article className={styles['protocol-details']}>
         <h1>Protocol № {protocol.id}</h1>
 
-        <p>Service notes: {protocol.serviceNotes}</p>
-        <p>Fine amount: {protocol.fineAmount}</p>
-        <p>Violator full name: {protocol.violatorFullName}</p>
-        <p>Violator passport number: {protocol.violatorPassportNumber}</p>
-        <p>
-          Created: {formatDateTime(protocol.createdAt)} |{' '}
-          {timeAgo(protocol.createdAt)}
-        </p>
-        <p>
-          Updated: {formatDateTime(protocol.updatedAt)} |{' '}
-          {timeAgo(protocol.updatedAt)}
-        </p>
-        <p>Officer full name: {protocol.parkOfficer.full_name}</p>
-        <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
+        <div className={styles['section']}>
+          <h2 className={styles['section-title']}>Details</h2>
+          <p>Service notes: {protocol.serviceNotes}</p>
+          <p>Fine amount: {protocol.fineAmount}</p>
+          <p>Violator full name: {protocol.violatorFullName}</p>
+          <p>Violator passport number: {protocol.violatorPassportNumber}</p>
+        </div>
+
+        <div className={styles['section']}>
+          <h2 className={styles['section-title']}>Timestamps</h2>
+          <p>
+            Created: {formatDateTime(protocol.createdAt)} |{' '}
+            {timeAgo(protocol.createdAt)}
+          </p>
+          <p>
+            Updated: {formatDateTime(protocol.updatedAt)} |{' '}
+            {timeAgo(protocol.updatedAt)}
+          </p>
+        </div>
+
+        <div className={styles['section']}>
+          <h2 className={styles['section-title']}>Officer Details</h2>
+          <p>Officer full name: {protocol.parkOfficer.full_name}</p>
+          <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
+        </div>
 
         <div className={styles['button-container']}>
           <button onClick={() => setDeleteConfirmationModalOpen(true)}>
