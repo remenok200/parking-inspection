@@ -50,6 +50,9 @@ export const updateProtocol = async (parkOfficerID, protocolID, updatedData) =>
     updatedData
   );
 
+export const getProtocolById = async (protocolId) =>
+  await httpClient.get(`/parkOfficers/${null}/protocols/${protocolId}`);
+
 export const getAllProtocolsByOfficerID = async (parkOfficerID, page) => {
   if (page) {
     return await httpClient.get(

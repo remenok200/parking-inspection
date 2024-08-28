@@ -1,15 +1,64 @@
 @use '../../common/styles/template';
 
-.card-wrapper {
-  @extend %card-wrapper;
+.protocol-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-.img {
-  width: 400px;
-  height: 400px;
-  object-fit: contain;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.protocol-details {
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+
+  button {
+    @extend %button;
+  }
 }
 
 .slider {
-  margin: 90px;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+
+  .img {
+    width: 100%;
+    border-radius: 10px;
+  }
+}
+
+.back-button {
+  @extend %button;
+  margin-bottom: 20px;
 }

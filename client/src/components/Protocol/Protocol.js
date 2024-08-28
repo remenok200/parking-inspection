@@ -1,27 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './Protocol.module.scss';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useDispatch } from 'react-redux';
 import {
   deleteProtocolByID,
   deleteProtocolImageByID,
 } from '../../redux/slices/protocolSlice';
-import { useDispatch } from 'react-redux';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import { Link } from 'react-router-dom';
 import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
+import { getProtocolById } from '../../API';
+import Spinner from '../Spinner/Spinner';
 
-const Protocol = ({ protocol, refreshProtocolsList }) => {
+const Protocol = () => {
+  const { protocolID } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [protocol, setProtocol] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [deleteImageConfirmationModal, setDeleteImageConfirmationModal] =
     useState(false);
-  const [addImagesModalOpen, setAddImagesModalOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchProtocol = async () => {
+      try {
+        const {
+          data: { data },
+        } = await getProtocolById(protocolID);
+        setProtocol(data);
+      } catch (error) {
+        console.error('Failed to fetch protocol:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProtocol();
+  }, [protocolID]);
+
+  if (loading) {
+    return (
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(255, 255, 255, 0.8)',
+            zIndex: 9999,
+          }}
+        >
+          <Spinner />
+        </div>
+      </div>
+    );
+  }
+
+  if (!protocol) {
+    return <h1>Protocol not found.</h1>;
+  }
 
   const settings = {
     dots: true,
@@ -47,8 +95,7 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
     );
 
     setDeleteConfirmationModalOpen(false);
-
-    refreshProtocolsList();
+    navigate('/protocols');
   };
 
   const deleteImageHandler = async () => {
@@ -58,35 +105,47 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
         imageID: protocol.images[currentSlide].id,
       })
     );
-    setDeleteConfirmationModalOpen(false);
-
-    refreshProtocolsList();
+    setDeleteImageConfirmationModal(false);
   };
 
   return (
-    <article className={styles['card-wrapper']}>
-      <h1>Protocol № {protocol.id}</h1>
+    <div className={styles['protocol-page']}>
+      <button onClick={() => navigate(-1)} className={styles['back-button']}>
+        Back
+      </button>
 
-      <p>Service notes: {protocol.serviceNotes}</p>
-      <p>Fine amount: {protocol.fineAmount}</p>
-      <p>Violator full name: {protocol.violatorFullName}</p>
-      <p>Violator passport number: {protocol.violatorPassportNumber}</p>
-      <p>
-        Created: {formatDateTime(protocol.createdAt)} |{' '}
-        {timeAgo(protocol.createdAt)}
-      </p>
-      <p>
-        Updated: {formatDateTime(protocol.updatedAt)} |{' '}
-        {timeAgo(protocol.updatedAt)}
-      </p>
+      <article className={styles['protocol-details']}>
+        <h1>Protocol № {protocol.id}</h1>
 
-      <p>Officer full name: {protocol.parkOfficer.full_name}</p>
-      <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
+        <p>Service notes: {protocol.serviceNotes}</p>
+        <p>Fine amount: {protocol.fineAmount}</p>
+        <p>Violator full name: {protocol.violatorFullName}</p>
+        <p>Violator passport number: {protocol.violatorPassportNumber}</p>
+        <p>
+          Created: {formatDateTime(protocol.createdAt)} |{' '}
+          {timeAgo(protocol.createdAt)}
+        </p>
+        <p>
+          Updated: {formatDateTime(protocol.updatedAt)} |{' '}
+          {timeAgo(protocol.updatedAt)}
+        </p>
+        <p>Officer full name: {protocol.parkOfficer.full_name}</p>
+        <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
 
-      <div className={styles['button-container']}>
-        <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-          Delete
-        </button>
+        <div className={styles['button-container']}>
+          <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+            Delete
+          </button>
+          <button onClick={() => navigate(`/protocols/edit/${protocol.id}`)}>
+            Edit
+          </button>
+          <button
+            onClick={() => navigate(`/protocols/${protocol.id}/add/image`)}
+          >
+            Add Image(s)
+          </button>
+        </div>
+
         {deleteConfirmationModalOpen && (
           <ConfirmationModal
             open={deleteConfirmationModalOpen}
@@ -96,18 +155,10 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
             deleteCallback={deleteHandler}
           />
         )}
-
-        <Link to={`/protocols/edit/${protocol.id}`}>
-          <button>Edit</button>
-        </Link>
-
-        <Link to={`/protocols/${protocol.id}/add/image`}>
-          <button>Add image(s)</button>
-        </Link>
-      </div>
+      </article>
 
       {protocol.images.length > 0 && (
-        <Slider {...settings} className={styles.slider}>
+        <Slider {...settings} className={styles['slider']}>
           {protocol.images.map((currentImage) => (
             <img
               className={styles.img}
@@ -119,25 +170,16 @@ const Protocol = ({ protocol, refreshProtocolsList }) => {
         </Slider>
       )}
 
-      <div className={styles['button-container']}>
-        {protocol.images.length > 0 && (
-          <>
-            <button onClick={() => setDeleteImageConfirmationModal(true)}>
-              Delete current image in the slider
-            </button>
-            {deleteImageConfirmationModal && (
-              <ConfirmationModal
-                open={deleteImageConfirmationModal}
-                setIsOpen={setDeleteImageConfirmationModal}
-                action={'delete'}
-                itemName={`this image`}
-                deleteCallback={deleteImageHandler}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </article>
+      {deleteImageConfirmationModal && (
+        <ConfirmationModal
+          open={deleteImageConfirmationModal}
+          setIsOpen={setDeleteImageConfirmationModal}
+          action={'delete'}
+          itemName={`this image`}
+          deleteCallback={deleteImageHandler}
+        />
+      )}
+    </div>
   );
 };
 

@@ -5,9 +5,7 @@ const { deleteImageFromDisk } = require('../utils');
 
 module.exports.getAllProtocols = async (req, res, next) => {
   try {
-    const {
-      pagination,
-    } = req;
+    const { pagination } = req;
 
     const protocols = await Protocol.findAll({
       include: [
@@ -29,6 +27,38 @@ module.exports.getAllProtocols = async (req, res, next) => {
     const totalProtocolsCount = await Protocol.count();
 
     return res.status(200).send({ data: protocols, totalProtocolsCount });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.getProtocolById = async (req, res, next) => {
+  try {
+    const {
+      params: { id },
+    } = req;
+
+    const protocol = await Protocol.findOne({
+      where: { id },
+      include: [
+        {
+          model: ParkOfficer,
+          attributes: ['id', 'full_name', 'badge_number'],
+          as: 'parkOfficer',
+        },
+        {
+          model: Image,
+          attributes: ['id', 'path'],
+          as: 'images',
+        },
+      ],
+    });
+
+    if (!protocol) {
+      return next(createHttpError(404, 'Protocol not found'));
+    }
+
+    return res.status(200).send({ data: protocol });
   } catch (error) {
     next(error);
   }

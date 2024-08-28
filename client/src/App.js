@@ -26,6 +26,7 @@ import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import useAuthCheck from './hooks/useAuthCheck';
+import Protocol from './components/Protocol/Protocol';
 
 function App() {
   useErrorToast();
@@ -54,6 +55,8 @@ function App() {
           path="/officers/edit/:parkOfficerID"
           element={<UpdateParkOfficer />}
         />
+
+        <Route path="/protocols/details/:protocolID" element={<Protocol />} />
         <Route path="/protocols" element={<ProtocolsPage />} />
         <Route
           path="/protocols/create/:parkOfficerID"

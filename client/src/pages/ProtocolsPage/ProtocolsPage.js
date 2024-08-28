@@ -4,13 +4,13 @@ import {
   getAllProtocols,
   getAllProtocolsByOfficerID,
 } from '../../redux/slices/protocolSlice';
-import Protocol from '../../components/Protocol/Protocol';
 import { useParams } from 'react-router-dom';
 import styles from './ProtocolsPage.module.scss';
 import Pagination from '../../components/Pagination/Pagination';
 import NavBar from '../../components/NavBar/NavBar';
 import CONSTANTS from '../../constants';
 import filterProtocols from '../../utils/filterProtocols';
+import { Link } from 'react-router-dom';
 const { LIMIT } = CONSTANTS;
 
 const ProtocolsPage = () => {
@@ -68,14 +68,6 @@ const ProtocolsPage = () => {
 
   const filteredProtocols = filterProtocols(protocols, searchValue);
 
-  const protocolsCards = filteredProtocols.map((currentProtocol) => (
-    <Protocol
-      key={currentProtocol.id}
-      protocol={currentProtocol}
-      refreshProtocolsList={refreshProtocolsList}
-    />
-  ));
-
   return (
     <>
       <NavBar />
@@ -99,7 +91,22 @@ const ProtocolsPage = () => {
           <h1 className={styles.header}>All protocols</h1>
         )}
 
-        {protocolsCards}
+        <div className={styles['protocols-list']}>
+          {filteredProtocols.map((protocol) => (
+            <div key={protocol.id} className={styles['protocol-card']}>
+              <h3>Protocol № {protocol.id}</h3>
+              <p>Violator: {protocol.violatorFullName}</p>
+              <p>Violator passport number: {protocol.violatorPassportNumber}</p>
+              <p>Fine: {protocol.fineAmount}</p>
+              <Link
+                to={`/protocols/details/${protocol.id}`}
+                className={styles['view-details-link']}
+              >
+                View Details
+              </Link>
+            </div>
+          ))}
+        </div>
 
         {!protocols.length ? <h1>Oops... No data =)</h1> : null}
 
