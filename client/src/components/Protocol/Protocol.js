@@ -14,8 +14,11 @@ import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import { getProtocolById } from '../../API';
 import Spinner from '../Spinner/Spinner';
+import useHasRole from '../../hooks/useHasRole';
 
 const Protocol = () => {
+  const isAdmin = useHasRole('admin');
+
   const { protocolID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -143,19 +146,21 @@ const Protocol = () => {
           <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
         </div>
 
-        <div className={styles['button-container']}>
-          <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-            Delete
-          </button>
-          <button onClick={() => navigate(`/protocols/edit/${protocol.id}`)}>
-            Edit
-          </button>
-          <button
-            onClick={() => navigate(`/protocols/${protocol.id}/add/image`)}
-          >
-            Add Image(s)
-          </button>
-        </div>
+        {isAdmin && (
+          <div className={styles['button-container']}>
+            <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+              Delete
+            </button>
+            <button onClick={() => navigate(`/protocols/edit/${protocol.id}`)}>
+              Edit
+            </button>
+            <button
+              onClick={() => navigate(`/protocols/${protocol.id}/add/image`)}
+            >
+              Add Image(s)
+            </button>
+          </div>
+        )}
 
         {deleteConfirmationModalOpen && (
           <ConfirmationModal

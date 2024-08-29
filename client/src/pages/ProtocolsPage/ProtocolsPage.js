@@ -73,6 +73,7 @@ const ProtocolsPage = () => {
       <NavBar />
 
       <section>
+        <div className={styles['flex-center']}>
         <div className={styles['search-container']}>
           <input
             type="text"
@@ -83,6 +84,7 @@ const ProtocolsPage = () => {
           <div className={styles['tooltip']}>
             {`Search by fine (e.g., >50, <100, =75) or other criteria: violator full name; violator passport number; park officer full name; park officer badge number`}
           </div>
+        </div>
         </div>
 
         {parkOfficerFullName ? (

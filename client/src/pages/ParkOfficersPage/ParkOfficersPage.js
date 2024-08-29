@@ -5,8 +5,11 @@ import ParkOfficer from '../../components/ParkOfficer/ParkOfficer';
 import styles from './ParkOfficersPage.module.scss';
 import NavBar from '../../components/NavBar/NavBar';
 import { Link } from 'react-router-dom';
+import useHasRole from '../../hooks/useHasRole';
 
 const ParkOfficersPage = () => {
+  const isAdmin = useHasRole('admin');
+
   const [filter, setFilter] = useState('worked');
 
   const { parkOfficers, isLoading, error } = useSelector(
@@ -59,9 +62,11 @@ const ParkOfficersPage = () => {
             </div>
           </div>
 
-          <Link to="/officers/add">
-            <button>Add Officer</button>
-          </Link>
+          {isAdmin && (
+            <Link to="/officers/add">
+              <button>Add Officer</button>
+            </Link>
+          )}
 
           <select
             value={filter}

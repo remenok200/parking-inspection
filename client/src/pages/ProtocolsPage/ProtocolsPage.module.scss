@@ -4,6 +4,11 @@
   text-align: center;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
 .search-container {
   position: relative;
   display: inline-block;

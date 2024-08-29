@@ -1,8 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './NavBar.module.scss';
+import useHasRole from '../../hooks/useHasRole';
 
 const NavBar = () => {
+  const isAdmin = useHasRole('admin');
+
   return (
     <nav>
       <ul className={styles['nav-list']}>
@@ -26,16 +29,18 @@ const NavBar = () => {
             Protocols
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/admin"
-            className={({ isActive }) =>
-              isActive ? `${styles.link} ${styles.active}` : styles.link
-            }
-          >
-            A-Panel
-          </NavLink>
-        </li>
+        {isAdmin && (
+          <li>
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              A-Panel
+            </NavLink>
+          </li>
+        )}
       </ul>
     </nav>
   );

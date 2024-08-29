@@ -10,8 +10,11 @@ import {
 } from '../../redux/slices/parkOfficerSlice';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import cx from 'classnames';
+import useHasRole from '../../hooks/useHasRole';
 
 const ParkOfficer = ({ parkOfficer }) => {
+  const isAdmin = useHasRole('admin');
+
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [dismissConfirmationModalOpen, setDismissConfirmationModalOpen] =
@@ -55,24 +58,7 @@ const ParkOfficer = ({ parkOfficer }) => {
           <button>View protocols</button>
         </Link>
 
-        <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-          Delete
-        </button>
-        {deleteConfirmationModalOpen && (
-          <ConfirmationModal
-            open={deleteConfirmationModalOpen}
-            setIsOpen={setDeleteConfirmationModalOpen}
-            action={'delete'}
-            itemName={parkOfficer.fullName}
-            deleteCallback={deleteHandler}
-          />
-        )}
-
-        <Link to={`/officers/edit/${parkOfficer.id}`}>
-          <button>Edit</button>
-        </Link>
-
-        {parkOfficer.isWorked && (
+        {parkOfficer.isWorked && isAdmin && (
           <>
             <Link to={`/protocols/create/${parkOfficer.id}`}>
               <button>Create protocol</button>
@@ -80,7 +66,30 @@ const ParkOfficer = ({ parkOfficer }) => {
           </>
         )}
 
-        {parkOfficer.isWorked && (
+        {isAdmin && (
+          <>
+            <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+              Delete
+            </button>
+            {deleteConfirmationModalOpen && (
+              <ConfirmationModal
+                open={deleteConfirmationModalOpen}
+                setIsOpen={setDeleteConfirmationModalOpen}
+                action={'delete'}
+                itemName={parkOfficer.fullName}
+                deleteCallback={deleteHandler}
+              />
+            )}
+          </>
+        )}
+
+        {isAdmin && (
+          <Link to={`/officers/edit/${parkOfficer.id}`}>
+            <button>Edit</button>
+          </Link>
+        )}
+
+        {parkOfficer.isWorked && isAdmin && (
           <>
             <button onClick={() => setDismissConfirmationModalOpen(true)}>
               Dismiss
@@ -97,7 +106,7 @@ const ParkOfficer = ({ parkOfficer }) => {
           </>
         )}
 
-        {!parkOfficer.isWorked && (
+        {!parkOfficer.isWorked && isAdmin && (
           <>
             <button onClick={() => setRestoreConfirmationModalOpen(true)}>
               Restore officer

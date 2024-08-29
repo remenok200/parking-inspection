@@ -15,7 +15,7 @@ protocolRouter
 
 protocolRouter
 .route('/:id')
-.get(checkToken, checkBan, checkAdmin, ProtocolController.getProtocolById)
+.get(checkToken, checkBan, ProtocolController.getProtocolById)
 .put(checkToken, checkBan, checkAdmin, uploadImages, ProtocolController.updateProtocolByID)
 .delete(checkToken, checkBan, checkAdmin, ProtocolController.deleteProtocolByID);
 

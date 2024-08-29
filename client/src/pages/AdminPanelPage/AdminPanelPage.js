@@ -2,8 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './AdminPanelPage.module.scss';
 import NavBar from '../../components/NavBar/NavBar';
+import useHasRole from '../../hooks/useHasRole';
+import { useNavigate } from 'react-router-dom';
 
 const AdminPanelPage = () => {
+  const isAdmin = useHasRole('admin');
+  const navigate = useNavigate();
+
+  if(!isAdmin) {
+    navigate('/');
+  }
+
   return (
     <>
       <NavBar />
