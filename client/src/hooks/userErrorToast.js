@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -7,10 +7,13 @@ const useErrorToast = () => {
     Object.values(state).map((slice) => slice.error)
   );
 
+  const lastErrorRef = useRef(null);
+
   useEffect(() => {
     errors.forEach((error) => {
-      if (error) {
+      if (error && error !== lastErrorRef.current) {
         toast.error(error);
+        lastErrorRef.current = error;
       }
     });
   }, [errors]);
