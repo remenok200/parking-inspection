@@ -68,9 +68,11 @@ const ParkOfficer = ({ parkOfficer }) => {
 
         {isAdmin && (
           <>
-            <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-              Delete
-            </button>
+            <div>
+              <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+                Delete
+              </button>
+            </div>
             {deleteConfirmationModalOpen && (
               <ConfirmationModal
                 open={deleteConfirmationModalOpen}
@@ -91,9 +93,11 @@ const ParkOfficer = ({ parkOfficer }) => {
 
         {parkOfficer.isWorked && isAdmin && (
           <>
-            <button onClick={() => setDismissConfirmationModalOpen(true)}>
-              Dismiss
-            </button>
+            <div>
+              <button onClick={() => setDismissConfirmationModalOpen(true)}>
+                Dismiss
+              </button>
+            </div>
             {dismissConfirmationModalOpen && (
               <ConfirmationModal
                 open={dismissConfirmationModalOpen}
@@ -108,9 +112,11 @@ const ParkOfficer = ({ parkOfficer }) => {
 
         {!parkOfficer.isWorked && isAdmin && (
           <>
-            <button onClick={() => setRestoreConfirmationModalOpen(true)}>
-              Restore officer
-            </button>
+            <div>
+              <button onClick={() => setRestoreConfirmationModalOpen(true)}>
+                Restore officer
+              </button>
+            </div>
             {restoreConfirmationModalOpen && (
               <ConfirmationModal
                 open={restoreConfirmationModalOpen}

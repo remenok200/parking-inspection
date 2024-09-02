@@ -79,7 +79,7 @@ const ParkOfficersPage = () => {
           </select>
         </div>
 
-        {parkOfficersCards}
+        <div className={styles['officers-cards']}>{parkOfficersCards}</div>
 
         {!parkOfficers.length && <h1>Oops... No data =)</h1>}
       </section>
