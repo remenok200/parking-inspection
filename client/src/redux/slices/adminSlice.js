@@ -1,165 +1,108 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from '../../API';
-import { toast } from 'react-toastify';
+import {
+  handleAsyncThunk,
+  handleFulfilled,
+  handlePending,
+  handleRejected,
+} from './functions';
 
 const SLICE_NAME = 'admins';
 
-const getAllUsers = createAsyncThunk(
+export const getAllUsers = createAsyncThunk(
   `${SLICE_NAME}/getAllUsers`,
-  async (_, thunkAPI) => {
-    try {
-      const {
-        data: { data },
-      } = await API.getAllUsers();
-
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
+  async (_, thunkAPI) => handleAsyncThunk(API.getAllUsers, null, thunkAPI)
 );
 
-const getAllBannedUsers = createAsyncThunk(
+export const getAllBannedUsers = createAsyncThunk(
   `${SLICE_NAME}/getAllBannedUsers`,
-  async (_, thunkAPI) => {
-    try {
-      const {
-        data: { data },
-      } = await API.getAllBannedUsers();
-
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
+  async (_, thunkAPI) => handleAsyncThunk(API.getAllBannedUsers, null, thunkAPI)
 );
 
-const banUser = createAsyncThunk(
+export const banUser = createAsyncThunk(
   `${SLICE_NAME}/banUser`,
-  async ({ userId, reason }, thunkAPI) => {
-    try {
-      await API.banUser(userId, reason);
-
-      toast.success('User successfully banned');
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
+  async ({ userId, reason }, thunkAPI) =>
+    handleAsyncThunk(
+      () => API.banUser(userId, reason),
+      'User successfully banned',
+      thunkAPI
+    )
 );
 
-const unbanUser = createAsyncThunk(
+export const unbanUser = createAsyncThunk(
   `${SLICE_NAME}/unbanUser`,
-  async (userId, thunkAPI) => {
-    try {
-      await API.unbanUser(userId);
-
-      toast.success('User successfully unbanned');
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
+  async (userId, thunkAPI) =>
+    handleAsyncThunk(
+      () => API.unbanUser(userId),
+      'User successfully unbanned',
+      thunkAPI
+    )
 );
 
-const endSession = createAsyncThunk(
+export const endSession = createAsyncThunk(
   `${SLICE_NAME}/endSession`,
-  async (tokenId, thunkAPI) => {
-    try {
-      await API.endSession(tokenId);
-
-      toast.success('Session successfully revoked');
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
+  async (tokenId, thunkAPI) =>
+    handleAsyncThunk(
+      () => API.endSession(tokenId),
+      'Session successfully revoked',
+      thunkAPI
+    )
 );
 
-const getUserSessions = createAsyncThunk(
+export const getUserSessions = createAsyncThunk(
   `${SLICE_NAME}/getUserSessions`,
   async (userId, thunkAPI) => {
-    try {
-      const {
-        data: { data: refreshTokens },
-      } = await API.getUserSessions(userId);
-
-      toast.success('User sessions received');
-
-      const sortedRefreshTokens = refreshTokens.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-
-      return sortedRefreshTokens;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
+    const data = await handleAsyncThunk(
+      () => API.getUserSessions(userId),
+      'User sessions received',
+      thunkAPI
+    );
+    return data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 );
 
-const getAllLogs = createAsyncThunk(
+export const getAllLogs = createAsyncThunk(
   `${SLICE_NAME}/getAllLogs`,
   async (_, thunkAPI) => {
-    try {
-      const {
-        data: { data: userLogs },
-      } = await API.getAllLogs();
-
-      const sortedLogs = userLogs.sort(
-        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-      );
-
-      toast.success('User logs received');
-
-      return sortedLogs;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
+    const data = await handleAsyncThunk(
+      API.getAllLogs,
+      'User logs received',
+      thunkAPI
+    );
+    return data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   }
 );
 
-const getAllLogsByUserID = createAsyncThunk(
+export const getAllLogsByUserID = createAsyncThunk(
   `${SLICE_NAME}/getAllLogsByUserID`,
   async (userId, thunkAPI) => {
-    try {
-      const {
-        data: { data: userLogs },
-      } = await API.getAllLogsByUserID(userId);
-
-      const sortedLogs = userLogs.sort(
-        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-      );
-
-      toast.success('User logs received');
-
-      return sortedLogs;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
+    const data = await handleAsyncThunk(
+      () => API.getAllLogsByUserID(userId),
+      'User logs received',
+      thunkAPI
+    );
+    return data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   }
 );
 
-const makeAdmin = createAsyncThunk(
+export const makeAdmin = createAsyncThunk(
   `${SLICE_NAME}/makeAdmin`,
-  async (userId, thunkAPI) => {
-    try {
-      await API.makeAdmin(userId);
-
-      toast.success('User promoted to admin successfully');
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
+  async (userId, thunkAPI) =>
+    handleAsyncThunk(
+      () => API.makeAdmin(userId),
+      'User promoted to admin successfully',
+      thunkAPI
+    )
 );
 
-const removeAdmin = createAsyncThunk(
+export const removeAdmin = createAsyncThunk(
   `${SLICE_NAME}/removeAdmin`,
-  async (userId, thunkAPI) => {
-    try {
-      await API.removeAdmin(userId);
-
-      toast.success('Admin role removed successfully');
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
+  async (userId, thunkAPI) =>
+    handleAsyncThunk(
+      () => API.removeAdmin(userId),
+      'Admin role removed successfully',
+      thunkAPI
+    )
 );
 
 const initialState = {
@@ -175,176 +118,50 @@ const adminSlice = createSlice({
   name: SLICE_NAME,
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(getAllUsers.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(getAllUsers.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-      state.allUsers = action.payload;
-    });
-
-    builder.addCase(getAllUsers.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(getAllBannedUsers.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(getAllBannedUsers.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-      state.bannedUsers = action.payload;
-    });
-
-    builder.addCase(getAllBannedUsers.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(banUser.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(banUser.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-    });
-
-    builder.addCase(banUser.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(unbanUser.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(unbanUser.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-    });
-
-    builder.addCase(unbanUser.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(getUserSessions.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(getUserSessions.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-      state.userSessions = action.payload;
-    });
-
-    builder.addCase(getUserSessions.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(endSession.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(endSession.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-    });
-
-    builder.addCase(endSession.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(getAllLogs.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(getAllLogs.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.userLogs = action.payload;
-      state.error = null;
-    });
-
-    builder.addCase(getAllLogs.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(getAllLogsByUserID.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(getAllLogsByUserID.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.userLogs = action.payload;
-      state.error = null;
-    });
-
-    builder.addCase(getAllLogsByUserID.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(makeAdmin.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(makeAdmin.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-    });
-
-    builder.addCase(makeAdmin.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(removeAdmin.pending, (state, action) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addCase(removeAdmin.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-    });
-
-    builder.addCase(removeAdmin.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    });
+    builder
+      .addCase(getAllUsers.pending, handlePending)
+      .addCase(getAllUsers.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'allUsers')
+      )
+      .addCase(getAllUsers.rejected, handleRejected)
+      .addCase(getAllBannedUsers.pending, handlePending)
+      .addCase(getAllBannedUsers.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'bannedUsers')
+      )
+      .addCase(getAllBannedUsers.rejected, handleRejected)
+      .addCase(banUser.pending, handlePending)
+      .addCase(banUser.fulfilled, handleFulfilled)
+      .addCase(banUser.rejected, handleRejected)
+      .addCase(unbanUser.pending, handlePending)
+      .addCase(unbanUser.fulfilled, handleFulfilled)
+      .addCase(unbanUser.rejected, handleRejected)
+      .addCase(getUserSessions.pending, handlePending)
+      .addCase(getUserSessions.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'userSessions')
+      )
+      .addCase(getUserSessions.rejected, handleRejected)
+      .addCase(endSession.pending, handlePending)
+      .addCase(endSession.fulfilled, handleFulfilled)
+      .addCase(endSession.rejected, handleRejected)
+      .addCase(getAllLogs.pending, handlePending)
+      .addCase(getAllLogs.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'userLogs')
+      )
+      .addCase(getAllLogs.rejected, handleRejected)
+      .addCase(getAllLogsByUserID.pending, handlePending)
+      .addCase(getAllLogsByUserID.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'userLogs')
+      )
+      .addCase(getAllLogsByUserID.rejected, handleRejected)
+      .addCase(makeAdmin.pending, handlePending)
+      .addCase(makeAdmin.fulfilled, handleFulfilled)
+      .addCase(makeAdmin.rejected, handleRejected)
+      .addCase(removeAdmin.pending, handlePending)
+      .addCase(removeAdmin.fulfilled, handleFulfilled)
+      .addCase(removeAdmin.rejected, handleRejected);
   },
 });
 
 const { reducer } = adminSlice;
-
-export {
-  getAllUsers,
-  getAllBannedUsers,
-  banUser,
-  unbanUser,
-  getUserSessions,
-  endSession,
-  getAllLogs,
-  getAllLogsByUserID,
-  makeAdmin,
-  removeAdmin,
-};
 
 export default reducer;
