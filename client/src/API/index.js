@@ -113,6 +113,9 @@ export const registerUser = async (userData) => {
   }
 };
 
+export const logout = async (tokenId) =>
+  await httpClient.delete(`/users/logout/${tokenId}`);
+
 // ADMIN
 
 export const getAllUsers = async () => await httpClient.get('/users/all');

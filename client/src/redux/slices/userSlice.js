@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as API from '../../API';
+import history from '../../BrowserHistory';
+import { toast } from 'react-toastify';
 
 const SLICE_NAME = 'users';
 
@@ -42,6 +44,22 @@ const authUser = createAsyncThunk(
       } = await API.authUser();
 
       return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const logout = createAsyncThunk(
+  `${SLICE_NAME}/logout`,
+  async (tokenId, thunkAPI) => {
+    try {
+      await API.logout(tokenId);
+      localStorage.clear();
+
+      history.push('/');
+
+      toast.success('Logout successfully');
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -105,11 +123,26 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(logout.pending, (state, action) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addCase(logout.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+
+    builder.addCase(logout.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 const { reducer } = userSlice;
 
-export { loginUser, registerUser, authUser };
+export { loginUser, registerUser, authUser, logout };
 
 export default reducer;

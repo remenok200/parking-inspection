@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { User, RefreshToken } = require('../models/MongoDB');
+const { User, RefreshToken, Log } = require('../models/MongoDB');
 const {
   createAccessToken,
   createRefreshToken,
@@ -175,6 +175,34 @@ module.exports.refreshSession = async (req, res, next) => {
     }
 
     return next(createHttpError(401, 'Token not found!'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.logout = async (req, res, next) => {
+  try {
+    const {
+      params: { tokenId },
+      tokenPayload: { userId },
+    } = req;
+
+    const refreshToken = await RefreshToken.findOneAndUpdate(
+      { token: tokenId },
+      { $unset: { token: 1 }, $set: { isRevoked: true } },
+      { new: true }
+    );
+
+    if (!refreshToken) {
+      return next(createHttpError(404, 'Refresh token not found'));
+    }
+
+    await Log.create({
+      action: `USER ID: ${userId} logout. Token ID: ${tokenId}`,
+      performedBy: userId,
+    });
+
+    return res.status(200).send({ data: 'Logout successfully' });
   } catch (error) {
     next(error);
   }

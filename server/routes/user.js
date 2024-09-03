@@ -23,6 +23,10 @@ userRouter
 .route('/refresh')
 .post(UserController.refreshSession);
 
+userRouter
+.route('/logout/:tokenId')
+.delete(checkToken, UserController.logout);
+
 userRouter.use('/', adminRouter); 
 
 module.exports = userRouter;
