@@ -124,38 +124,47 @@ const adminSlice = createSlice({
         handleFulfilled(state, action, 'allUsers')
       )
       .addCase(getAllUsers.rejected, handleRejected)
+
       .addCase(getAllBannedUsers.pending, handlePending)
       .addCase(getAllBannedUsers.fulfilled, (state, action) =>
         handleFulfilled(state, action, 'bannedUsers')
       )
       .addCase(getAllBannedUsers.rejected, handleRejected)
+
       .addCase(banUser.pending, handlePending)
       .addCase(banUser.fulfilled, handleFulfilled)
       .addCase(banUser.rejected, handleRejected)
+
       .addCase(unbanUser.pending, handlePending)
       .addCase(unbanUser.fulfilled, handleFulfilled)
       .addCase(unbanUser.rejected, handleRejected)
+
       .addCase(getUserSessions.pending, handlePending)
       .addCase(getUserSessions.fulfilled, (state, action) =>
         handleFulfilled(state, action, 'userSessions')
       )
       .addCase(getUserSessions.rejected, handleRejected)
+
       .addCase(endSession.pending, handlePending)
       .addCase(endSession.fulfilled, handleFulfilled)
       .addCase(endSession.rejected, handleRejected)
+
       .addCase(getAllLogs.pending, handlePending)
       .addCase(getAllLogs.fulfilled, (state, action) =>
         handleFulfilled(state, action, 'userLogs')
       )
       .addCase(getAllLogs.rejected, handleRejected)
+
       .addCase(getAllLogsByUserID.pending, handlePending)
       .addCase(getAllLogsByUserID.fulfilled, (state, action) =>
         handleFulfilled(state, action, 'userLogs')
       )
       .addCase(getAllLogsByUserID.rejected, handleRejected)
+
       .addCase(makeAdmin.pending, handlePending)
       .addCase(makeAdmin.fulfilled, handleFulfilled)
       .addCase(makeAdmin.rejected, handleRejected)
+
       .addCase(removeAdmin.pending, handlePending)
       .addCase(removeAdmin.fulfilled, handleFulfilled)
       .addCase(removeAdmin.rejected, handleRejected);
