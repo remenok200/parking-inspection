@@ -1,46 +1,48 @@
-const adminRouter = require('express').Router();
+const express = require('express');
+const adminRouter = express.Router();
 
 const AdminController = require('../controllers/AdminController');
-
 const { checkToken } = require('../middlewares/checkToken');
 const { checkAdmin } = require('../middlewares/checkAdmin');
 const { checkBan } = require('../middlewares/checkBan');
 
+adminRouter.use(checkToken, checkBan, checkAdmin);
+
 adminRouter
 .route('/banlist')
-.post(checkToken, checkBan, checkAdmin, AdminController.ban);
+.post(AdminController.ban);
 
 adminRouter
 .route('/banlist/unban/:userId')
-.delete(checkToken, checkBan, checkAdmin, AdminController.unban);
+.delete(AdminController.unban);
 
 adminRouter
 .route('/all')
-.get(checkToken, checkBan, checkAdmin, AdminController.getAllUsers);
+.get(AdminController.getAllUsers);
 
 adminRouter
 .route('/all/banned')
-.get(checkToken, checkBan, checkAdmin, AdminController.getAllBannedUsers);
+.get(AdminController.getAllBannedUsers);
 
 adminRouter
 .route('/tokens/:userId')
-.get(checkToken, checkBan, checkAdmin, AdminController.getUserRefreshTokens);
+.get(AdminController.getUserRefreshTokens);
 
 adminRouter
 .route('/tokens/:tokenId/revoke')
-.put(checkToken, checkBan, checkAdmin, AdminController.revokeRefreshToken);
+.put(AdminController.revokeRefreshToken);
 
 adminRouter
 .route('/logs/all')
-.get(checkToken, checkBan, checkAdmin, AdminController.getAllLogs);
+.get(AdminController.getAllLogs);
 
 adminRouter
 .route('/logs/:userId/all')
-.get(checkToken, checkBan, checkAdmin, AdminController.getAllLogsByUserID);
+.get(AdminController.getAllLogsByUserID);
 
 adminRouter
 .route('/admins/:userId')
-.put(checkToken, checkBan, checkAdmin, AdminController.makeAdmin)
-.delete(checkToken, checkBan, checkAdmin, AdminController.removeAdmin);
+.put(AdminController.makeAdmin)
+.delete(AdminController.removeAdmin);
 
 module.exports = adminRouter;
