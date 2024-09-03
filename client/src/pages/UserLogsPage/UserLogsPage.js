@@ -82,7 +82,7 @@ const UserLogsPage = () => {
               <thead>
                 <tr>
                   <th>Timestamp</th>
-                  <th>Action</th>
+                  <th className={styles['action-column']}>Action</th>
                   <th>Performed By</th>
                 </tr>
               </thead>
@@ -94,7 +94,7 @@ const UserLogsPage = () => {
                       <td>{`${formatDateTime(timestamp)} | ${timeAgo(
                         timestamp
                       )}`}</td>
-                      <td>{action}</td>
+                      <td className={styles['action-column']}>{action}</td>
                       <td>{performedBy}</td>
                     </tr>
                   );

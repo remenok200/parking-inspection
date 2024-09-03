@@ -16,6 +16,9 @@
   td {
     padding: 10px;
     border: 1px solid #ddd;
+    word-wrap: break-word;
+    word-break: break-word;
+    text-overflow: ellipsis;
   }
 
   th {
@@ -28,6 +31,10 @@
 
   tr:hover {
     background-color: #f1f1f1;
+  }
+
+  .action-column {
+    white-space: normal;
   }
 }
 
