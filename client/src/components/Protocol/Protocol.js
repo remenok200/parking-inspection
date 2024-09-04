@@ -30,20 +30,20 @@ const Protocol = () => {
     useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  useEffect(() => {
-    const fetchProtocol = async () => {
-      try {
-        const {
-          data: { data },
-        } = await getProtocolById(protocolID);
-        setProtocol(data);
-      } catch (error) {
-        console.error('Failed to fetch protocol:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProtocol = async () => {
+    try {
+      const {
+        data: { data },
+      } = await getProtocolById(protocolID);
+      setProtocol(data);
+    } catch (error) {
+      console.error('Failed to fetch protocol:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProtocol();
   }, [protocolID]);
 
@@ -84,8 +84,8 @@ const Protocol = () => {
     arrows: protocol.images.length > 1,
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
-    afterChange: (currentImageIndex) => {
-      setCurrentSlide(currentImageIndex);
+    beforeChange: (currentImageIndex, nextImageIndex) => {
+      setTimeout(() => setCurrentSlide(nextImageIndex), 500);
     },
   };
 
@@ -108,6 +108,7 @@ const Protocol = () => {
         imageID: protocol.images[currentSlide].id,
       })
     );
+    await fetchProtocol();
     setDeleteImageConfirmationModal(false);
   };
 

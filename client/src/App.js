@@ -5,7 +5,7 @@ import {
   Route,
 } from 'react-router-dom';
 import ParkOfficersPage from './pages/ParkOfficersPage/ParkOfficersPage';
-import ProtocolsPage from './pages/ProtocolsPage/ProtocolsPage';
+import ProtocolsPage from './pages/AllProtocolsPage/ProtocolsPage';
 import styles from './App.module.scss';
 import HomePage from './pages/HomePage/HomePage';
 import { useSelector } from 'react-redux';
