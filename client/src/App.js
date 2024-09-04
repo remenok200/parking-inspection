@@ -26,7 +26,7 @@ import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import useAuthCheck from './hooks/useAuthCheck';
-import Protocol from './components/Protocol/Protocol';
+import Protocol from './pages/ProtocolPage/Protocol';
 
 function App() {
   useErrorToast();

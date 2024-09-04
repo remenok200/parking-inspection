@@ -4,6 +4,7 @@ import { addImagesToProtocol } from '../../redux/slices/protocolSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './AddImage.module.scss';
+import { getProtocolById } from '../../API';
 
 const AddImage = () => {
   const dispatch = useDispatch();
@@ -12,15 +13,24 @@ const AddImage = () => {
 
   const { protocols } = useSelector((state) => state.protocols);
   const [protocol, setProtocol] = useState(null);
-
   const [file, setFile] = useState(null);
 
   useEffect(() => {
-    const fetchProtocol = () => {
-      const foundProtocol = protocols.find(
-        (p) => p.id === parseInt(protocolID)
-      );
-      setProtocol(foundProtocol);
+    const fetchProtocol = async () => {
+      const foundProtocol = protocols.find((p) => p.id === Number(protocolID));
+
+      if (foundProtocol) {
+        setProtocol(foundProtocol);
+      } else {
+        try {
+          const {
+            data: { data },
+          } = await getProtocolById(protocolID);
+          setProtocol(data);
+        } catch (error) {
+          console.error('Failed to fetch protocol:', error);
+        }
+      }
     };
 
     fetchProtocol();
@@ -43,7 +53,7 @@ const AddImage = () => {
   };
 
   if (!protocol) {
-    return;
+    return <h1>Loading...</h1>;
   }
 
   return (

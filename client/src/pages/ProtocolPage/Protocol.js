@@ -9,11 +9,11 @@ import {
   deleteProtocolByID,
   deleteProtocolImageByID,
 } from '../../redux/slices/protocolSlice';
-import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import { CustomPrevArrow, CustomNextArrow } from '../CustomArrows/CustomArrows';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
+import { CustomPrevArrow, CustomNextArrow } from '../../components/CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import { getProtocolById } from '../../API';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../../components/Spinner/Spinner';
 import useHasRole from '../../hooks/useHasRole';
 
 const Protocol = () => {
