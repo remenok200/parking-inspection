@@ -187,7 +187,7 @@ const Protocol = () => {
         </Slider>
       )}
 
-      {protocol.images.length > 0 && (
+      {isAdmin && protocol.images.length > 0 && (
         <div className={styles['button-container']}>
           <button onClick={deleteImageHandler}>
             Delete current image in the slider

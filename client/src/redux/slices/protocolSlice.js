@@ -12,7 +12,20 @@ const SLICE_NAME = 'protocols';
 export const getAllProtocols = createAsyncThunk(
   `${SLICE_NAME}/getAllProtocols`,
   async (page, thunkAPI) => {
-    return handleAsyncThunk(() => API.getAllProtocols(page), null, thunkAPI);
+    try {
+      let response;
+      if (page) {
+        response = await API.getAllProtocols(page);
+      } else {
+        response = await API.getAllProtocols();
+      }
+
+      const { data, totalProtocolsCount } = response.data;
+
+      return { protocols: data, totalProtocolsCount };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -63,11 +76,20 @@ export const addImagesToProtocol = createAsyncThunk(
 export const getAllProtocolsByOfficerID = createAsyncThunk(
   `${SLICE_NAME}/getAllProtocolsByOfficerID`,
   async ({ parkOfficerID, page }, thunkAPI) => {
-    return handleAsyncThunk(
-      () => API.getAllProtocolsByOfficerID(parkOfficerID, page),
-      null,
-      thunkAPI
-    );
+    try {
+      let response;
+      if (page) {
+        response = await API.getAllProtocolsByOfficerID(parkOfficerID, page);
+      } else {
+        response = await API.getAllProtocolsByOfficerID(parkOfficerID);
+      }
+
+      const { data, totalProtocolsCount } = response.data;
+
+      return { protocols: data, totalProtocolsCount };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -95,8 +117,10 @@ const protocolSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllProtocols.pending, handlePending);
     builder.addCase(getAllProtocols.fulfilled, (state, action) => {
-      handleFulfilled(state, action, 'protocols');
+      state.isLoading = false;
+      state.error = null;
       state.totalProtocolsCount = action.payload.totalProtocolsCount;
+      state.protocols = action.payload.protocols;
     });
     builder.addCase(getAllProtocols.rejected, handleRejected);
 
@@ -114,8 +138,10 @@ const protocolSlice = createSlice({
 
     builder.addCase(getAllProtocolsByOfficerID.pending, handlePending);
     builder.addCase(getAllProtocolsByOfficerID.fulfilled, (state, action) => {
-      handleFulfilled(state, action, 'protocols');
+      state.isLoading = false;
+      state.protocols = action.payload.protocols;
       state.totalProtocolsCount = action.payload.totalProtocolsCount;
+      state.error = null;
     });
     builder.addCase(getAllProtocolsByOfficerID.rejected, handleRejected);
 
