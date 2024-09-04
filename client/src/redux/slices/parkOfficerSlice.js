@@ -11,8 +11,7 @@ const SLICE_NAME = 'parkOfficer';
 
 export const getParkOfficers = createAsyncThunk(
   `${SLICE_NAME}/getParkOfficers`,
-  async (_, thunkAPI) =>
-    handleAsyncThunk(API.getParkOfficers, 'Park officers received', thunkAPI)
+  async (_, thunkAPI) => handleAsyncThunk(API.getParkOfficers, null, thunkAPI)
 );
 
 export const deleteParkOfficer = createAsyncThunk(
@@ -83,38 +82,23 @@ const parkOfficerSlice = createSlice({
       .addCase(getParkOfficers.rejected, handleRejected)
 
       .addCase(deleteParkOfficer.pending, handlePending)
-      .addCase(deleteParkOfficer.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(deleteParkOfficer.fulfilled, handleFulfilled)
       .addCase(deleteParkOfficer.rejected, handleRejected)
 
       .addCase(dismissParkOfficer.pending, handlePending)
-      .addCase(dismissParkOfficer.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(dismissParkOfficer.fulfilled, handleFulfilled)
       .addCase(dismissParkOfficer.rejected, handleRejected)
 
       .addCase(restoreParkOfficer.pending, handlePending)
-      .addCase(restoreParkOfficer.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(restoreParkOfficer.fulfilled, handleFulfilled)
       .addCase(restoreParkOfficer.rejected, handleRejected)
 
       .addCase(addParkOfficer.pending, handlePending)
-      .addCase(addParkOfficer.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(addParkOfficer.fulfilled, handleFulfilled)
       .addCase(addParkOfficer.rejected, handleRejected)
 
       .addCase(updateParkOfficer.pending, handlePending)
-      .addCase(updateParkOfficer.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(updateParkOfficer.fulfilled, handleFulfilled)
       .addCase(updateParkOfficer.rejected, handleRejected);
   },
 });
