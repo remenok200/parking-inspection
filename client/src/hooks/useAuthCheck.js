@@ -6,6 +6,12 @@ const useAuthCheck = () => {
   const { user } = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
+  if(user === null) {
+    if (localStorage.getItem('refreshToken')) {
+      dispatch(authUser());
+    }
+  }
+
   useEffect(() => {
     if (!user) {
       if (localStorage.getItem('refreshToken')) {
