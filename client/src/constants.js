@@ -1,5 +1,5 @@
 const CONSTANTS = {
-  LIMIT: 5,
+  LIMIT: 30,
   SESSION_EXPIRES_TIME: 3600
 }
 
