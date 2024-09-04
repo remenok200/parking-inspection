@@ -187,15 +187,11 @@ module.exports.logout = async (req, res, next) => {
       tokenPayload: { userId },
     } = req;
 
-    const refreshToken = await RefreshToken.findOneAndUpdate(
+    await RefreshToken.findOneAndUpdate(
       { token: tokenId },
       { $unset: { token: 1 }, $set: { isRevoked: true } },
       { new: true }
     );
-
-    if (!refreshToken) {
-      return next(createHttpError(404, 'Refresh token not found'));
-    }
 
     await Log.create({
       action: `USER ID: ${userId} logout. Token ID: ${tokenId}`,
