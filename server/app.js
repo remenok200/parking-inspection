@@ -21,7 +21,7 @@ app.use(errorHandler);
 
 // You can turn on the generator for testing purposes [THEN REMOVE FROM HERE]
 
-// generateParkOfficers(50, 20)
+// generateParkOfficers(20, 20)
 //   .then(() => {
 //     console.log('Data generation completed');
 //   })
