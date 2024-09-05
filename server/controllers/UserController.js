@@ -193,7 +193,7 @@ module.exports.logout = async (req, res, next) => {
       { new: true }
     );
 
-    await Log.create({
+    await Log.createLog({
       action: `USER ID: ${userId} logout. Token ID: ${tokenId}`,
       performedBy: userId,
     });

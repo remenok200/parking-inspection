@@ -148,7 +148,7 @@ module.exports.createProtocol = async (req, res, next) => {
       order: [['updated_at', 'DESC']],
     });
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} create protocol. Protocol ID: ${createdProtocol.id} (created protocol)`,
       performedBy: userId,
     });
@@ -203,7 +203,7 @@ module.exports.updateProtocolByID = async (req, res, next) => {
       order: [['updated_at', 'DESC']],
     });
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} update protocol. Protocol ID: ${id}`,
       performedBy: userId,
     });
@@ -252,7 +252,7 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
       return next(createHttpError(404, 'Protocol not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} delete protocol. Protocol ID: ${id} (protocol deleted)`,
       performedBy: userId,
     });

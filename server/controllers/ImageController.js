@@ -14,7 +14,7 @@ module.exports.getProtocolImages = async (req, res, next) => {
       where: { protocolId },
     });
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} get all protocol images. Protocol id: ${protocolId}`,
       performedBy: userId,
     });
@@ -37,7 +37,7 @@ module.exports.addProtocolImages = async (req, res, next) => {
 
     const imagesFromDB = await Image.bulkCreate(images, { returning: true });
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} add ${images.length} image(s) to protocol. Protocol id: ${protocolId}`,
       performedBy: userId,
     });
@@ -61,7 +61,7 @@ module.exports.getImageByID = async (req, res, next) => {
       return next(createHttpError(404, 'Image not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} get image by ID: ${imageId}. Protocol ID: ${protocolId}`,
       performedBy: userId,
     });
@@ -93,7 +93,7 @@ module.exports.deleteImageByID = async (req, res, next) => {
 
     await deleteImageFromDisk(image.path);
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} delete ${count} image(s). Protocol ID: ${protocolId}`,
       performedBy: userId,
     });

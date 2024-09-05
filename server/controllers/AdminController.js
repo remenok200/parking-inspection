@@ -21,7 +21,7 @@ module.exports.ban = async (req, res, next) => {
 
       const banned = await Banlist.create({ adminId, userId, reason });
 
-      await Log.create({
+      await Log.createLog({
         action: `ADMIN ID: ${adminId} ban user. User ID: ${userId}`,
         performedBy: adminId,
       });
@@ -45,7 +45,7 @@ module.exports.unban = async (req, res, next) => {
     const result = await Banlist.deleteOne({ adminId, userId });
 
     if (result.deletedCount > 0) {
-      await Log.create({
+      await Log.createLog({
         action: `ADMIN ID: ${adminId} unban user. User ID: ${userId}`,
         performedBy: adminId,
       });
@@ -72,7 +72,7 @@ module.exports.getAllBannedUsers = async (req, res, next) => {
       banInfo: ban,
     }));
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${userId} get all banned users`,
       performedBy: userId,
     });
@@ -96,7 +96,7 @@ module.exports.getAllUsers = async (req, res, next) => {
       _id: { $nin: bannedUserIds },
     });
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${userId} get all users`,
       performedBy: userId,
     });
@@ -119,7 +119,7 @@ module.exports.getUserRefreshTokens = async (req, res, next) => {
 
     const refreshTokens = await RefreshToken.find({ userId });
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${adminId} get user refresh tokens (sessions). User ID: ${userId}`,
       performedBy: adminId,
     });
@@ -147,7 +147,7 @@ module.exports.revokeRefreshToken = async (req, res, next) => {
       return next(createHttpError(404, 'Refresh token not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${userId} revoke refresh token. Token ID: ${tokenId}`,
       performedBy: userId,
     });
@@ -166,7 +166,7 @@ module.exports.getAllLogs = async (req, res, next) => {
 
     const logs = await Log.find();
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${userId} get all logs`,
       performedBy: userId,
     });
@@ -186,7 +186,7 @@ module.exports.getAllLogsByUserID = async (req, res, next) => {
 
     const logs = await Log.find({ performedBy: userId });
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${adminId} get all user logs. User ID: ${userId}`,
       performedBy: adminId,
     });
@@ -214,7 +214,7 @@ module.exports.makeAdmin = async (req, res, next) => {
       return next(createHttpError(404, 'User not found or already an admin'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${adminId} make user admin. User ID: ${userId}`,
       performedBy: adminId,
     });
@@ -244,7 +244,7 @@ module.exports.removeAdmin = async (req, res, next) => {
       return next(createHttpError(404, 'User not found or not an admin'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ADMIN ID: ${adminId} removed user admin. User ID: ${userId}`,
       performedBy: adminId,
     });

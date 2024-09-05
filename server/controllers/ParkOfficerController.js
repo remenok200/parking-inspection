@@ -27,7 +27,7 @@ module.exports.getParkOfficerByID = async (req, res, next) => {
       return next(createHttpError(404, 'Park officer not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} get park officer with ID: ${id}`,
       performedBy: userId,
     });
@@ -51,7 +51,7 @@ module.exports.createParkOfficer = async (req, res, next) => {
       return next(createHttpError(400, 'Park officer not created'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} create park officer. Officer ID: ${createdParkOfficer.id} (created officer)`,
       performedBy: userId,
     });
@@ -79,7 +79,7 @@ module.exports.updateParkOfficerByID = async (req, res, next) => {
       return next(createHttpError(404, 'Park officer not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} update park officer. Park officer ID: ${id}`,
       performedBy: userId,
     });
@@ -103,7 +103,7 @@ module.exports.deleteParkOfficerByID = async (req, res, next) => {
       return next(createHttpError(404, 'Park officer not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} delete park officer. Park officer ID: ${id} (officer deleted)`,
       performedBy: userId,
     });
@@ -135,7 +135,7 @@ module.exports.dismissParkOfficerByID = async (req, res, next) => {
       return next(createHttpError(404, 'Park officer not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} dismiss park officer. Park officer ID: ${id}`,
       performedBy: userId,
     });
@@ -167,7 +167,7 @@ module.exports.restoreParkOfficerByID = async (req, res, next) => {
       return next(createHttpError(404, 'Park officer not found'));
     }
 
-    await Log.create({
+    await Log.createLog({
       action: `ID: ${userId} restore park officer. Park officer ID: ${id}`,
       performedBy: userId,
     });
