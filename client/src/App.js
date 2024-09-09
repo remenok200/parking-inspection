@@ -27,6 +27,7 @@ import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import useAuthCheck from './hooks/useAuthCheck';
 import Protocol from './pages/ProtocolPage/Protocol';
+import ParkOfficerDetailsPage from './pages/ParkOfficerDetailsPage/ParkOfficerDetailsPage';
 
 function App() {
   useErrorToast();
@@ -50,6 +51,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/officers" element={<ParkOfficersPage />} />
+        <Route
+          path="/officers/:officerID"
+          element={<ParkOfficerDetailsPage />}
+        />
         <Route path="/officers/add" element={<AddParkOfficer />} />
         <Route
           path="/officers/edit/:parkOfficerID"
