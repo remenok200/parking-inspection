@@ -52,7 +52,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/officers" element={<ParkOfficersPage />} />
         <Route
-          path="/officers/:officerID"
+          path="/officers/details/:officerID"
           element={<ParkOfficerDetailsPage />}
         />
         <Route path="/officers/add" element={<AddParkOfficer />} />

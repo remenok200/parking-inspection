@@ -18,7 +18,7 @@ const ParkOfficer = ({ parkOfficer }) => {
         {parkOfficer.isWorked ? 'Worked' : 'Not worked'}
       </p>
 
-      <Link to={`/officers/${parkOfficer.id}`}>
+      <Link to={`/officers/details/${parkOfficer.id}`}>
         <button style={{ width: '100%' }}>View Details</button>
       </Link>
     </article>
