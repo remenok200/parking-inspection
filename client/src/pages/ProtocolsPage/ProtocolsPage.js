@@ -32,11 +32,13 @@ const ProtocolsPage = () => {
 
   useEffect(() => {
     if (parkOfficerID) {
-      getParkOfficerByID(parkOfficerID).then(({ data: { data } }) => {
-        setParkOfficerFullName(data[0].fullName);
-      }).catch((err) => {
-        console.error("Failed to fetch park officer data:", err);
-      });
+      getParkOfficerByID(parkOfficerID)
+        .then(({ data: { data } }) => {
+          setParkOfficerFullName(data[0].fullName);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch park officer data:', err);
+        });
     }
   }, [parkOfficerID]);
 

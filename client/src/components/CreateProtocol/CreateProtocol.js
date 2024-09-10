@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createProtocol } from '../../redux/slices/protocolSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getParkOfficerByID } from '../../API';
 
 const initialValues = {
   serviceNotes: '',
@@ -20,16 +21,17 @@ const CreateProtocol = () => {
 
   const [parkOfficerFullName, setParkOfficerFullName] = useState('');
 
-  const { parkOfficers } = useSelector((state) => state.parkOfficers);
-
   useEffect(() => {
-    const officer = parkOfficers.find(
-      (officer) => officer.id === parseInt(parkOfficerID)
-    );
-    if (officer) {
-      setParkOfficerFullName(officer.fullName);
+    if (parkOfficerID) {
+      getParkOfficerByID(parkOfficerID)
+        .then(({ data: { data } }) => {
+          setParkOfficerFullName(data[0].fullName);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch park officer data:', err);
+        });
     }
-  }, [parkOfficerID, parkOfficers]);
+  }, [parkOfficerID]);
 
   const handleCreateProtocolSubmit = async (values, { resetForm }) => {
     try {

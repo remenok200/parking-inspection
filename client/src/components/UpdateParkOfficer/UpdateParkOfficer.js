@@ -2,31 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { parkOfficerValidationSchema } from '../../schemas/parkOfficerValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { updateParkOfficer } from '../../redux/slices/parkOfficerSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styles from './UpdateParkOfficer.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getParkOfficerByID } from '../../API';
 
 const UpdateParkOfficer = () => {
   const { parkOfficerID } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { parkOfficers } = useSelector((state) => state.parkOfficers);
   const [officer, setOfficer] = useState(null);
 
   useEffect(() => {
-    const fetchOfficer = () => {
-      const foundOfficer = parkOfficers.find(
-        (officer) => officer.id === parseInt(parkOfficerID)
-      );
-      setOfficer(foundOfficer);
-    };
-
-    fetchOfficer();
-  }, [parkOfficerID, parkOfficers, dispatch]);
+    if (parkOfficerID) {
+      getParkOfficerByID(parkOfficerID)
+        .then(({ data: { data } }) => {
+          setOfficer(data[0]);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch park officer data:', err);
+        });
+    }
+  }, [parkOfficerID]);
 
   if (!officer) {
-    return;
+    return <h1>Oooops! Officer not found!</h1>;
   }
 
   const initialValues = {
