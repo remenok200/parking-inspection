@@ -4,6 +4,7 @@ import {
   getAllProtocols,
   getAllProtocolsByOfficerID,
 } from '../../redux/slices/protocolSlice';
+import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
 import { useParams } from 'react-router-dom';
 import styles from './ProtocolsPage.module.scss';
 import Pagination from '../../components/Pagination/Pagination';
@@ -20,11 +21,8 @@ const ProtocolsPage = () => {
     (state) => state.protocols
   );
 
-  const { parkOfficers } = useSelector((state) => state.parkOfficers);
-  const parkOfficer = parkOfficers.find(
-    (officer) => officer.id === parseInt(parkOfficerID)
-  );
-  const parkOfficerFullName = parkOfficer ? parkOfficer.fullName : null;
+  const { selectedParkOfficer } = useSelector((state) => state.parkOfficers);
+  const parkOfficerFullName = selectedParkOfficer ? selectedParkOfficer.fullName : null;
 
   const dispatch = useDispatch();
 
@@ -42,12 +40,14 @@ const ProtocolsPage = () => {
         dispatch(
           getAllProtocolsByOfficerID({ parkOfficerID, page: pageNumber })
         );
+        dispatch(getParkOfficerById(parkOfficerID));
       } else {
         dispatch(getAllProtocols(pageNumber));
       }
     } else {
       if (parkOfficerID) {
         dispatch(getAllProtocolsByOfficerID({ parkOfficerID }));
+        dispatch(getParkOfficerById(parkOfficerID));
       } else {
         dispatch(getAllProtocols());
       }
