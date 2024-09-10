@@ -54,10 +54,6 @@ module.exports.getProtocolById = async (req, res, next) => {
       ],
     });
 
-    if (!protocol) {
-      return next(createHttpError(404, 'Protocol not found'));
-    }
-
     return res.status(200).send({ data: protocol });
   } catch (error) {
     next(error);

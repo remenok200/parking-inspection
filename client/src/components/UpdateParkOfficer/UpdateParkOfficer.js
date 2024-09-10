@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import styles from './UpdateParkOfficer.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getParkOfficerByID } from '../../API';
+import Spinner from '../Spinner/Spinner';
 
 const UpdateParkOfficer = () => {
   const { parkOfficerID } = useParams();
@@ -13,25 +14,42 @@ const UpdateParkOfficer = () => {
   const navigate = useNavigate();
 
   const [officer, setOfficer] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (parkOfficerID) {
+      setLoading(true);
       getParkOfficerByID(parkOfficerID)
         .then(({ data: { data } }) => {
           setOfficer(data[0]);
         })
         .catch((err) => {
           console.error('Failed to fetch park officer data:', err);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [parkOfficerID]);
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
+
   if (!officer) {
     return (
-      <h1>
-        Oooops! Officer not found! Please wait a bit or check if the officer id
-        is correct
-      </h1>
+      <h1>Officer not found! Please check if the protocol ID is correct</h1>
     );
   }
 

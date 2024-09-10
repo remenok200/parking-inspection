@@ -6,6 +6,7 @@ import { protocolValidationSchema } from '../../schemas/protocolValidationSchema
 import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getParkOfficerByID } from '../../API';
+import Spinner from '../Spinner/Spinner';
 
 const initialValues = {
   serviceNotes: '',
@@ -20,24 +21,43 @@ const CreateProtocol = () => {
   const { parkOfficerID } = useParams();
 
   const [officer, setOfficer] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (parkOfficerID) {
+      setLoading(true);
       getParkOfficerByID(parkOfficerID)
         .then(({ data: { data } }) => {
           setOfficer(data[0]);
         })
         .catch((err) => {
           console.error('Failed to fetch park officer data:', err);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [parkOfficerID]);
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
+
   if (!officer) {
     return (
       <h1>
-        Oooops! Officer not found! Please wait a bit or check if the officer id
-        is correct
+        Oooops! Officer not found! Please check if the officer id is correct
       </h1>
     );
   }

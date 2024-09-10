@@ -2,31 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { updateProtocol } from '../../redux/slices/protocolSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styles from './UpdateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getProtocolById } from '../../API';
+import Spinner from '../Spinner/Spinner';
 
 const UpdateProtocol = () => {
   const { protocolID } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { protocols } = useSelector((state) => state.protocols);
   const [protocol, setProtocol] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchProtocol = () => {
-      const foundProtocol = protocols.find(
-        (protocol) => protocol.id === parseInt(protocolID)
-      );
-      setProtocol(foundProtocol);
-    };
+    if (protocolID) {
+      setLoading(true);
+      getProtocolById(protocolID)
+        .then(({ data: { data } }) => {
+          setProtocol(data);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch protocol data:', err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [protocolID]);
 
-    fetchProtocol();
-  }, [protocolID, protocols, dispatch]);
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
 
   if (!protocol) {
-    return;
+    return (
+      <h1>Protocol not found! Please check if the officer id is correct</h1>
+    );
   }
 
   const initialValues = {
