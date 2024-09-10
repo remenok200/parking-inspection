@@ -4,7 +4,6 @@ import {
   getAllProtocols,
   getAllProtocolsByOfficerID,
 } from '../../redux/slices/protocolSlice';
-import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
 import { useParams } from 'react-router-dom';
 import styles from './ProtocolsPage.module.scss';
 import Pagination from '../../components/Pagination/Pagination';
@@ -12,6 +11,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import CONSTANTS from '../../constants';
 import filterProtocols from '../../utils/filterProtocols';
 import { Link } from 'react-router-dom';
+import { getParkOfficerByID } from '../../API';
 const { LIMIT } = CONSTANTS;
 
 const ProtocolsPage = () => {
@@ -21,15 +21,24 @@ const ProtocolsPage = () => {
     (state) => state.protocols
   );
 
-  const { selectedParkOfficer } = useSelector((state) => state.parkOfficers);
-  const parkOfficerFullName = selectedParkOfficer ? selectedParkOfficer.fullName : null;
-
   const dispatch = useDispatch();
 
   const [searchValue, setSearchValue] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showPagination, setShowPagination] = useState(true);
+
+  const [parkOfficerFullName, setParkOfficerFullName] = useState(null);
+
+  useEffect(() => {
+    if (parkOfficerID) {
+      getParkOfficerByID(parkOfficerID).then(({ data: { data } }) => {
+        setParkOfficerFullName(data[0].fullName);
+      }).catch((err) => {
+        console.error("Failed to fetch park officer data:", err);
+      });
+    }
+  }, [parkOfficerID]);
 
   const [showSelect, setShowSelect] = useState(false);
   const [searchType, setSearchType] = useState('default');
@@ -40,14 +49,12 @@ const ProtocolsPage = () => {
         dispatch(
           getAllProtocolsByOfficerID({ parkOfficerID, page: pageNumber })
         );
-        dispatch(getParkOfficerById(parkOfficerID));
       } else {
         dispatch(getAllProtocols(pageNumber));
       }
     } else {
       if (parkOfficerID) {
         dispatch(getAllProtocolsByOfficerID({ parkOfficerID }));
-        dispatch(getParkOfficerById(parkOfficerID));
       } else {
         dispatch(getAllProtocols());
       }
@@ -56,6 +63,7 @@ const ProtocolsPage = () => {
 
   useEffect(() => {
     setTotalPages(Math.ceil(totalProtocolsCount / LIMIT));
+
     refreshProtocolsList();
   }, [
     pageNumber,
