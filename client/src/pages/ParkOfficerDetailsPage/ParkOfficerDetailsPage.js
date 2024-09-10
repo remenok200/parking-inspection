@@ -48,10 +48,14 @@ const ParkOfficerDetailsPage = () => {
 
   const dismissHandler = async () => {
     await dispatch(dismissParkOfficer(parkOfficer.id));
+    setDismissConfirmationModalOpen(false);
+    await fetchOfficer();
   };
 
   const restoreHandler = async () => {
     await dispatch(restoreParkOfficer(parkOfficer.id));
+    setRestoreConfirmationModalOpen(false);
+    await fetchOfficer();
   };
 
   if (!parkOfficer) {
