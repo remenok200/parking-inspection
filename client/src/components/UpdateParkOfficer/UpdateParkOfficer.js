@@ -27,7 +27,12 @@ const UpdateParkOfficer = () => {
   }, [parkOfficerID]);
 
   if (!officer) {
-    return <h1>Oooops! Officer not found!</h1>;
+    return (
+      <h1>
+        Oooops! Officer not found! Please wait a bit or check if the officer id
+        is correct
+      </h1>
+    );
   }
 
   const initialValues = {

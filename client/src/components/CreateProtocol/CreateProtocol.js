@@ -19,19 +19,28 @@ const CreateProtocol = () => {
   const dispatch = useDispatch();
   const { parkOfficerID } = useParams();
 
-  const [parkOfficerFullName, setParkOfficerFullName] = useState('');
+  const [officer, setOfficer] = useState(null);
 
   useEffect(() => {
     if (parkOfficerID) {
       getParkOfficerByID(parkOfficerID)
         .then(({ data: { data } }) => {
-          setParkOfficerFullName(data[0].fullName);
+          setOfficer(data[0]);
         })
         .catch((err) => {
           console.error('Failed to fetch park officer data:', err);
         });
     }
   }, [parkOfficerID]);
+
+  if (!officer) {
+    return (
+      <h1>
+        Oooops! Officer not found! Please wait a bit or check if the officer id
+        is correct
+      </h1>
+    );
+  }
 
   const handleCreateProtocolSubmit = async (values, { resetForm }) => {
     try {
@@ -46,7 +55,7 @@ const CreateProtocol = () => {
   return (
     <>
       <h2 className={styles['form-title']}>
-        {parkOfficerFullName} | Create protocol
+        {officer.fullName} | Create protocol
       </h2>
       <Formik
         initialValues={initialValues}
