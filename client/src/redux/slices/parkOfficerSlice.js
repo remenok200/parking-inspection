@@ -14,6 +14,21 @@ export const getParkOfficers = createAsyncThunk(
   async (_, thunkAPI) => handleAsyncThunk(API.getParkOfficers, null, thunkAPI)
 );
 
+export const getParkOfficerById = createAsyncThunk(
+  `${SLICE_NAME}/getParkOfficerById`,
+  async (parkOfficerId, thunkAPI) => {
+    try {
+      const {
+        data: { data: selectedOfficer },
+      } = await API.getParkOfficerByID(parkOfficerId);
+
+      return selectedOfficer[0];
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteParkOfficer = createAsyncThunk(
   `${SLICE_NAME}/deleteParkOfficer`,
   async (parkOfficerID, thunkAPI) =>
@@ -68,6 +83,7 @@ const initialState = {
   parkOfficers: [],
   isLoading: false,
   error: null,
+  selectedParkOfficer: null,
 };
 
 const parkOfficerSlice = createSlice({
@@ -80,6 +96,14 @@ const parkOfficerSlice = createSlice({
         handleFulfilled(state, action, 'parkOfficers')
       )
       .addCase(getParkOfficers.rejected, handleRejected)
+
+      .addCase(getParkOfficerById.pending, handlePending)
+      .addCase(getParkOfficerById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.selectedParkOfficer = action.payload;
+      })
+      .addCase(getParkOfficerById.rejected, handleRejected)
 
       .addCase(deleteParkOfficer.pending, handlePending)
       .addCase(deleteParkOfficer.fulfilled, handleFulfilled)

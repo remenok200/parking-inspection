@@ -26,7 +26,7 @@ import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import useAuthCheck from './hooks/useAuthCheck';
-import ProtocolPage from './pages/ProtocolPage/ProtocolPage';
+import ProtocolDetailsPage from './pages/ProtocolDetailsPage/ProtocolDetailsPage';
 import ParkOfficerDetailsPage from './pages/ParkOfficerDetailsPage/ParkOfficerDetailsPage';
 
 function App() {
@@ -63,7 +63,7 @@ function App() {
 
         <Route
           path="/protocols/details/:protocolID"
-          element={<ProtocolPage />}
+          element={<ProtocolDetailsPage />}
         />
         <Route path="/protocols" element={<ProtocolsPage />} />
         <Route

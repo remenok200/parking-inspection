@@ -6,11 +6,10 @@ import {
   deleteParkOfficer,
   dismissParkOfficer,
   restoreParkOfficer,
-  getParkOfficers,
+  getParkOfficerById,
 } from '../../redux/slices/parkOfficerSlice';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import useHasRole from '../../hooks/useHasRole';
-import Spinner from '../../components/Spinner/Spinner';
 import { Link } from 'react-router-dom';
 
 const ParkOfficerDetailsPage = () => {
@@ -19,10 +18,10 @@ const ParkOfficerDetailsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const officers = useSelector((state) => state.parkOfficers.parkOfficers);
+  const { selectedParkOfficer: parkOfficer } = useSelector(
+    (state) => state.parkOfficers
+  );
 
-  const [parkOfficer, setParkOfficer] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [dismissConfirmationModalOpen, setDismissConfirmationModalOpen] =
@@ -30,21 +29,17 @@ const ParkOfficerDetailsPage = () => {
   const [restoreConfirmationModalOpen, setRestoreConfirmationModalOpen] =
     useState(false);
 
-  useEffect(() => {
-    if (!officers.length) {
-      dispatch(getParkOfficers());
-    } else {
-      const officer = officers.find(
-        (officer) => officer.id === Number(officerID)
-      );
-      if (officer) {
-        setParkOfficer(officer);
-      } else {
-        console.error('Officer not found');
-      }
-      setLoading(false);
+  const fetchOfficer = async () => {
+    try {
+      await dispatch(getParkOfficerById(officerID));
+    } catch (error) {
+      console.error('Failed to fetch officer:', error);
     }
-  }, [officers, officerID, dispatch]);
+  };
+
+  useEffect(() => {
+    fetchOfficer();
+  }, [officerID]);
 
   const deleteHandler = async () => {
     await dispatch(deleteParkOfficer(parkOfficer.id));
@@ -58,29 +53,6 @@ const ParkOfficerDetailsPage = () => {
   const restoreHandler = async () => {
     await dispatch(restoreParkOfficer(parkOfficer.id));
   };
-
-  if (loading) {
-    return (
-      <div style={{ position: 'relative', minHeight: '100vh' }}>
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'rgba(255, 255, 255, 0.8)',
-            zIndex: 9999,
-          }}
-        >
-          <Spinner />
-        </div>
-      </div>
-    );
-  }
 
   if (!parkOfficer) {
     return <h1>Officer not found.</h1>;
