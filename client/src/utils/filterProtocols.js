@@ -1,13 +1,20 @@
-const filterProtocols = (protocols, query) => {
+const filterProtocols = (protocols, query, searchType) => {
   const lowerCaseQuery = query.toLowerCase().trim();
   
+  if (!lowerCaseQuery) {
+    return protocols;
+  }
+
   const operator = ['<', '>', '='].find((op) => lowerCaseQuery.startsWith(op));
   const amount = parseFloat(lowerCaseQuery.slice(1).trim());
 
   return protocols.filter((protocol) => {
-    const fineAmount = protocol.fineAmount;
+    if (searchType === 'byID') {
+      return protocol.id.toString().includes(lowerCaseQuery);
+    }
 
-    // Фильтруем по fineAmount
+    const fineAmount = protocol.fineAmount;
+    
     if (operator) {
       switch (operator) {
         case '>':
@@ -20,7 +27,7 @@ const filterProtocols = (protocols, query) => {
           return false;
       }
     }
-    
+
     return (
       protocol.violatorFullName.toLowerCase().includes(lowerCaseQuery) ||
       protocol.violatorPassportNumber.toLowerCase().includes(lowerCaseQuery) ||

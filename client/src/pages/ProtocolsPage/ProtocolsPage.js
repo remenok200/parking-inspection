@@ -16,7 +16,7 @@ const { LIMIT } = CONSTANTS;
 const ProtocolsPage = () => {
   const { parkOfficerID } = useParams();
 
-  const { protocols, isLoading, error, totalProtocolsCount } = useSelector(
+  const { protocols, error, totalProtocolsCount } = useSelector(
     (state) => state.protocols
   );
 
@@ -32,6 +32,9 @@ const ProtocolsPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showPagination, setShowPagination] = useState(true);
+
+  const [showSelect, setShowSelect] = useState(false);
+  const [searchType, setSearchType] = useState('default');
 
   const refreshProtocolsList = () => {
     if (showPagination) {
@@ -63,10 +66,10 @@ const ProtocolsPage = () => {
   ]);
 
   if (error) {
-    return <div>ERROR HAPPENNED</div>;
+    return <div>ERROR HAPPENED</div>;
   }
 
-  const filteredProtocols = filterProtocols(protocols, searchValue);
+  const filteredProtocols = filterProtocols(protocols, searchValue, searchType);
 
   return (
     <>
@@ -74,17 +77,30 @@ const ProtocolsPage = () => {
 
       <section>
         <div className={styles['flex-center']}>
-        <div className={styles['search-container']}>
-          <input
-            type="text"
-            value={searchValue}
-            onChange={({ target: { value } }) => setSearchValue(value)}
-            placeholder="Search...."
-          />
-          <div className={styles['tooltip']}>
-            {`Search by fine (e.g., >50, <100, =75) or other criteria: violator full name; violator passport number; park officer full name; park officer badge number`}
+          <div className={styles['search-container']}>
+            <input
+              type="text"
+              value={searchValue}
+              onChange={({ target: { value } }) => setSearchValue(value)}
+              onFocus={() => setShowSelect(true)}
+              placeholder="Search..."
+            />
+            {showSelect && (
+              <select
+                value={searchType}
+                onChange={({ target: { value } }) => setSearchType(value)}
+                className={styles['filter-select']}
+              >
+                <option value="default">Default Search</option>
+                <option value="byID">Search by Protocol ID</option>
+              </select>
+            )}
+            <div className={styles['tooltip']}>
+              {searchType === 'byID'
+                ? 'Search by Protocol ID (e.g., 12345)'
+                : 'Search by fine (e.g., >50, <100, =75) or other criteria: violator full name; violator passport number; park officer full name; park officer badge number'}
+            </div>
           </div>
-        </div>
         </div>
 
         {parkOfficerFullName ? (
