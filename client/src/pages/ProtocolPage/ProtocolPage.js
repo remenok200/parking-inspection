@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from './Protocol.module.scss';
+import styles from './ProtocolPage.module.scss';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   deleteProtocolByID,
   deleteProtocolImageByID,
+  getProtocolById
 } from '../../redux/slices/protocolSlice';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import { CustomPrevArrow, CustomNextArrow } from '../../components/CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
-import { getProtocolById } from '../../API';
-import Spinner from '../../components/Spinner/Spinner';
 import useHasRole from '../../hooks/useHasRole';
 
-const Protocol = () => {
+const ProtocolPage = () => {
   const isAdmin = useHasRole('admin');
 
   const { protocolID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [protocol, setProtocol] = useState(null);
-  const [loading, setLoading] = useState(true);
+  
+  const { selectedProtocol: protocol } = useSelector(state => state.protocols);
+
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [deleteImageConfirmationModal, setDeleteImageConfirmationModal] =
@@ -32,43 +32,15 @@ const Protocol = () => {
 
   const fetchProtocol = async () => {
     try {
-      const {
-        data: { data },
-      } = await getProtocolById(protocolID);
-      setProtocol(data);
+      await dispatch(getProtocolById(protocolID));
     } catch (error) {
       console.error('Failed to fetch protocol:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchProtocol();
   }, [protocolID]);
-
-  if (loading) {
-    return (
-      <div style={{ position: 'relative', minHeight: '100vh' }}>
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'rgba(255, 255, 255, 0.8)',
-            zIndex: 9999,
-          }}
-        >
-          <Spinner />
-        </div>
-      </div>
-    );
-  }
 
   if (!protocol) {
     return <h1>Protocol not found.</h1>;
@@ -208,4 +180,4 @@ const Protocol = () => {
   );
 };
 
-export default Protocol;
+export default ProtocolPage;

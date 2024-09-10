@@ -3,6 +3,9 @@ import httpClient from './httpClient';
 export const getParkOfficers = async () =>
   await httpClient.get('/parkOfficers');
 
+export const getParkOfficerByID = async (parkOfficerID) =>
+  await httpClient.get(`/parkOfficers/${parkOfficerID}`);
+
 export const deleteParkOfficer = async (parkOfficerID) =>
   await httpClient.delete(`/parkOfficers/${parkOfficerID}`);
 

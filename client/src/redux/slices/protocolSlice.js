@@ -29,6 +29,21 @@ export const getAllProtocols = createAsyncThunk(
   }
 );
 
+export const getProtocolById = createAsyncThunk(
+  `${SLICE_NAME}/getProtocolById`,
+  async (protocolID, thunkAPI) => {
+    try {
+      const {
+        data: { data },
+      } = await API.getProtocolById(protocolID);
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteProtocolByID = createAsyncThunk(
   `${SLICE_NAME}/deleteProtocolByID`,
   async ({ parkOfficerID, protocolID }, thunkAPI) => {
@@ -109,6 +124,7 @@ const initialState = {
   isLoading: false,
   error: null,
   totalProtocolsCount: 0,
+  selectedProtocol: null,
 };
 
 const protocolSlice = createSlice({
@@ -123,6 +139,14 @@ const protocolSlice = createSlice({
       state.protocols = action.payload.protocols;
     });
     builder.addCase(getAllProtocols.rejected, handleRejected);
+
+    builder.addCase(getProtocolById.pending, handlePending);
+    builder.addCase(getProtocolById.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+      state.selectedProtocol = action.payload;
+    });
+    builder.addCase(getProtocolById.rejected, handleRejected);
 
     builder.addCase(deleteProtocolByID.pending, handlePending);
     builder.addCase(deleteProtocolByID.fulfilled, handleFulfilled);

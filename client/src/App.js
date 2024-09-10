@@ -26,7 +26,7 @@ import UserSessionsPage from './pages/UserSessionsPage/UserSessionsPage';
 import UserLogsPage from './pages/UserLogsPage/UserLogsPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import useAuthCheck from './hooks/useAuthCheck';
-import Protocol from './pages/ProtocolPage/Protocol';
+import ProtocolPage from './pages/ProtocolPage/ProtocolPage';
 import ParkOfficerDetailsPage from './pages/ParkOfficerDetailsPage/ParkOfficerDetailsPage';
 
 function App() {
@@ -61,7 +61,10 @@ function App() {
           element={<UpdateParkOfficer />}
         />
 
-        <Route path="/protocols/details/:protocolID" element={<Protocol />} />
+        <Route
+          path="/protocols/details/:protocolID"
+          element={<ProtocolPage />}
+        />
         <Route path="/protocols" element={<ProtocolsPage />} />
         <Route
           path="/protocols/create/:parkOfficerID"
