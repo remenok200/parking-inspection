@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createProtocol } from '../../redux/slices/protocolSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,7 +6,6 @@ import { protocolValidationSchema } from '../../schemas/protocolValidationSchema
 import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
-import Spinner from '../Spinner/Spinner';
 
 const initialValues = {
   serviceNotes: '',

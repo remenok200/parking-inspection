@@ -1,68 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { parkOfficerValidationSchema } from '../../schemas/parkOfficerValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { updateParkOfficer } from '../../redux/slices/parkOfficerSlice';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './UpdateParkOfficer.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getParkOfficerByID } from '../../API';
-import Spinner from '../Spinner/Spinner';
+import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
 
 const UpdateParkOfficer = () => {
   const { parkOfficerID } = useParams();
+  const { selectedParkOfficer } = useSelector((state) => state.parkOfficers);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [officer, setOfficer] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     if (parkOfficerID) {
-      setLoading(true);
-      getParkOfficerByID(parkOfficerID)
-        .then(({ data: { data } }) => {
-          setOfficer(data[0]);
-        })
-        .catch((err) => {
-          console.error('Failed to fetch park officer data:', err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      dispatch(getParkOfficerById(parkOfficerID));
     }
   }, [parkOfficerID]);
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (!officer) {
+  if (!selectedParkOfficer) {
     return (
       <h1>Officer not found! Please check if the protocol ID is correct</h1>
     );
   }
 
   const initialValues = {
-    fullName: officer.fullName,
-    badgeNumber: officer.badgeNumber,
-    district: officer.district,
+    fullName: selectedParkOfficer.fullName,
+    badgeNumber: selectedParkOfficer.badgeNumber,
+    district: selectedParkOfficer.district,
   };
 
   const handlerUpdateForm = async (values, { resetForm }) => {
     try {
       await dispatch(
-        updateParkOfficer({ parkOfficerID: officer.id, updatedData: values })
+        updateParkOfficer({
+          parkOfficerID: selectedParkOfficer.id,
+          updatedData: values,
+        })
       );
       resetForm();
 
@@ -74,7 +49,7 @@ const UpdateParkOfficer = () => {
 
   return (
     <>
-      <h2 className={styles['form-title']}>{officer.fullName} | Edit</h2>
+      <h2 className={styles['form-title']}>{selectedParkOfficer.fullName} | Edit</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={parkOfficerValidationSchema}
