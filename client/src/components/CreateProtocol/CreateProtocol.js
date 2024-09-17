@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createProtocol } from '../../redux/slices/protocolSlice';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getParkOfficerByID } from '../../API';
+import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
 import Spinner from '../Spinner/Spinner';
 
 const initialValues = {
@@ -17,44 +17,17 @@ const initialValues = {
 
 const CreateProtocol = () => {
   const navigate = useNavigate();
+  const { selectedParkOfficer } = useSelector((state) => state.parkOfficers);
   const dispatch = useDispatch();
   const { parkOfficerID } = useParams();
 
-  const [officer, setOfficer] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     if (parkOfficerID) {
-      setLoading(true);
-      getParkOfficerByID(parkOfficerID)
-        .then(({ data: { data } }) => {
-          setOfficer(data[0]);
-        })
-        .catch((err) => {
-          console.error('Failed to fetch park officer data:', err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      dispatch(getParkOfficerById(parkOfficerID));
     }
   }, [parkOfficerID]);
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (!officer) {
+  if (!selectedParkOfficer) {
     return (
       <h1>
         Oooops! Officer not found! Please check if the officer id is correct
@@ -75,7 +48,7 @@ const CreateProtocol = () => {
   return (
     <>
       <h2 className={styles['form-title']}>
-        {officer.fullName} | Create protocol
+        {selectedParkOfficer.fullName} | Create protocol
       </h2>
       <Formik
         initialValues={initialValues}
