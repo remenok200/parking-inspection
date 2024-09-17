@@ -1,71 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { updateProtocol } from '../../redux/slices/protocolSlice';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './UpdateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getProtocolById } from '../../API';
-import Spinner from '../Spinner/Spinner';
+import { getProtocolById } from '../../redux/slices/protocolSlice';
 
 const UpdateProtocol = () => {
   const { protocolID } = useParams();
+  const { selectedProtocol } = useSelector((state) => state.protocols);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [protocol, setProtocol] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     if (protocolID) {
-      setLoading(true);
-      getProtocolById(protocolID)
-        .then(({ data: { data } }) => {
-          setProtocol(data);
-        })
-        .catch((err) => {
-          console.error('Failed to fetch protocol data:', err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      dispatch(getProtocolById(protocolID));
     }
   }, [protocolID]);
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (!protocol) {
+  if (!selectedProtocol) {
     return (
       <h1>Protocol not found! Please check if the officer id is correct</h1>
     );
   }
 
   const initialValues = {
-    serviceNotes: protocol.serviceNotes,
-    fineAmount: protocol.fineAmount,
-    violatorFullName: protocol.violatorFullName,
-    violatorPassportNumber: protocol.violatorPassportNumber,
+    serviceNotes: selectedProtocol.serviceNotes,
+    fineAmount: selectedProtocol.fineAmount,
+    violatorFullName: selectedProtocol.violatorFullName,
+    violatorPassportNumber: selectedProtocol.violatorPassportNumber,
   };
 
   const handlerUpdateForm = async (values, { resetForm }) => {
     try {
       await dispatch(
         updateProtocol({
-          parkOfficerID: protocol.officerId,
-          protocolID: protocol.id,
+          parkOfficerID: selectedProtocol.officerId,
+          protocolID: selectedProtocol.id,
           updatedData: values,
         })
       );
@@ -80,7 +52,9 @@ const UpdateProtocol = () => {
 
   return (
     <>
-      <h2 className={styles['form-title']}>Protocol № {protocol.id} | Edit</h2>
+      <h2 className={styles['form-title']}>
+        Protocol № {selectedProtocol.id} | Edit
+      </h2>
       <Formik
         initialValues={initialValues}
         validationSchema={protocolValidationSchema}
