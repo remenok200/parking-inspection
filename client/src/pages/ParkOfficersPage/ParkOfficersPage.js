@@ -6,6 +6,7 @@ import styles from './ParkOfficersPage.module.scss';
 import NavBar from '../../components/NavBar/NavBar';
 import { Link } from 'react-router-dom';
 import useHasRole from '../../hooks/useHasRole';
+import UserSidebar from '../../components/UserSidebar/UserSidebar';
 
 const ParkOfficersPage = () => {
   const isAdmin = useHasRole('admin');
@@ -18,8 +19,21 @@ const ParkOfficersPage = () => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState('');
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   useEffect(() => {
     dispatch(getParkOfficers());
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 700);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [dispatch]);
 
   if (error) {
@@ -46,7 +60,14 @@ const ParkOfficersPage = () => {
 
   return (
     <>
-      <NavBar />
+      {isMobile ? (
+        <UserSidebar
+          isOpen={isSidebarOpen}
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        />
+      ) : (
+        <NavBar />
+      )}
 
       <section>
         <div className={styles['flex-wrapper']}>

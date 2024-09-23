@@ -11,6 +11,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import CONSTANTS from '../../constants';
 import filterProtocols from '../../utils/filterProtocols';
 import { Link } from 'react-router-dom';
+import UserSidebar from '../../components/UserSidebar/UserSidebar';
 import { getParkOfficerByID } from '../../API';
 const { LIMIT } = CONSTANTS;
 
@@ -27,6 +28,9 @@ const ProtocolsPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showPagination, setShowPagination] = useState(true);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [parkOfficerFullName, setParkOfficerFullName] = useState(null);
 
@@ -77,6 +81,18 @@ const ProtocolsPage = () => {
   ]);
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 700);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         searchContainerRef.current &&
@@ -100,7 +116,14 @@ const ProtocolsPage = () => {
 
   return (
     <>
-      <NavBar />
+      {isMobile ? (
+        <UserSidebar
+          isOpen={isSidebarOpen}
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        />
+      ) : (
+        <NavBar />
+      )}
 
       <section>
         <div className={styles['flex-center']}>
