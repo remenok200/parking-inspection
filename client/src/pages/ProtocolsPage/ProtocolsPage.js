@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAllProtocols,
@@ -44,6 +44,7 @@ const ProtocolsPage = () => {
 
   const [showSelect, setShowSelect] = useState(false);
   const [searchType, setSearchType] = useState('default');
+  const searchContainerRef = useRef(null);
 
   const refreshProtocolsList = () => {
     if (showPagination) {
@@ -75,6 +76,22 @@ const ProtocolsPage = () => {
     showPagination,
   ]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
+        setShowSelect(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   if (error) {
     return <div>ERROR HAPPENED</div>;
   }
@@ -87,7 +104,7 @@ const ProtocolsPage = () => {
 
       <section>
         <div className={styles['flex-center']}>
-          <div className={styles['search-container']}>
+          <div ref={searchContainerRef} className={styles['search-container']}>
             <div className={styles['flex-center-column']}>
               <input
                 type="text"
