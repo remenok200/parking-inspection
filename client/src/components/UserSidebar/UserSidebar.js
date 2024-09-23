@@ -5,12 +5,14 @@ import styles from './UserSidebar.module.scss';
 import cx from 'classnames';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/slices/userSlice';
+import useHasRole from '../../hooks/useHasRole';
 
 const UserSidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
   const [showHamburger, setShowHamburger] = useState(!isOpen);
   const dispatch = useDispatch();
   const refreshToken = localStorage.getItem('refreshToken');
+  const isAdmin = useHasRole('admin');
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -77,6 +79,21 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
                 Protocols
               </NavLink>
             </li>
+            {isAdmin && (
+              <li>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    cx(styles.navLink, {
+                      [styles.active]: isActive,
+                    })
+                  }
+                  onClick={toggleSidebar}
+                >
+                  A-Panel
+                </NavLink>
+              </li>
+            )}
             <li>
               <button
                 className={`${styles.navLink} ${styles.logoutBtn}`}
