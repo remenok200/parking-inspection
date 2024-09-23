@@ -38,7 +38,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
   }, [isOpen]);
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <div
         ref={sidebarRef}
         className={cx(styles.sidebar, {
@@ -101,7 +101,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           <MenuIcon />
         </button>
       )}
-    </>
+    </div>
   );
 };
 
