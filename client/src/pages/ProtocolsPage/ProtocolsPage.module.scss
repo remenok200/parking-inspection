@@ -9,6 +9,11 @@
   justify-content: center;
 }
 
+.flex-center-column {
+  @extend .flex-center;
+  flex-direction: column;
+}
+
 .search-container {
   position: relative;
   display: inline-block;

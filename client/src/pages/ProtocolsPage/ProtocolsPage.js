@@ -88,23 +88,25 @@ const ProtocolsPage = () => {
       <section>
         <div className={styles['flex-center']}>
           <div className={styles['search-container']}>
-            <input
-              type="text"
-              value={searchValue}
-              onChange={({ target: { value } }) => setSearchValue(value)}
-              onFocus={() => setShowSelect(true)}
-              placeholder="Search..."
-            />
-            {showSelect && (
-              <select
-                value={searchType}
-                onChange={({ target: { value } }) => setSearchType(value)}
-                className={styles['filter-select']}
-              >
-                <option value="default">Default Search</option>
-                <option value="byID">Search by Protocol ID</option>
-              </select>
-            )}
+            <div className={styles['flex-center-column']}>
+              <input
+                type="text"
+                value={searchValue}
+                onChange={({ target: { value } }) => setSearchValue(value)}
+                onFocus={() => setShowSelect(true)}
+                placeholder="Search..."
+              />
+              {showSelect && (
+                <select
+                  value={searchType}
+                  onChange={({ target: { value } }) => setSearchType(value)}
+                  className={styles['filter-select']}
+                >
+                  <option value="default">Default Search</option>
+                  <option value="byID">Search by Protocol ID</option>
+                </select>
+              )}
+            </div>
             <div className={styles['tooltip']}>
               {searchType === 'byID'
                 ? 'Search by Protocol ID (e.g., 12345)'
