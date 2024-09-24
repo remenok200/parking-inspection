@@ -33,6 +33,16 @@ const NavBar = () => {
             Protocols
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive ? `${styles.link} ${styles.active}` : styles.link
+            }
+          >
+            My Profile
+          </NavLink>
+        </li>
         {isAdmin && (
           <li>
             <NavLink

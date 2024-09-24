@@ -79,6 +79,19 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
                 Protocols
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/profile"
+                className={({ isActive }) =>
+                  cx(styles.navLink, {
+                    [styles.active]: isActive,
+                  })
+                }
+                onClick={toggleSidebar}
+              >
+                My Profile
+              </NavLink>
+            </li>
             {isAdmin && (
               <li>
                 <NavLink

@@ -1,0 +1,51 @@
+@import '../../common/styles/template';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.profileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.cardWrapper {
+  @extend %card-wrapper;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+}
+
+.back-button {
+  @extend %button;
+  font-weight: bold;
+}
+
+.formTitle {
+  @extend %form-title;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -5,12 +5,14 @@ import NavBar from '../../components/NavBar/NavBar';
 import useHasRole from '../../hooks/useHasRole';
 import UserSidebar from '../../components/UserSidebar/UserSidebar';
 import { useNavigate } from 'react-router-dom';
+import CONSTANTS from '../../constants';
+const { MOBILE_WIDTH } = CONSTANTS;
 
 const AdminPanelPage = () => {
   const isAdmin = useHasRole('admin');
   const navigate = useNavigate();
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_WIDTH);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (!isAdmin) {
@@ -19,7 +21,7 @@ const AdminPanelPage = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 700);
+      setIsMobile(window.innerWidth < MOBILE_WIDTH);
     };
 
     window.addEventListener('resize', handleResize);

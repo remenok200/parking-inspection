@@ -7,26 +7,28 @@ import NavBar from '../../components/NavBar/NavBar';
 import { Link } from 'react-router-dom';
 import useHasRole from '../../hooks/useHasRole';
 import UserSidebar from '../../components/UserSidebar/UserSidebar';
+import CONSTANTS from '../../constants';
+const { MOBILE_WIDTH } = CONSTANTS;
 
 const ParkOfficersPage = () => {
   const isAdmin = useHasRole('admin');
 
   const [filter, setFilter] = useState('worked');
 
-  const { parkOfficers, isLoading, error } = useSelector(
+  const { parkOfficers, error } = useSelector(
     (state) => state.parkOfficers
   );
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState('');
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_WIDTH);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getParkOfficers());
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 700);
+      setIsMobile(window.innerWidth < MOBILE_WIDTH);
     };
 
     window.addEventListener('resize', handleResize);

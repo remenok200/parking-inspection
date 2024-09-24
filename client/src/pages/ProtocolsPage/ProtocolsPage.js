@@ -13,7 +13,7 @@ import filterProtocols from '../../utils/filterProtocols';
 import { Link } from 'react-router-dom';
 import UserSidebar from '../../components/UserSidebar/UserSidebar';
 import { getParkOfficerByID } from '../../API';
-const { LIMIT } = CONSTANTS;
+const { LIMIT, MOBILE_WIDTH } = CONSTANTS;
 
 const ProtocolsPage = () => {
   const { parkOfficerID } = useParams();
@@ -29,7 +29,7 @@ const ProtocolsPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [showPagination, setShowPagination] = useState(true);
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_WIDTH);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [parkOfficerFullName, setParkOfficerFullName] = useState(null);
@@ -82,7 +82,7 @@ const ProtocolsPage = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 700);
+      setIsMobile(window.innerWidth < MOBILE_WIDTH);
     };
 
     window.addEventListener('resize', handleResize);
