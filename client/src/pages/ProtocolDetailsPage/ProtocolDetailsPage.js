@@ -8,21 +8,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   deleteProtocolByID,
   deleteProtocolImageByID,
-  getProtocolById
+  getProtocolById,
 } from '../../redux/slices/protocolSlice';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
-import { CustomPrevArrow, CustomNextArrow } from '../../components/CustomArrows/CustomArrows';
+import {
+  CustomPrevArrow,
+  CustomNextArrow,
+} from '../../components/CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import useHasRole from '../../hooks/useHasRole';
+import generateProtocolPDF from '../../utils/pdfUtil';
+import CONSTANTS from '../../constants';
+const { GET_IMAGES_BASE_URL } = CONSTANTS;
 
-const ProtocolPage = () => {
+const ProtocolDetailsPage = () => {
   const isAdmin = useHasRole('admin');
-
   const { protocolID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  const { selectedProtocol: protocol } = useSelector(state => state.protocols);
+
+  const { selectedProtocol: protocol } = useSelector(
+    (state) => state.protocols
+  );
 
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
@@ -68,7 +75,6 @@ const ProtocolPage = () => {
         protocolID: protocol.id,
       })
     );
-
     setDeleteConfirmationModalOpen(false);
     navigate('/protocols');
   };
@@ -82,6 +88,10 @@ const ProtocolPage = () => {
     );
     await fetchProtocol();
     setDeleteImageConfirmationModal(false);
+  };
+
+  const handleGeneratePDF = () => {
+    generateProtocolPDF(protocol);
   };
 
   return (
@@ -121,6 +131,7 @@ const ProtocolPage = () => {
 
         {isAdmin && (
           <div className={styles['button-container']}>
+            <button onClick={handleGeneratePDF}>Generate PDF</button>
             <button onClick={() => setDeleteConfirmationModalOpen(true)}>
               Delete
             </button>
@@ -152,7 +163,7 @@ const ProtocolPage = () => {
             <img
               className={styles.img}
               key={currentImage.id}
-              src={`http://localhost:5001/images/${currentImage.path}`}
+              src={`${GET_IMAGES_BASE_URL}/${currentImage.path}`}
               alt={protocol.id}
             />
           ))}
@@ -180,4 +191,4 @@ const ProtocolPage = () => {
   );
 };
 
-export default ProtocolPage;
+export default ProtocolDetailsPage;
