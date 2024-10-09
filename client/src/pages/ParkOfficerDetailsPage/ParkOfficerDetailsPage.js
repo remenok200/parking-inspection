@@ -11,6 +11,7 @@ import {
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import useHasRole from '../../hooks/useHasRole';
 import { Link } from 'react-router-dom';
+import generateOfficerPDF from '../../utils/pdfUtilOfficers';
 
 const ParkOfficerDetailsPage = () => {
   const { officerID } = useParams();
@@ -40,6 +41,10 @@ const ParkOfficerDetailsPage = () => {
   useEffect(() => {
     fetchOfficer();
   }, [officerID]);
+
+  const handleGeneratePDF = () => {
+    generateOfficerPDF(parkOfficer);
+  };
 
   const deleteHandler = async () => {
     await dispatch(deleteParkOfficer(parkOfficer.id));
@@ -84,6 +89,8 @@ const ParkOfficerDetailsPage = () => {
 
         {isAdmin && (
           <div className={styles['button-container']}>
+            <button onClick={handleGeneratePDF}>Generate PDF</button>
+            
             <Link to={`/protocols/${parkOfficer.id}`}>
               <button style={{ width: '100%' }}>View protocols</button>
             </Link>
