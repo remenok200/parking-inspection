@@ -19,6 +19,9 @@ export const endSession = async (tokenId) =>
 
 export const getAllLogs = async () => await httpClient.get('/users/logs/all');
 
+export const getLogActionTypes = async () =>
+  await httpClient.get('/users/logs/actionTypes');
+
 export const getAllLogsByUserID = async (userId) =>
   await httpClient.get(`/users/logs/${userId}/all`);
 

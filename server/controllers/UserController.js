@@ -7,6 +7,7 @@ const {
   verifyRefreshToken,
 } = require('../services/createSession');
 const createHttpError = require('http-errors');
+const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
 
 module.exports.registrationUser = async (req, res, next) => {
   try {
@@ -194,7 +195,8 @@ module.exports.logout = async (req, res, next) => {
     );
 
     await Log.createLog({
-      action: `USER ID: ${userId} logout. Token ID: ${tokenId}`,
+      actionType: LOG_ACTION_TYPES.LOGOUT,
+      description: `USER ID: ${userId} logout. Token ID: ${tokenId}`,
       performedBy: userId,
     });
 

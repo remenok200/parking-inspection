@@ -33,6 +33,10 @@ adminRouter
 .put(AdminController.revokeRefreshToken);
 
 adminRouter
+.route('/logs/actionTypes')
+.get(AdminController.getAllActionTypes);
+
+adminRouter
 .route('/logs/all')
 .get(AdminController.getAllLogs);
 

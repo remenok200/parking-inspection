@@ -14,6 +14,11 @@ export const getAllUsers = createAsyncThunk(
   async (_, thunkAPI) => handleAsyncThunk(API.getAllUsers, null, thunkAPI)
 );
 
+export const getLogActionTypes = createAsyncThunk(
+  `${SLICE_NAME}/getLogActionTypes`,
+  async (_, thunkAPI) => handleAsyncThunk(API.getLogActionTypes, null, thunkAPI)
+);
+
 export const getAllBannedUsers = createAsyncThunk(
   `${SLICE_NAME}/getAllBannedUsers`,
   async (_, thunkAPI) => handleAsyncThunk(API.getAllBannedUsers, null, thunkAPI)
@@ -110,6 +115,7 @@ const initialState = {
   bannedUsers: null,
   userSessions: null,
   userLogs: null,
+  logActionTypes: null,
   isLoading: false,
   error: null,
 };
@@ -124,6 +130,12 @@ const adminSlice = createSlice({
         handleFulfilled(state, action, 'allUsers')
       )
       .addCase(getAllUsers.rejected, handleRejected)
+
+      .addCase(getLogActionTypes.pending, handlePending)
+      .addCase(getLogActionTypes.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'logActionTypes')
+      )
+      .addCase(getLogActionTypes.rejected, handleRejected)
 
       .addCase(getAllBannedUsers.pending, handlePending)
       .addCase(getAllBannedUsers.fulfilled, (state, action) =>

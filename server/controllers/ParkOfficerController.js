@@ -1,6 +1,7 @@
 const { ParkOfficer } = require('../models');
 const { Log } = require('../models/MongoDB');
 const createHttpError = require('http-errors');
+const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
 
 module.exports.getAllParkOfficers = async (req, res, next) => {
   try {
@@ -28,7 +29,8 @@ module.exports.getParkOfficerByID = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} get park officer with ID: ${id}`,
+      actionType: LOG_ACTION_TYPES.GET_PARK_OFFICER_BY_ID,
+      description: `ID: ${userId} get park officer with ID: ${id}`,
       performedBy: userId,
     });
 
@@ -52,7 +54,8 @@ module.exports.createParkOfficer = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} create park officer. Officer ID: ${createdParkOfficer.id} (created officer)`,
+      actionType: LOG_ACTION_TYPES.CREATE_PARK_OFFICER,
+      description: `ID: ${userId} create park officer. Officer ID: ${createdParkOfficer.id} (created officer)`,
       performedBy: userId,
     });
 
@@ -80,7 +83,8 @@ module.exports.updateParkOfficerByID = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} update park officer. Park officer ID: ${id}`,
+      actionType: LOG_ACTION_TYPES.UPDATE_PARK_OFFICER,
+      description: `ID: ${userId} update park officer. Park officer ID: ${id}`,
       performedBy: userId,
     });
 
@@ -104,7 +108,8 @@ module.exports.deleteParkOfficerByID = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} delete park officer. Park officer ID: ${id} (officer deleted)`,
+      actionType: LOG_ACTION_TYPES.DELETE_PARK_OFFICER,
+      description: `ID: ${userId} delete park officer. Park officer ID: ${id} (officer deleted)`,
       performedBy: userId,
     });
 
@@ -136,7 +141,8 @@ module.exports.dismissParkOfficerByID = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} dismiss park officer. Park officer ID: ${id}`,
+      actionType: LOG_ACTION_TYPES.DISMISS_PARK_OFFICER,
+      description: `ID: ${userId} dismiss park officer. Park officer ID: ${id}`,
       performedBy: userId,
     });
 
@@ -168,7 +174,8 @@ module.exports.restoreParkOfficerByID = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} restore park officer. Park officer ID: ${id}`,
+      actionType: LOG_ACTION_TYPES.RESTORE_PARK_OFFICER,
+      description: `ID: ${userId} restore park officer. Park officer ID: ${id}`,
       performedBy: userId,
     });
 

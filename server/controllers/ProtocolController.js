@@ -2,6 +2,7 @@ const { Protocol, ParkOfficer, Image } = require('../models');
 const { Log } = require('../models/MongoDB');
 const createHttpError = require('http-errors');
 const { deleteImageFromDisk } = require('../utils');
+const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
 
 module.exports.getAllProtocols = async (req, res, next) => {
   try {
@@ -145,7 +146,8 @@ module.exports.createProtocol = async (req, res, next) => {
     });
 
     await Log.createLog({
-      action: `ID: ${userId} create protocol. Protocol ID: ${createdProtocol.id} (created protocol)`,
+      actionType: LOG_ACTION_TYPES.CREATE_PROTOCOL,
+      description: `ID: ${userId} create protocol. Protocol ID: ${createdProtocol.id}`,
       performedBy: userId,
     });
 
@@ -200,7 +202,8 @@ module.exports.updateProtocolByID = async (req, res, next) => {
     });
 
     await Log.createLog({
-      action: `ID: ${userId} update protocol. Protocol ID: ${id}`,
+      actionType: LOG_ACTION_TYPES.UPDATE_PROTOCOL,
+      description: `ID: ${userId} update protocol. Protocol ID: ${id}`,
       performedBy: userId,
     });
 
@@ -249,7 +252,8 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} delete protocol. Protocol ID: ${id} (protocol deleted)`,
+      actionType: LOG_ACTION_TYPES.DELETE_PROTOCOL,
+      description: `ID: ${userId} delete protocol. Protocol ID: ${id} (protocol deleted)`,
       performedBy: userId,
     });
 

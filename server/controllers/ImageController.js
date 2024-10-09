@@ -2,6 +2,7 @@ const { Image } = require('../models');
 const createHttpError = require('http-errors');
 const { Log } = require('../models/MongoDB');
 const { deleteImageFromDisk } = require('../utils');
+const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
 
 module.exports.getProtocolImages = async (req, res, next) => {
   try {
@@ -15,7 +16,8 @@ module.exports.getProtocolImages = async (req, res, next) => {
     });
 
     await Log.createLog({
-      action: `ID: ${userId} get all protocol images. Protocol id: ${protocolId}`,
+      actionType: LOG_ACTION_TYPES.GET_ALL_PROTOCOL_IMAGES,
+      description: `ID: ${userId} get all protocol images. Protocol id: ${protocolId}`,
       performedBy: userId,
     });
 
@@ -38,7 +40,8 @@ module.exports.addProtocolImages = async (req, res, next) => {
     const imagesFromDB = await Image.bulkCreate(images, { returning: true });
 
     await Log.createLog({
-      action: `ID: ${userId} add ${images.length} image(s) to protocol. Protocol id: ${protocolId}`,
+      actionType: LOG_ACTION_TYPES.ADD_IMAGES_TO_PROTOCOL,
+      description: `ID: ${userId} add ${images.length} image(s) to protocol. Protocol id: ${protocolId}`,
       performedBy: userId,
     });
 
@@ -62,7 +65,8 @@ module.exports.getImageByID = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ID: ${userId} get image by ID: ${imageId}. Protocol ID: ${protocolId}`,
+      actionType: LOG_ACTION_TYPES.GET_IMAGE_BY_ID,
+      description: `ID: ${userId} get image by ID: ${imageId}. Protocol ID: ${protocolId}`,
       performedBy: userId,
     });
 
@@ -94,7 +98,8 @@ module.exports.deleteImageByID = async (req, res, next) => {
     await deleteImageFromDisk(image.path);
 
     await Log.createLog({
-      action: `ID: ${userId} delete ${count} image(s). Protocol ID: ${protocolId}`,
+      actionType: LOG_ACTION_TYPES.DELETE_IMAGES,
+      description: `ID: ${userId} delete ${count} image(s). Protocol ID: ${protocolId}`,
       performedBy: userId,
     });
 

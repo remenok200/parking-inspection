@@ -1,10 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { LOG_ACTION_TYPES } = require('../../config/logActionTypes');
 
 const logSchema = new Schema({
-  action: {
+  description: {
     type: String,
     required: true,
+  },
+  actionType: {
+    type: String,
+    required: true,
+    enum: Object.values(LOG_ACTION_TYPES),
   },
   performedBy: {
     type: Schema.Types.ObjectId,

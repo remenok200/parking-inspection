@@ -1,5 +1,12 @@
-const { User, Banlist, RefreshToken, Log } = require('../models/MongoDB');
+const {
+  User,
+  Banlist,
+  RefreshToken,
+  Log,
+  LogActionType
+} = require('../models/MongoDB');
 const createHttpError = require('http-errors');
+const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
 
 module.exports.ban = async (req, res, next) => {
   try {
@@ -22,7 +29,8 @@ module.exports.ban = async (req, res, next) => {
       const banned = await Banlist.create({ adminId, userId, reason });
 
       await Log.createLog({
-        action: `ADMIN ID: ${adminId} ban user. User ID: ${userId}`,
+        actionType: LOG_ACTION_TYPES.BAN_USER,
+        description: `ADMIN ID: ${adminId} ban user. User ID: ${userId}`,
         performedBy: adminId,
       });
 
@@ -46,7 +54,8 @@ module.exports.unban = async (req, res, next) => {
 
     if (result.deletedCount > 0) {
       await Log.createLog({
-        action: `ADMIN ID: ${adminId} unban user. User ID: ${userId}`,
+        actionType: LOG_ACTION_TYPES.UNBAN_USER,
+        description: `ADMIN ID: ${adminId} unban user. User ID: ${userId}`,
         performedBy: adminId,
       });
 
@@ -73,7 +82,8 @@ module.exports.getAllBannedUsers = async (req, res, next) => {
     }));
 
     await Log.createLog({
-      action: `ADMIN ID: ${userId} get all banned users`,
+      actionType: LOG_ACTION_TYPES.GET_ALL_BANNED_USERS,
+      description: `ADMIN ID: ${userId} get all banned users`,
       performedBy: userId,
     });
 
@@ -97,7 +107,8 @@ module.exports.getAllUsers = async (req, res, next) => {
     });
 
     await Log.createLog({
-      action: `ADMIN ID: ${userId} get all users`,
+      actionType: LOG_ACTION_TYPES.GET_ALL_USERS,
+      description: `ADMIN ID: ${userId} get all users`,
       performedBy: userId,
     });
 
@@ -120,7 +131,8 @@ module.exports.getUserRefreshTokens = async (req, res, next) => {
     const refreshTokens = await RefreshToken.find({ userId });
 
     await Log.createLog({
-      action: `ADMIN ID: ${adminId} get user refresh tokens (sessions). User ID: ${userId}`,
+      actionType: LOG_ACTION_TYPES.GET_USER_REFRESH_TOKENS,
+      description: `ADMIN ID: ${adminId} get user refresh tokens (sessions). User ID: ${userId}`,
       performedBy: adminId,
     });
 
@@ -148,7 +160,8 @@ module.exports.revokeRefreshToken = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ADMIN ID: ${userId} revoke refresh token. Token ID: ${tokenId}`,
+      actionType: LOG_ACTION_TYPES.GET_USER_REFRESH_TOKENS,
+      description: `ADMIN ID: ${userId} revoke refresh token. Token ID: ${tokenId}`,
       performedBy: userId,
     });
 
@@ -167,7 +180,8 @@ module.exports.getAllLogs = async (req, res, next) => {
     const logs = await Log.find();
 
     await Log.createLog({
-      action: `ADMIN ID: ${userId} get all logs`,
+      actionType: LOG_ACTION_TYPES.GET_ALL_LOGS,
+      description: `ADMIN ID: ${userId} get all logs`,
       performedBy: userId,
     });
 
@@ -187,7 +201,8 @@ module.exports.getAllLogsByUserID = async (req, res, next) => {
     const logs = await Log.find({ performedBy: userId });
 
     await Log.createLog({
-      action: `ADMIN ID: ${adminId} get all user logs. User ID: ${userId}`,
+      actionType: LOG_ACTION_TYPES.GET_ALL_USER_LOGS,
+      description: `ADMIN ID: ${adminId} get all user logs. User ID: ${userId}`,
       performedBy: adminId,
     });
 
@@ -215,7 +230,8 @@ module.exports.makeAdmin = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ADMIN ID: ${adminId} make user admin. User ID: ${userId}`,
+      actionType: LOG_ACTION_TYPES.MAKE_ADMIN,
+      description: `ADMIN ID: ${adminId} make user admin. User ID: ${userId}`,
       performedBy: adminId,
     });
 
@@ -245,11 +261,22 @@ module.exports.removeAdmin = async (req, res, next) => {
     }
 
     await Log.createLog({
-      action: `ADMIN ID: ${adminId} removed user admin. User ID: ${userId}`,
+      actionType: LOG_ACTION_TYPES.REMOVE_ADMIN,
+      description: `ADMIN ID: ${adminId} removed user admin. User ID: ${userId}`,
       performedBy: adminId,
     });
 
     return res.status(200).send({ data: 'Admin role removed successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.getAllActionTypes = async (req, res, next) => {
+  try {
+    const actionTypes = await LogActionType.find();
+
+    return res.status(200).send({ data: actionTypes });
   } catch (error) {
     next(error);
   }

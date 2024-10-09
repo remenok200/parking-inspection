@@ -3,10 +3,19 @@ const cors = require('cors');
 const router = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
 // const generateParkOfficers = require('./utils/generator');
+const initializeActionTypes = require('./utils/initializeLogActionTypes');
 
 const app = express();
 
 require('./models/MongoDB');
+
+initializeActionTypes()
+  .then(() => {
+    console.log('actionTypes initialized');
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
 app.use(cors());
 

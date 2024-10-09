@@ -4,6 +4,7 @@ const User = require('./User');
 const RefreshToken = require('./RefreshToken');
 const Banlist = require('./Banlist');
 const Log = require('./Log');
+const LogActionType = require('./LogActionType');
 
 const env = process.env.NODE_ENV || 'development';
 const configPath = path.join(__dirname, '..', '..', '/config/configMongo.json');
@@ -26,5 +27,6 @@ module.exports = {
   User,
   RefreshToken,
   Banlist,
-  Log
+  Log,
+  LogActionType
 };

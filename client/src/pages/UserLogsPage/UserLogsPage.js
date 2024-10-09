@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getAllLogs, getAllLogsByUserID } from '../../redux/slices/adminSlice';
+import {
+  getAllLogs,
+  getAllLogsByUserID,
+  getLogActionTypes,
+} from '../../redux/slices/adminSlice';
 import styles from './UserLogs.module.scss';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar';
-import { ACTION_TYPES_FILTER } from '../../constants';
-import { filteredLogs } from '../../utils/filteredLogs';
 
 const UserLogsPage = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userLogs } = useSelector((state) => state.admins);
+  const { userLogs, logActionTypes } = useSelector((state) => state.admins);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [filterAction, setFilterAction] = useState('');
+  const [filterActionType, setFilterActionType] = useState('');
 
-  const filteredLogsArray = filteredLogs(userLogs, filterAction);
+  const filteredLogs = (userLogs, filterActionType) => {
+    if (!filterActionType) return userLogs;
+    return userLogs.filter((log) => log.actionType === filterActionType);
+  };
+
+  const filteredLogsArray = filteredLogs(userLogs, filterActionType);
 
   const [visibleLogs, setVisibleLogs] = useState(10);
   const totalLogs = filteredLogsArray ? filteredLogsArray.length : 0;
   const hasMoreLogs = visibleLogs < totalLogs;
+
+  useEffect(() => {
+    dispatch(getLogActionTypes());
+  }, [dispatch]);
 
   useEffect(() => {
     if (userId) {
@@ -60,19 +71,22 @@ const UserLogsPage = () => {
         {userId && <h3>Logs for User ID: {userId}</h3>}
 
         <div className={styles['filter-container']}>
-          <label htmlFor="action-filter">Filter by Action:</label>
+          <label htmlFor="action-type-filter">Filter by Action Type:</label>
           <select
-            id="action-filter"
-            value={filterAction}
-            onChange={(e) => setFilterAction(e.target.value)}
+            value={filterActionType}
+            onChange={(e) => setFilterActionType(e.target.value)}
             className={styles['filter-select']}
           >
             <option value="">All Actions</option>
-            {Object.values(ACTION_TYPES_FILTER).map((action) => (
-              <option key={action} value={action}>
-                {action}
-              </option>
-            ))}
+            {Array.isArray(logActionTypes) && logActionTypes.length > 0 ? (
+              logActionTypes.map(({ _id, type }) => (
+                <option key={_id} value={type}>
+                  {type}
+                </option>
+              ))
+            ) : (
+              <option disabled>No action types available</option>
+            )}
           </select>
         </div>
 
@@ -82,19 +96,29 @@ const UserLogsPage = () => {
               <thead>
                 <tr>
                   <th>Timestamp</th>
-                  <th className={styles['action-column']}>Action</th>
+                  <th className={styles['action-column']}>
+                    Action Description
+                  </th>
+                  <th>Action Type</th>
                   <th>Performed By</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredLogsArray.slice(0, visibleLogs).map((log) => {
-                  const { _id, action, performedBy, timestamp } = log;
+                  const {
+                    _id,
+                    description,
+                    actionType,
+                    performedBy,
+                    timestamp,
+                  } = log;
                   return (
                     <tr key={_id}>
                       <td>{`${formatDateTime(timestamp)} | ${timeAgo(
                         timestamp
                       )}`}</td>
-                      <td className={styles['action-column']}>{action}</td>
+                      <td>{description}</td>
+                      <td>{actionType}</td>
                       <td>{performedBy}</td>
                     </tr>
                   );
