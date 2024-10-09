@@ -21,30 +21,35 @@ const generateProtocolPDF = async (protocol) => {
 
   const addFooter = (pageNumber, totalPages) => {
     doc.setFontSize(10);
+    doc.setTextColor(100);
     doc.text(
       `Page ${pageNumber} of ${totalPages}`,
       pageWidth - 40,
       pageHeight - 10
     );
     doc.text(`Generated on: ${generatedOn}`, 14, pageHeight - 10);
-
     doc.addImage(qrCodeDataUrl, 'PNG', pageWidth - 35, pageHeight - 40, 20, 20);
   };
 
   const addHeader = (title) => {
     doc.setFontSize(22);
+    doc.setTextColor('#007bff');
     doc.text(title, pageWidth / 2, 20, { align: 'center' });
   };
 
   const addSectionTitle = (title, yPosition) => {
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#007bff');
     doc.text(title, 14, yPosition);
     doc.setFont('helvetica', 'normal');
+    doc.setDrawColor('#007bff');
+    doc.line(14, yPosition + 2, pageWidth - 14, yPosition + 2);
   };
 
   const addText = (text, yPosition) => {
     doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
     doc.text(text, 14, yPosition);
   };
 
@@ -73,9 +78,7 @@ const generateProtocolPDF = async (protocol) => {
 
         if (imgData) {
           doc.addPage();
-
           addSectionTitle(`Protocol image ${i + 1}`, 20);
-
           doc.addImage(imgData, 'JPEG', 14, 40, 180, 150);
         }
       } catch (error) {
@@ -85,9 +88,8 @@ const generateProtocolPDF = async (protocol) => {
       }
     }
   } else {
-    doc.addPage();
-    addSectionTitle('Protocol Images', 20);
-    addText('No images available for this protocol.', 30);
+    addSectionTitle('Protocol Images', 180);
+    addText('No images available for this protocol.', 190);
   }
 
   const totalPages = doc.internal.getNumberOfPages();

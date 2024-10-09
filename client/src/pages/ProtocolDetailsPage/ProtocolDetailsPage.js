@@ -17,7 +17,7 @@ import {
 } from '../../components/CustomArrows/CustomArrows';
 import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import useHasRole from '../../hooks/useHasRole';
-import generateProtocolPDF from '../../utils/pdfUtil';
+import generateProtocolPDF from '../../utils/pdfUtilProtocols';
 import CONSTANTS from '../../constants';
 const { GET_IMAGES_BASE_URL } = CONSTANTS;
 
