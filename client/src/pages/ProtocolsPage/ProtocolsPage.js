@@ -180,7 +180,7 @@ const ProtocolsPage = () => {
 
         {!protocols.length ? <h1>Oops... No data =)</h1> : null}
 
-        {showPagination && totalPages > 1 ? (
+        {!searchValue && showPagination && totalPages > 1 ? (
           <Pagination
             currentPage={pageNumber}
             totalPages={totalPages}
