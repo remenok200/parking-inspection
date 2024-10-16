@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { createProtocol } from '../../redux/slices/protocolSlice';
+import {
+  createProtocol,
+  getProtocolsByViolatorPassportNumber,
+} from '../../redux/slices/protocolSlice';
+import { clearProtocolsOfSpecificViolator } from '../../redux/slices/protocolSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
-import { getProtocolsByViolatorPassportNumber } from '../../redux/slices/protocolSlice';
+import cx from 'classnames';
 
 const initialValues = {
   serviceNotes: '',
@@ -18,23 +22,19 @@ const initialValues = {
 const CreateProtocol = () => {
   const navigate = useNavigate();
   const { selectedParkOfficer } = useSelector((state) => state.parkOfficers);
+  const { protocolsOfSpecificViolator } = useSelector(
+    (state) => state.protocols
+  );
   const dispatch = useDispatch();
   const { parkOfficerID } = useParams();
 
   useEffect(() => {
+    dispatch(clearProtocolsOfSpecificViolator());
+
     if (parkOfficerID) {
       dispatch(getParkOfficerById(parkOfficerID));
-      // dispatch(getProtocolsByViolatorPassportNumber('MP9418178'));
     }
-  }, [parkOfficerID]);
-
-  if (!selectedParkOfficer) {
-    return (
-      <h1>
-        Oooops! Officer not found! Please check if the officer id is correct
-      </h1>
-    );
-  }
+  }, [dispatch, parkOfficerID]);
 
   const handleCreateProtocolSubmit = async (values, { resetForm }) => {
     try {
@@ -45,6 +45,21 @@ const CreateProtocol = () => {
       console.error(error);
     }
   };
+
+  const handleViolatorPassportBlur = async (e) => {
+    const passportNumber = e.target.value;
+    if (passportNumber) {
+      await dispatch(getProtocolsByViolatorPassportNumber(passportNumber));
+    }
+  };
+
+  if (!selectedParkOfficer) {
+    return (
+      <h1>
+        Oooops! Officer not found! Please check if the officer id is correct
+      </h1>
+    );
+  }
 
   return (
     <>
@@ -90,13 +105,33 @@ const CreateProtocol = () => {
 
             <label>
               Violator passport number:
-              <Field name="violatorPassportNumber" autoComplete="off" />
+              <Field
+                name="violatorPassportNumber"
+                autoComplete="off"
+                onBlur={handleViolatorPassportBlur}
+              />
               <ErrorMessage
                 name="violatorPassportNumber"
                 component="div"
                 className={styles['form-error']}
               />
             </label>
+
+            {formikProps.values.violatorPassportNumber &&
+              protocolsOfSpecificViolator !== null && (
+                <div
+                  className={cx(styles['violator-info'], {
+                    [styles['no-protocols']]:
+                      protocolsOfSpecificViolator.length === 0,
+                    [styles['has-protocols']]:
+                      protocolsOfSpecificViolator.length > 0,
+                  })}
+                >
+                  {protocolsOfSpecificViolator.length === 0
+                    ? 'The violator has not protocols'
+                    : `The violator has ${protocolsOfSpecificViolator.length} protocol(s)`}
+                </div>
+              )}
 
             <div className={styles['button-container']}>
               <button type="submit">Create protocol</button>

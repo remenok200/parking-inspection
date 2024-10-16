@@ -142,6 +142,11 @@ const initialState = {
 const protocolSlice = createSlice({
   name: SLICE_NAME,
   initialState,
+  reducers: {
+    clearProtocolsOfSpecificViolator: (state) => {
+      state.protocolsOfSpecificViolator = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllProtocols.pending, handlePending);
     builder.addCase(getAllProtocols.fulfilled, (state, action) => {
@@ -197,6 +202,9 @@ const protocolSlice = createSlice({
   },
 });
 
-const { reducer } = protocolSlice;
+const { reducer, actions } = protocolSlice;
+
+// actions creators
+export const { clearProtocolsOfSpecificViolator } = actions;
 
 export default reducer;
