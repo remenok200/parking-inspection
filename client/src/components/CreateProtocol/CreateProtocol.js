@@ -6,6 +6,7 @@ import { protocolValidationSchema } from '../../schemas/protocolValidationSchema
 import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
+import { getProtocolsByViolatorPassportNumber } from '../../redux/slices/protocolSlice';
 
 const initialValues = {
   serviceNotes: '',
@@ -23,6 +24,7 @@ const CreateProtocol = () => {
   useEffect(() => {
     if (parkOfficerID) {
       dispatch(getParkOfficerById(parkOfficerID));
+      // dispatch(getProtocolsByViolatorPassportNumber('MP9418178'));
     }
   }, [parkOfficerID]);
 

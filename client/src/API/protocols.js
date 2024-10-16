@@ -34,6 +34,9 @@ export const getAllProtocolsByOfficerID = async (parkOfficerID, page) => {
   return await httpClient.get(endpoint);
 };
 
+export const getProtocolsByViolatorPassportNumber = async (passportNumber) =>
+  await httpClient.get(`/violator/${passportNumber}`);
+
 export const addProtocolImages = async (images, protocolID) =>
   await httpClient.post(`/parkOfficers/protocols/${protocolID}/images`, images);
 

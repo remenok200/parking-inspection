@@ -262,3 +262,36 @@ module.exports.deleteProtocolByID = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.getProtocolsByViolatorPassportNumber = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const {
+      params: { passportNumber },
+    } = req;
+
+    const protocols = await Protocol.findAll({
+      where: { violatorPassportNumber: passportNumber },
+      include: [
+        {
+          model: ParkOfficer,
+          attributes: ['id', 'full_name', 'badge_number'],
+          as: 'parkOfficer',
+        },
+        {
+          model: Image,
+          attributes: ['id', 'path'],
+          as: 'images',
+        },
+      ],
+      order: [['updated_at', 'DESC']],
+    });
+
+    return res.status(200).send({ data: protocols });
+  } catch (error) {
+    next(error);
+  }
+};

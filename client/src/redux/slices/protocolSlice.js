@@ -119,12 +119,24 @@ export const deleteProtocolImageByID = createAsyncThunk(
   }
 );
 
+export const getProtocolsByViolatorPassportNumber = createAsyncThunk(
+  `${SLICE_NAME}/getProtocolsByViolatorPassportNumber`,
+  async (passportNumber, thunkAPI) => {
+    return handleAsyncThunk(
+      () => API.getProtocolsByViolatorPassportNumber(passportNumber),
+      null,
+      thunkAPI
+    );
+  }
+);
+
 const initialState = {
   protocols: [],
   isLoading: false,
   error: null,
   totalProtocolsCount: 0,
   selectedProtocol: null,
+  protocolsOfSpecificViolator: null
 };
 
 const protocolSlice = createSlice({
@@ -176,6 +188,12 @@ const protocolSlice = createSlice({
     builder.addCase(deleteProtocolImageByID.pending, handlePending);
     builder.addCase(deleteProtocolImageByID.fulfilled, handleFulfilled);
     builder.addCase(deleteProtocolImageByID.rejected, handleRejected);
+
+    builder.addCase(getProtocolsByViolatorPassportNumber.pending, handlePending);
+    builder.addCase(getProtocolsByViolatorPassportNumber.fulfilled, (state, action) => {
+      handleFulfilled(state, action, 'protocolsOfSpecificViolator');
+    });
+    builder.addCase(getProtocolsByViolatorPassportNumber.rejected, handleRejected);
   },
 });
 
