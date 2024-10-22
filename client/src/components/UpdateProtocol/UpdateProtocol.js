@@ -1,27 +1,36 @@
 import React, { useEffect } from 'react';
 import { protocolValidationSchema } from '../../schemas/protocolValidationSchema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { updateProtocol } from '../../redux/slices/protocolSlice';
+import {
+  updateProtocol,
+  getProtocolsByViolatorPassportNumber,
+  clearProtocolsOfSpecificViolator,
+} from '../../redux/slices/protocolSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './UpdateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProtocolById } from '../../redux/slices/protocolSlice';
+import cx from 'classnames';
 
 const UpdateProtocol = () => {
   const { protocolID } = useParams();
-  const { selectedProtocol } = useSelector((state) => state.protocols);
+  const { selectedProtocol, protocolsOfSpecificViolator } = useSelector(
+    (state) => state.protocols
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
+    dispatch(clearProtocolsOfSpecificViolator());
+
     if (protocolID) {
       dispatch(getProtocolById(protocolID));
     }
-  }, [protocolID]);
+  }, [dispatch, protocolID]);
 
   if (!selectedProtocol) {
     return (
-      <h1>Protocol not found! Please check if the officer id is correct</h1>
+      <h1>Protocol not found! Please check if the protocol id is correct</h1>
     );
   }
 
@@ -43,10 +52,16 @@ const UpdateProtocol = () => {
       );
 
       resetForm();
-
       navigate('/protocols');
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleViolatorPassportBlur = async (e) => {
+    const passportNumber = e.target.value;
+    if (passportNumber) {
+      await dispatch(getProtocolsByViolatorPassportNumber(passportNumber));
     }
   };
 
@@ -95,13 +110,33 @@ const UpdateProtocol = () => {
 
             <label>
               Violator passport number:
-              <Field name="violatorPassportNumber" autoComplete="off" />
+              <Field
+                name="violatorPassportNumber"
+                autoComplete="off"
+                onBlur={handleViolatorPassportBlur}
+              />
               <ErrorMessage
                 name="violatorPassportNumber"
                 component="div"
                 className={styles['form-error']}
               />
             </label>
+
+            {formikProps.values.violatorPassportNumber &&
+              protocolsOfSpecificViolator !== null && (
+                <div
+                  className={cx(styles['violator-info'], {
+                    [styles['no-protocols']]:
+                      protocolsOfSpecificViolator.length === 0,
+                    [styles['has-protocols']]:
+                      protocolsOfSpecificViolator.length > 0,
+                  })}
+                >
+                  {protocolsOfSpecificViolator.length === 0
+                    ? 'The violator has no protocols'
+                    : `The violator has ${protocolsOfSpecificViolator.length} protocol(s)`}
+                </div>
+              )}
 
             <div className={styles['button-container']}>
               <button type="submit">Update protocol</button>

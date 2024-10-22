@@ -15,3 +15,27 @@
 .button {
   @extend %button;
 }
+
+.violator-info {
+  @extend %card-wrapper;
+  text-align: center;
+  font-size: 1.125rem;
+  color: #444;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  &.no-protocols {
+    background-color: #e0ffe0;
+    border-color: #b3ffb3;
+    color: #006600;
+  }
+
+  &.has-protocols {
+    background-color: #ffe0e0;
+    border-color: #ffb3b3;
+    color: #660000;
+  }
+}
