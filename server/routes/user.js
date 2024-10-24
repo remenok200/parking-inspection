@@ -16,6 +16,14 @@ userRouter
 .post(UserController.loginUser);
 
 userRouter
+.route('/sign-up/google')
+.post(UserController.registrationUserWithGoogle);
+
+userRouter
+.route('/sign-in/google')
+.post(UserController.loginUserWithGoogle);
+
+userRouter
 .route('/')
 .get(checkToken, UserController.checkAuth);
 

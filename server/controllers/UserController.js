@@ -6,8 +6,10 @@ const {
   verifyAccessToken,
   verifyRefreshToken,
 } = require('../services/createSession');
+const serviceAccount = require('../config/parking-inspection-firebase-adminsdk-lumww-05adebcf60.json');
 const createHttpError = require('http-errors');
 const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
+const admin = require('firebase-admin');
 
 module.exports.registrationUser = async (req, res, next) => {
   try {
@@ -114,6 +116,103 @@ module.exports.checkAuth = async (req, res, next) => {
     });
 
     return res.status(200).send({ data: foundUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://parking-inspection.firebaseio.com',
+});
+
+module.exports.registrationUserWithGoogle = async (req, res, next) => {
+  try {
+    const {
+      body: { token, geolocation, ipAddress, operatingSystem, browser },
+    } = req;
+
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const { email, name } = decodedToken;
+
+    let foundUser = await User.findOne({ email });
+    if (!foundUser) {
+      foundUser = await User.create({
+        nickname: name,
+        email,
+      });
+    }
+
+    const accessToken = await createAccessToken({
+      userId: foundUser._id,
+      email: foundUser.email,
+      role: foundUser.role,
+    });
+
+    const refreshToken = await createRefreshToken({
+      userId: foundUser._id,
+      email: foundUser.email,
+      role: foundUser.role,
+    });
+
+    await RefreshToken.create({
+      token: refreshToken,
+      userId: foundUser._id,
+      geolocation,
+      ipAddress,
+      operatingSystem,
+      browser,
+    });
+
+    return res
+      .status(201)
+      .send({ data: foundUser, tokens: { accessToken, refreshToken } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.loginUserWithGoogle = async (req, res, next) => {
+  try {
+    const {
+      body: { token, geolocation, ipAddress, operatingSystem, browser },
+    } = req;
+
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const { email, name } = decodedToken;
+
+    let foundUser = await User.findOne({ email });
+    if (!foundUser) {
+      foundUser = await User.create({
+        nickname: name,
+        email,
+      });
+    }
+
+    const accessToken = await createAccessToken({
+      userId: foundUser._id,
+      email: foundUser.email,
+      role: foundUser.role,
+    });
+
+    const refreshToken = await createRefreshToken({
+      userId: foundUser._id,
+      email: foundUser.email,
+      role: foundUser.role,
+    });
+
+    await RefreshToken.create({
+      token: refreshToken,
+      userId: foundUser._id,
+      geolocation,
+      ipAddress,
+      operatingSystem,
+      browser,
+    });
+
+    return res
+      .status(200)
+      .send({ data: foundUser, tokens: { accessToken, refreshToken } });
   } catch (error) {
     next(error);
   }

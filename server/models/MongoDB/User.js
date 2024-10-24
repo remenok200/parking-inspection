@@ -18,7 +18,7 @@ const userSchema = new Schema({
   },
   passwordHash: {
     type: String,
-    required: true,
+    // required: true,   <<--- google auth doesn't need a password hash
   },
   role: {
     type: String,

@@ -44,5 +44,39 @@ export const registerUser = async (userData) => {
   }
 };
 
+export const loginUserWithGoogle = async (token) => {
+  const ipAddress = await getIPFromAmazon();
+  const { operatingSystem, browser } = getBrowserAndOSInfo();
+
+  const response = await httpClient.post('/users/sign-in/google', {
+    token,
+    geolocation,
+    ipAddress,
+    operatingSystem,
+    browser,
+  });
+
+  if (response.status === 200) {
+    history.push('/officers');
+  }
+};
+
+export const registerUserWithGoogle = async (token) => {
+  const ipAddress = await getIPFromAmazon();
+  const { operatingSystem, browser } = getBrowserAndOSInfo();
+
+  const response = await httpClient.post('/users/sign-up/google', {
+    token,
+    geolocation,
+    ipAddress,
+    operatingSystem,
+    browser,
+  });
+
+  if (response.status === 201) {
+    history.push('/officers');
+  }
+};
+
 export const logout = async (tokenId) =>
   await httpClient.delete(`/users/logout/${tokenId}`);

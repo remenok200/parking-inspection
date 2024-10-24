@@ -3,11 +3,13 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './SignIn.module.scss';
 import { signInValidationSchema } from '../../schemas/signInValidationSchema';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../../redux/slices/userSlice';
+import { loginUser, loginUserWithGoogle } from '../../redux/slices/userSlice';
+import { auth, googleProvider, signInWithPopup } from '../../services/firebase';
+import GoogleIcon from '@mui/icons-material/Google';
 
 const initialValues = {
   email: '',
-  password: ''
+  password: '',
 };
 
 const SignIn = () => {
@@ -16,6 +18,16 @@ const SignIn = () => {
   const handleSubmitSignIn = async (values, { resetForm }) => {
     await dispatch(loginUser(values));
     resetForm();
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const token = result.user.accessToken;
+      await dispatch(loginUserWithGoogle(token));
+    } catch (error) {
+      console.error('Error with Google Sign In:', error);
+    }
   };
 
   return (
@@ -59,12 +71,26 @@ const SignIn = () => {
               />
             </label>
 
-            <button type='submit' className={styles['button']}>Login</button>
+            <div className={styles['button-container']}>
+              <button type="submit" className={styles['button']}>
+                Login
+              </button>
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                className={styles['button']}
+              >
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <GoogleIcon style={{ marginRight: '8px' }} />
+                  Sign In with Google
+                </div>
+              </button>
+            </div>
           </Form>
         )}
       </Formik>
     </>
   );
-}
+};
 
 export default SignIn;

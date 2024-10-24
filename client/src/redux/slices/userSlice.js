@@ -23,6 +23,18 @@ export const loginUser = createAsyncThunk(
     handleAsyncThunk(() => API.loginUser(userData), null, thunkAPI)
 );
 
+export const loginUserWithGoogle = createAsyncThunk(
+  `${SLICE_NAME}/loginUserWithGoogle`,
+  async (token, thunkAPI) =>
+    handleAsyncThunk(() => API.loginUserWithGoogle(token), null, thunkAPI)
+);
+
+export const registerUserWithGoogle = createAsyncThunk(
+  `${SLICE_NAME}/registerUserWithGoogle`,
+  async (token, thunkAPI) =>
+    handleAsyncThunk(() => API.registerUserWithGoogle(token), null, thunkAPI)
+);
+
 export const authUser = createAsyncThunk(
   `${SLICE_NAME}/authUser`,
   async (_, thunkAPI) => handleAsyncThunk(API.authUser, null, thunkAPI)
@@ -64,6 +76,18 @@ const userSlice = createSlice({
         handleFulfilled(state, action, 'user')
       )
       .addCase(registerUser.rejected, handleRejected)
+
+      .addCase(loginUserWithGoogle.pending, handlePending)
+      .addCase(loginUserWithGoogle.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'user')
+      )
+      .addCase(loginUserWithGoogle.rejected, handleRejected)
+
+      .addCase(registerUserWithGoogle.pending, handlePending)
+      .addCase(registerUserWithGoogle.fulfilled, (state, action) =>
+        handleFulfilled(state, action, 'user')
+      )
+      .addCase(registerUserWithGoogle.rejected, handleRejected)
 
       .addCase(authUser.pending, handlePending)
       .addCase(authUser.fulfilled, (state, action) =>
