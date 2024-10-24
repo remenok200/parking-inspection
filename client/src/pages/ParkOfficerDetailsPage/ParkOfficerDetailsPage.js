@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import styles from './ParkOfficerDetailsPage.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -10,8 +10,16 @@ import {
 } from '../../redux/slices/parkOfficerSlice';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import useHasRole from '../../hooks/useHasRole';
-import { Link } from 'react-router-dom';
 import generateOfficerPDF from '../../utils/pdfUtilOfficers';
+
+import {
+  Edit,
+  Delete,
+  Visibility,
+  PictureAsPdf,
+  Save,
+  Restore,
+} from '@mui/icons-material';
 
 const ParkOfficerDetailsPage = () => {
   const { officerID } = useParams();
@@ -87,39 +95,47 @@ const ParkOfficerDetailsPage = () => {
           {parkOfficer.isWorked ? 'Worked' : 'Not worked'}
         </p>
 
-        {isAdmin && (
-          <div className={styles['button-container']}>
-            <button onClick={handleGeneratePDF}>Generate PDF</button>
-            
-            <Link to={`/protocols/${parkOfficer.id}`}>
-              <button style={{ width: '100%' }}>View protocols</button>
+        <div className={styles['button-container']}>
+          <button onClick={handleGeneratePDF}>
+            <PictureAsPdf fontSize="small" /> Generate PDF
+          </button>
+
+          <Link to={`/protocols/${parkOfficer.id}`}>
+            <button style={{ width: '100%' }}>
+              <Visibility fontSize="small" /> View protocols
+            </button>
+          </Link>
+
+          {parkOfficer.isWorked && isAdmin && (
+            <Link to={`/protocols/create/${parkOfficer.id}`}>
+              <button style={{ width: '100%' }}>
+                <Edit fontSize="small" /> Create protocol
+              </button>
             </Link>
+          )}
 
-            {parkOfficer.isWorked && isAdmin && (
-              <Link to={`/protocols/create/${parkOfficer.id}`}>
-                <button style={{ width: '100%' }}>Create protocol</button>
-              </Link>
-            )}
-
-            <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-              Delete
-            </button>
-            <button
-              onClick={() => navigate(`/officers/edit/${parkOfficer.id}`)}
-            >
-              Edit
-            </button>
-            {parkOfficer.isWorked ? (
-              <button onClick={() => setDismissConfirmationModalOpen(true)}>
-                Dismiss
+          {isAdmin && (
+            <>
+              <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+                <Delete fontSize="small" /> Delete
               </button>
-            ) : (
-              <button onClick={() => setRestoreConfirmationModalOpen(true)}>
-                Restore
+              <button
+                onClick={() => navigate(`/officers/edit/${parkOfficer.id}`)}
+              >
+                <Edit fontSize="small" /> Edit
               </button>
-            )}
-          </div>
-        )}
+              {parkOfficer.isWorked ? (
+                <button onClick={() => setDismissConfirmationModalOpen(true)}>
+                  <Save fontSize="small" /> Dismiss
+                </button>
+              ) : (
+                <button onClick={() => setRestoreConfirmationModalOpen(true)}>
+                  <Restore fontSize="small" /> Restore
+                </button>
+              )}
+            </>
+          )}
+        </div>
 
         {deleteConfirmationModalOpen && (
           <ConfirmationModal

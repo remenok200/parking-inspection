@@ -19,6 +19,13 @@ import { formatDateTime, timeAgo } from '../../utils/dateUtil';
 import useHasRole from '../../hooks/useHasRole';
 import generateProtocolPDF from '../../utils/pdfUtilProtocols';
 import CONSTANTS from '../../constants';
+import {
+  Delete,
+  Edit,
+  PictureAsPdf,
+  AddPhotoAlternate,
+} from '@mui/icons-material';
+
 const { GET_IMAGES_BASE_URL } = CONSTANTS;
 
 const ProtocolDetailsPage = () => {
@@ -129,22 +136,28 @@ const ProtocolDetailsPage = () => {
           <p>Officer badge number: {protocol.parkOfficer.badge_number}</p>
         </div>
 
-        {isAdmin && (
-          <div className={styles['button-container']}>
-            <button onClick={handleGeneratePDF}>Generate PDF</button>
-            <button onClick={() => setDeleteConfirmationModalOpen(true)}>
-              Delete
-            </button>
-            <button onClick={() => navigate(`/protocols/edit/${protocol.id}`)}>
-              Edit
-            </button>
-            <button
-              onClick={() => navigate(`/protocols/${protocol.id}/add/image`)}
-            >
-              Add Image(s)
-            </button>
-          </div>
-        )}
+        <div className={styles['button-container']}>
+          <button onClick={handleGeneratePDF}>
+            <PictureAsPdf fontSize="small" /> Generate PDF
+          </button>
+          {isAdmin && (
+            <>
+              <button onClick={() => setDeleteConfirmationModalOpen(true)}>
+                <Delete fontSize="small" /> Delete
+              </button>
+              <button
+                onClick={() => navigate(`/protocols/edit/${protocol.id}`)}
+              >
+                <Edit fontSize="small" /> Edit
+              </button>
+              <button
+                onClick={() => navigate(`/protocols/${protocol.id}/add/image`)}
+              >
+                <AddPhotoAlternate fontSize="small" /> Add Image(s)
+              </button>
+            </>
+          )}
+        </div>
 
         {deleteConfirmationModalOpen && (
           <ConfirmationModal
@@ -173,7 +186,7 @@ const ProtocolDetailsPage = () => {
       {isAdmin && protocol.images.length > 0 && (
         <div className={styles['button-container']}>
           <button onClick={deleteImageHandler}>
-            Delete current image in the slider
+            <Delete fontSize="small" /> Delete current image in the slider
           </button>
         </div>
       )}
