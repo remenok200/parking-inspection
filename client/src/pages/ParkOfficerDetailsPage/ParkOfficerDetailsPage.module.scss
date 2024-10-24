@@ -96,12 +96,25 @@
 
 .button-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 15px;
-  justify-content: space-around;
   margin-top: 20px;
+  flex-wrap: wrap;
+
+  a {
+    text-decoration: none;
+  }
 
   button {
     @extend %button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 160px;
+    min-width: 160px;
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
   }
 }
