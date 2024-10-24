@@ -58,3 +58,13 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+a {
+  text-decoration: none;
+}

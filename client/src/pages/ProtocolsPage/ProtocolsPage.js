@@ -13,6 +13,7 @@ import filterProtocols from '../../utils/filterProtocols';
 import { Link } from 'react-router-dom';
 import UserSidebar from '../../components/UserSidebar/UserSidebar';
 import { getParkOfficerByID } from '../../API';
+import { Info } from '@mui/icons-material';
 const { LIMIT, MOBILE_WIDTH } = CONSTANTS;
 
 const ProtocolsPage = () => {
@@ -168,11 +169,10 @@ const ProtocolsPage = () => {
               <p>Violator: {protocol.violatorFullName}</p>
               <p>Violator passport number: {protocol.violatorPassportNumber}</p>
               <p>Fine: {protocol.fineAmount}</p>
-              <Link
-                to={`/protocols/details/${protocol.id}`}
-                className={styles['view-details-link']}
-              >
-                View Details
+              <Link to={`/protocols/details/${protocol.id}`}>
+                <button className={styles.button}>
+                  <Info fontSize="small" /> View Details
+                </button>
               </Link>
             </div>
           ))}

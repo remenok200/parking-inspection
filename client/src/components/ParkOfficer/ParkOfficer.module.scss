@@ -57,3 +57,10 @@
 .status-not-worked {
   @include status-style(#e9ecef, #ced4da, #333, #ced4da, #adb5bd, #333);
 }
+
+.button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}

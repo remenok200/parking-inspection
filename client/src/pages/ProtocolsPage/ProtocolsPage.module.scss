@@ -100,22 +100,11 @@
     color: #555;
     margin-bottom: 10px;
   }
+}
 
-  .view-details-link {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-
-    &:hover {
-      background-color: #0056b3;
-      transform: scale(1.05);
-    }
-  }
+.button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }

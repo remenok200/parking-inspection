@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import useHasRole from '../../hooks/useHasRole';
 import UserSidebar from '../../components/UserSidebar/UserSidebar';
 import CONSTANTS from '../../constants';
+import { Add } from '@mui/icons-material';
 const { MOBILE_WIDTH } = CONSTANTS;
 
 const ParkOfficersPage = () => {
@@ -15,9 +16,7 @@ const ParkOfficersPage = () => {
 
   const [filter, setFilter] = useState('worked');
 
-  const { parkOfficers, error } = useSelector(
-    (state) => state.parkOfficers
-  );
+  const { parkOfficers, error } = useSelector((state) => state.parkOfficers);
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState('');
 
@@ -87,7 +86,9 @@ const ParkOfficersPage = () => {
 
           {isAdmin && (
             <Link to="/officers/add">
-              <button>Add Officer</button>
+              <button className={styles.button}>
+                <Add fontSize="small" /> Add Officer
+              </button>
             </Link>
           )}
 

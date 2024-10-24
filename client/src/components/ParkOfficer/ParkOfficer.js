@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './ParkOfficer.module.scss';
 import { Link } from 'react-router-dom';
+import { Info } from '@mui/icons-material';
 
 const ParkOfficer = ({ parkOfficer }) => {
   return (
@@ -19,7 +20,9 @@ const ParkOfficer = ({ parkOfficer }) => {
       </p>
 
       <Link to={`/officers/details/${parkOfficer.id}`}>
-        <button style={{ width: '100%' }}>View Details</button>
+        <button className={styles.button}>
+          <Info fontSize="small" /> View Details
+        </button>
       </Link>
     </article>
   );
