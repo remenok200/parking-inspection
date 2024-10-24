@@ -11,6 +11,7 @@ import styles from './CreateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
 import cx from 'classnames';
+import { Add, Cancel } from '@mui/icons-material';
 
 const initialValues = {
   serviceNotes: '',
@@ -134,9 +135,11 @@ const CreateProtocol = () => {
               )}
 
             <div className={styles['button-container']}>
-              <button type="submit">Create protocol</button>
+              <button type="submit">
+                <Add fontSize="small" /> Create protocol
+              </button>
               <button type="button" onClick={() => navigate(-1)}>
-                Cancel
+                <Cancel fontSize="small" /> Cancel
               </button>
             </div>
           </Form>

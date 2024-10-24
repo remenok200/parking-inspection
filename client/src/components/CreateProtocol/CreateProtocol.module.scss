@@ -16,6 +16,19 @@
   @extend %button;
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  gap: 15px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
 .violator-info {
   @extend %card-wrapper;
   text-align: center;
