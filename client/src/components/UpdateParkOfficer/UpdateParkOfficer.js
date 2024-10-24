@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styles from './UpdateParkOfficer.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getParkOfficerById } from '../../redux/slices/parkOfficerSlice';
+import { Save, Cancel } from '@mui/icons-material';
 
 const UpdateParkOfficer = () => {
   const { parkOfficerID } = useParams();
@@ -49,7 +50,9 @@ const UpdateParkOfficer = () => {
 
   return (
     <>
-      <h2 className={styles['form-title']}>{selectedParkOfficer.fullName} | Edit</h2>
+      <h2 className={styles['form-title']}>
+        {selectedParkOfficer.fullName} | Edit
+      </h2>
       <Formik
         initialValues={initialValues}
         validationSchema={parkOfficerValidationSchema}
@@ -88,9 +91,11 @@ const UpdateParkOfficer = () => {
             </label>
 
             <div className={styles['button-container']}>
-              <button type="submit">Update officer</button>
+              <button type="submit">
+                <Save fontSize="small" /> Update officer
+              </button>
               <button type="button" onClick={() => navigate(-1)}>
-                Cancel
+                <Cancel fontSize="small" /> Cancel
               </button>
             </div>
           </Form>

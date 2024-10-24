@@ -11,6 +11,7 @@ import styles from './UpdateProtocol.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProtocolById } from '../../redux/slices/protocolSlice';
 import cx from 'classnames';
+import { Save, Cancel } from '@mui/icons-material';
 
 const UpdateProtocol = () => {
   const { protocolID } = useParams();
@@ -139,9 +140,11 @@ const UpdateProtocol = () => {
               )}
 
             <div className={styles['button-container']}>
-              <button type="submit">Update protocol</button>
+              <button type="submit">
+                <Save fontSize="small" /> Update protocol
+              </button>
               <button type="button" onClick={() => navigate(-1)}>
-                Cancel
+                <Cancel fontSize="small" /> Cancel
               </button>
             </div>
           </Form>
