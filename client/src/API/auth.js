@@ -80,3 +80,12 @@ export const registerUserWithGoogle = async (token) => {
 
 export const logout = async (tokenId) =>
   await httpClient.delete(`/users/logout/${tokenId}`);
+
+export const resetPassword = async (email) => {
+  await httpClient.post('/users/forgot-password', { email });
+};
+
+export const updatePassword = async (token, newPassword) =>
+  await httpClient.post(`/users/reset-password/${token}`, {
+    newPassword,
+  });

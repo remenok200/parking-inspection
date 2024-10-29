@@ -54,6 +54,26 @@ export const logout = createAsyncThunk(
   }
 );
 
+export const resetPassword = createAsyncThunk(
+  `${SLICE_NAME}/resetPassword`,
+  async (email, thunkAPI) =>
+    handleAsyncThunk(
+      () => API.resetPassword(email),
+      'Password reset email sent successfully',
+      thunkAPI
+    )
+);
+
+export const updatePassword = createAsyncThunk(
+  `${SLICE_NAME}/updatePassword`,
+  async ({ token, newPassword }, thunkAPI) =>
+    handleAsyncThunk(
+      () => API.updatePassword(token, newPassword),
+      'Password updated successfully',
+      thunkAPI
+    )
+);
+
 const initialState = {
   user: null,
   isLoading: false,
@@ -101,7 +121,21 @@ const userSlice = createSlice({
         state.error = null;
         state.user = null;
       })
-      .addCase(logout.rejected, handleRejected);
+      .addCase(logout.rejected, handleRejected)
+
+      .addCase(resetPassword.pending, handlePending)
+      .addCase(resetPassword.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(resetPassword.rejected, handleRejected)
+
+      .addCase(updatePassword.pending, handlePending)
+      .addCase(updatePassword.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(updatePassword.rejected, handleRejected);
   },
 });
 

@@ -35,6 +35,14 @@ userRouter
 .route('/logout/:tokenId')
 .delete(checkToken, UserController.logout);
 
+userRouter
+.route('/forgot-password')
+.post(UserController.sendPasswordResetLink);
+
+userRouter
+.route('/reset-password/:token')
+.post(UserController.resetPassword);
+
 userRouter.use('/', adminRouter); 
 
 module.exports = userRouter;

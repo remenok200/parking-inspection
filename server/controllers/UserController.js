@@ -3,13 +3,16 @@ const { User, RefreshToken, Log } = require('../models/MongoDB');
 const {
   createAccessToken,
   createRefreshToken,
-  verifyAccessToken,
   verifyRefreshToken,
+  createResetToken,
+  verifyResetToken,
 } = require('../services/createSession');
 const serviceAccount = require('../config/parking-inspection-firebase-adminsdk-lumww-05adebcf60.json');
 const createHttpError = require('http-errors');
 const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
 const admin = require('firebase-admin');
+const { RESET_EXPIRES_TIME, SALT_ROUND } = require('../config/constants');
+const nodemailer = require('nodemailer');
 
 module.exports.registrationUser = async (req, res, next) => {
   try {
@@ -300,6 +303,88 @@ module.exports.logout = async (req, res, next) => {
     });
 
     return res.status(200).send({ data: 'Logout successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.sendPasswordResetLink = async (req, res, next) => {
+  try {
+    const {
+      body: { email },
+    } = req;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return next(createHttpError(404, 'User not found!'));
+    }
+
+    const resetToken = await createResetToken(user);
+    // const resetLink = `${req.protocol}://${req.get(
+    //   'host'
+    // )}/reset-password/${resetToken}`;
+    const resetLink = `${req.protocol}://localhost:3000/reset-password/${resetToken}`;
+
+    // https://ethereal.email/
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+        user: 'taya.stoltenberg99@ethereal.email',
+        pass: 'N87BskjZ8UA2Jw9GbE',
+      },
+    });
+    
+    await transporter.sendMail(
+      {
+        from: '"Support" <support@example.com>',
+        to: user.email,
+        subject: 'Password Reset',
+        text: `Click the link to reset your password: ${resetLink}. This link will expire in ${RESET_EXPIRES_TIME}.`,
+        html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p><p>This link will expire in ${RESET_EXPIRES_TIME}.</p>`,
+      },
+      (err, info) => {
+        if (err) {
+          return next(createHttpError(400, 'Email not sent!'));
+        }
+
+        console.log('Message sent: %s', info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      }
+    );
+
+    return res
+      .status(200)
+      .send({ data: 'Password reset link sent to your email.' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.resetPassword = async (req, res, next) => {
+  try {
+    const {
+      params: { token },
+    } = req;
+    const {
+      body: { newPassword },
+    } = req;
+
+    const decoded = await verifyResetToken(token);
+    const user = await User.findOne({ _id: decoded.userId });
+
+    if (!user) {
+      return next(createHttpError(404, 'User not found!'));
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUND);
+    await User.findOneAndUpdate(
+      { _id: user._id },
+      { passwordHash: hashedPassword }
+    );
+
+    return res.status(200).send({ data: 'Password reset successful' });
   } catch (error) {
     next(error);
   }
