@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import { loginUser, loginUserWithGoogle } from '../../redux/slices/userSlice';
 import { auth, googleProvider, signInWithPopup } from '../../services/firebase';
 import GoogleIcon from '@mui/icons-material/Google';
+import LockIcon from '@mui/icons-material/Lock';
+import { useNavigate } from 'react-router-dom';
 
 const initialValues = {
   email: '',
@@ -14,6 +16,7 @@ const initialValues = {
 
 const SignIn = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmitSignIn = async (values, { resetForm }) => {
     await dispatch(loginUser(values));
@@ -70,6 +73,16 @@ const SignIn = () => {
                 className={styles['form-error']}
               />
             </label>
+
+            <div className={styles['forgot-password-container']}>
+              <LockIcon style={{ marginRight: '5px', color: '#007bff' }} />
+              <span
+                className={styles['forgot-password-link']}
+                onClick={() => navigate('/forgot-password')}
+              >
+                I'm forgot password
+              </span>
+            </div>
 
             <div className={styles['button-container']}>
               <button type="submit" className={styles['button']}>
