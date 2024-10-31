@@ -325,19 +325,18 @@ module.exports.sendPasswordResetLink = async (req, res, next) => {
     // )}/reset-password/${resetToken}`;
     const resetLink = `${req.protocol}://localhost:3000/reset-password/${resetToken}`;
 
-    // https://ethereal.email/
+    // https://myaccount.google.com/apppasswords
     const transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
+      service: 'gmail',
       auth: {
-        user: 'taya.stoltenberg99@ethereal.email',
-        pass: 'N87BskjZ8UA2Jw9GbE',
+        user: 'dshagde66wewedhs@gmail.com',
+        pass: 'tajr hedn iphv ryyp',
       },
     });
-    
+
     await transporter.sendMail(
       {
-        from: '"Support" <support@example.com>',
+        from: '"Support" <no-reply@parking.inspection>',
         to: user.email,
         subject: 'Password Reset',
         text: `Click the link to reset your password: ${resetLink}. This link will expire in ${RESET_EXPIRES_TIME}.`,
@@ -345,12 +344,11 @@ module.exports.sendPasswordResetLink = async (req, res, next) => {
       },
       (err, info) => {
         if (err) {
+          console.error('Error sending email:', err); // Логируем ошибку
           return next(createHttpError(400, 'Email not sent!'));
         }
 
         console.log('Message sent: %s', info.messageId);
-        // Preview only available when sending through an Ethereal account
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
       }
     );
 
