@@ -1,26 +1,11 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { updatePassword } from '../../redux/slices/userSlice';
 import styles from './ResetPassword.module.scss';
 import { useNavigate } from 'react-router-dom';
-
-const validationSchema = yup.object().shape({
-  newPassword: yup
-    .string()
-    .trim()
-    .matches(
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
-      'Password must be at least 8 characters long, including upper and lower case letters, numbers and special characters (#?!@$ %^&*-)'
-    )
-    .required(),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('newPassword'), null], 'Passwords must match')
-    .required('Required'),
-});
+import { resetPasswordValidationSchema } from '../../schemas/resetPasswordValidationSchema';
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
@@ -44,7 +29,7 @@ const ResetPassword = () => {
       <h2>Reset Password</h2>
       <Formik
         initialValues={{ newPassword: '', confirmPassword: '' }}
-        validationSchema={validationSchema}
+        validationSchema={resetPasswordValidationSchema}
         onSubmit={handleSubmit}
       >
         {() => (

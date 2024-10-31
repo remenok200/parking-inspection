@@ -1,21 +1,20 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { resetPassword } from '../../redux/slices/userSlice';
 import styles from './ForgotPassword.module.scss';
-
-const validationSchema = yup.object().shape({
-  email: yup.string().email('Invalid email format').required('Required'),
-});
+import { forgotPasswordValidationSchema } from '../../schemas/forgotPasswordValidationSchema';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
       await dispatch(resetPassword(values.email));
       resetForm();
+      navigate('/');
     } catch (error) {
       console.error('Error sending reset email:', error);
     }
@@ -26,7 +25,7 @@ const ForgotPassword = () => {
       <h2>Forgot Password</h2>
       <Formik
         initialValues={{ email: '' }}
-        validationSchema={validationSchema}
+        validationSchema={forgotPasswordValidationSchema}
         onSubmit={handleSubmit}
       >
         {() => (

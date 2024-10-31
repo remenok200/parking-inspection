@@ -12,7 +12,7 @@ const createHttpError = require('http-errors');
 const { LOG_ACTION_TYPES } = require('../config/logActionTypes');
 const admin = require('firebase-admin');
 const { RESET_EXPIRES_TIME, SALT_ROUND } = require('../config/constants');
-const nodemailer = require('nodemailer');
+const { sendEmail } = require('../services/emailService');
 
 module.exports.registrationUser = async (req, res, next) => {
   try {
@@ -325,32 +325,15 @@ module.exports.sendPasswordResetLink = async (req, res, next) => {
     // )}/reset-password/${resetToken}`;
     const resetLink = `${req.protocol}://localhost:3000/reset-password/${resetToken}`;
 
-    // https://myaccount.google.com/apppasswords
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'dshagde66wewedhs@gmail.com',
-        pass: 'tajr hedn iphv ryyp',
-      },
-    });
+    const mailOptions = {
+      from: '"Support" <no-reply@parking.inspection>',
+      to: user.email,
+      subject: 'Password Reset',
+      text: `Click the link to reset your password: ${resetLink}. This link will expire in ${RESET_EXPIRES_TIME}.`,
+      html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p><p>This link will expire in ${RESET_EXPIRES_TIME}.</p>`,
+    };
 
-    await transporter.sendMail(
-      {
-        from: '"Support" <no-reply@parking.inspection>',
-        to: user.email,
-        subject: 'Password Reset',
-        text: `Click the link to reset your password: ${resetLink}. This link will expire in ${RESET_EXPIRES_TIME}.`,
-        html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p><p>This link will expire in ${RESET_EXPIRES_TIME}.</p>`,
-      },
-      (err, info) => {
-        if (err) {
-          console.error('Error sending email:', err); // Логируем ошибку
-          return next(createHttpError(400, 'Email not sent!'));
-        }
-
-        console.log('Message sent: %s', info.messageId);
-      }
-    );
+    await sendEmail(mailOptions, next);
 
     return res
       .status(200)
