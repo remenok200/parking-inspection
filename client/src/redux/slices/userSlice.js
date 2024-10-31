@@ -56,13 +56,18 @@ export const logout = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   `${SLICE_NAME}/resetPassword`,
-  async (email, thunkAPI) =>
-    handleAsyncThunk(
-      () => API.resetPassword(email),
-      'Password reset email sent successfully',
-      thunkAPI
-    )
+  async (email, thunkAPI) => {
+    try {
+      const response = await API.resetPassword(email);
+      toast.success('Password reset email sent successfully');
+      return response;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
 );
+
 
 export const updatePassword = createAsyncThunk(
   `${SLICE_NAME}/updatePassword`,
@@ -124,17 +129,11 @@ const userSlice = createSlice({
       .addCase(logout.rejected, handleRejected)
 
       .addCase(resetPassword.pending, handlePending)
-      .addCase(resetPassword.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(resetPassword.fulfilled, handleFulfilled)
       .addCase(resetPassword.rejected, handleRejected)
 
       .addCase(updatePassword.pending, handlePending)
-      .addCase(updatePassword.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-      })
+      .addCase(updatePassword.fulfilled, handleFulfilled)
       .addCase(updatePassword.rejected, handleRejected);
   },
 });

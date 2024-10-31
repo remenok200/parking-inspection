@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { updatePassword } from '../../redux/slices/userSlice';
 import styles from './ResetPassword.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = yup.object().shape({
   newPassword: yup
@@ -24,12 +25,15 @@ const validationSchema = yup.object().shape({
 const ResetPassword = () => {
   const dispatch = useDispatch();
   const { token } = useParams();
+  const navigate = useNavigate();
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { resetForm }) => {
     try {
       await dispatch(
         updatePassword({ token, newPassword: values.newPassword })
       );
+      resetForm();
+      navigate('/');
     } catch (error) {
       console.error('Error resetting password:', error);
     }
