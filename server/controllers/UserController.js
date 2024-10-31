@@ -346,7 +346,7 @@ module.exports.sendPasswordResetLink = async (req, res, next) => {
 module.exports.resetPassword = async (req, res, next) => {
   try {
     const {
-      params: { token },
+      params: { token }, // Password Reset Token
     } = req;
     const {
       body: { newPassword },
@@ -364,6 +364,12 @@ module.exports.resetPassword = async (req, res, next) => {
       { _id: user._id },
       { passwordHash: hashedPassword }
     );
+
+    await Log.createLog({
+      actionType: LOG_ACTION_TYPES.RESET_YOUR_PASSWORD,
+      description: `USER ID: ${user._id} reset your password.`,
+      performedBy: user._id,
+    });
 
     return res.status(200).send({ data: 'Password reset successful' });
   } catch (error) {

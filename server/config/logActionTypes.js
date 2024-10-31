@@ -23,6 +23,7 @@ const LOG_ACTION_TYPES = {
   MAKE_ADMIN: 'make user admin',
   REMOVE_ADMIN: 'removed user admin',
   LOGOUT: 'logout',
+  RESET_YOUR_PASSWORD: 'reset your password'
 };
 
 module.exports = { LOG_ACTION_TYPES };
