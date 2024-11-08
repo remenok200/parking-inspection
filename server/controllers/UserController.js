@@ -45,6 +45,16 @@ module.exports.registrationUser = async (req, res, next) => {
       browser,
     });
 
+    const mailOptions = {
+      from: '"Support" <no-reply@parking.inspection>',
+      to: createdUser.email,
+      subject: 'Welcome to Parking Inspection',
+      text: `Welcome, ${createdUser.nickname}! Thank you for registering.`,
+      html: `<p>Welcome, ${createdUser.nickname}! Thank you for registering with our service.</p>`,
+    };
+
+    await sendEmail(mailOptions, next);
+
     return res
       .status(201)
       .send({ data: createdUser, tokens: { accessToken, refreshToken } });
@@ -97,6 +107,16 @@ module.exports.loginUser = async (req, res, next) => {
         browser,
       });
 
+      const mailOptions = {
+        from: '"Support" <no-reply@parking.inspection>',
+        to: foundUser.email,
+        subject: 'New Login Notification',
+        text: `We detected a login to your account.\nGeolocation: ${geolocation}\nIP Address: ${ipAddress}\nOperating System: ${operatingSystem}\nBrowser: ${browser}`,
+        html: `<p>We detected a login to your account.</p><p>Geolocation: ${geolocation}</p><p>IP Address: ${ipAddress}</p><p>Operating System: ${operatingSystem}</p><p>Browser: ${browser}</p>`,
+      };
+
+      await sendEmail(mailOptions, next);
+
       return res
         .status(200)
         .send({ data: foundUser, tokens: { accessToken, refreshToken } });
@@ -139,11 +159,33 @@ module.exports.registrationUserWithGoogle = async (req, res, next) => {
     const { email, name } = decodedToken;
 
     let foundUser = await User.findOne({ email });
+    if (foundUser) {
+      const mailOptions = {
+        from: '"Support" <no-reply@parking.inspection>',
+        to: foundUser.email,
+        subject: 'New Login Notification',
+        text: `We detected a login to your account.\nGeolocation: ${geolocation}\nIP Address: ${ipAddress}\nOperating System: ${operatingSystem}\nBrowser: ${browser}`,
+        html: `<p>We detected a login to your account.</p><p>Geolocation: ${geolocation}</p><p>IP Address: ${ipAddress}</p><p>Operating System: ${operatingSystem}</p><p>Browser: ${browser}</p>`,
+      };
+
+      await sendEmail(mailOptions, next);
+    }
+
     if (!foundUser) {
       foundUser = await User.create({
         nickname: name,
         email,
       });
+
+      const mailOptions = {
+        from: '"Support" <no-reply@parking.inspection>',
+        to: foundUser.email,
+        subject: 'Welcome to Parking Inspection',
+        text: `Welcome, ${foundUser.nickname}! Thank you for registering.`,
+        html: `<p>Welcome, ${foundUser.nickname}! Thank you for registering with our service.</p>`,
+      };
+
+      await sendEmail(mailOptions, next);
     }
 
     const accessToken = await createAccessToken({
@@ -185,11 +227,32 @@ module.exports.loginUserWithGoogle = async (req, res, next) => {
     const { email, name } = decodedToken;
 
     let foundUser = await User.findOne({ email });
+    if (foundUser) {
+      const mailOptions = {
+        from: '"Support" <no-reply@parking.inspection>',
+        to: foundUser.email,
+        subject: 'New Login Notification',
+        text: `We detected a login to your account.\nGeolocation: ${geolocation}\nIP Address: ${ipAddress}\nOperating System: ${operatingSystem}\nBrowser: ${browser}`,
+        html: `<p>We detected a login to your account.</p><p>Geolocation: ${geolocation}</p><p>IP Address: ${ipAddress}</p><p>Operating System: ${operatingSystem}</p><p>Browser: ${browser}</p>`,
+      };
+
+      await sendEmail(mailOptions, next);
+    }
     if (!foundUser) {
       foundUser = await User.create({
         nickname: name,
         email,
       });
+
+      const mailOptions = {
+        from: '"Support" <no-reply@parking.inspection>',
+        to: foundUser.email,
+        subject: 'Welcome to Parking Inspection',
+        text: `Welcome, ${foundUser.nickname}! Thank you for registering.`,
+        html: `<p>Welcome, ${foundUser.nickname}! Thank you for registering with our service.</p>`,
+      };
+
+      await sendEmail(mailOptions, next);
     }
 
     const accessToken = await createAccessToken({
